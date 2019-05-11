@@ -1,0 +1,25 @@
+{
+    "path":{
+        "test":"prefab/test"
+    },
+    "line":{
+        "red":"prefab/line_red",
+        "blue":"prefab/line_blue",
+        "gree":"prefab/line_gree",
+        "baseline":"prefab/line"
+    },
+    "vehicle":{
+        "path":"prefab/vehicle"
+    },
+    "people":{
+        "rect":"prefab/sitePeople_rect",
+        "triangle":"prefab/sitePeople_triangle",
+        "circle":"prefab/sitePeople_circle"
+    },
+    "site":
+    {
+        "rect":"prefab/site_rect",
+        "triangle":"prefab/site_triangle",
+        "circle":"prefab/site_circle"
+    }
+}

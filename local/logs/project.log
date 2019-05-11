@@ -1,0 +1,80 @@
+2019-05-11T03:26:40.646Z - normal: Load ~/.CocosCreator/settings.json
+2019-05-11T03:26:41.814Z - normal: Initializing Asset Database
+2019-05-11T03:26:41.818Z - normal: checking language setting...
+2019-05-11T03:26:41.818Z - normal: Language: zh
+2019-05-11T03:26:42.466Z - success: preview server running at http://localhost:7456
+2019-05-11T03:26:42.469Z - success: protocol editor-framework registered
+2019-05-11T03:26:42.469Z - success: protocol app registered
+2019-05-11T03:26:42.469Z - success: protocol theme registered
+2019-05-11T03:26:42.470Z - success: protocol packages registered
+2019-05-11T03:26:42.470Z - success: protocol uuid registerred
+2019-05-11T03:26:42.470Z - success: protocol db registerred
+2019-05-11T03:26:42.470Z - success: protocol thumbnail registerred
+2019-05-11T03:26:42.470Z - success: protocol unpack registerred
+2019-05-11T03:26:42.470Z - success: protocol disable-commonjs registerred
+2019-05-11T03:26:42.606Z - normal: connected!
+2019-05-11T03:26:42.607Z - normal: Check project E:\Cocos_Project\CocosCreatorFrame
+2019-05-11T03:26:42.608Z - normal: Initializing project E:\Cocos_Project\CocosCreatorFrame
+2019-05-11T03:26:42.977Z - normal: Initializing Cocos2d
+2019-05-11T03:26:43.688Z - normal: Initializing engine extends
+2019-05-11T03:26:43.742Z - success: asset-db-debugger loaded
+2019-05-11T03:26:43.743Z - success: baidu-adapter loaded
+2019-05-11T03:26:43.745Z - success: code-editor loaded
+2019-05-11T03:26:43.745Z - success: color-picker loaded
+2019-05-11T03:26:43.823Z - success: fb-audience-network loaded
+2019-05-11T03:26:43.871Z - success: fb-live-stream loaded
+2019-05-11T03:26:43.874Z - success: google-play-instant loaded
+2019-05-11T03:26:43.878Z - success: huawei-runtime loaded
+2019-05-11T03:26:43.879Z - success: jsb-adapter loaded
+2019-05-11T03:26:43.883Z - success: oppo-runtime loaded
+2019-05-11T03:26:43.912Z - success: package-manager loaded
+2019-05-11T03:26:44.017Z - success: qqplay-adapter loaded
+2019-05-11T03:26:44.019Z - success: runtime-dev-tools loaded
+2019-05-11T03:26:44.022Z - success: sdkbox loaded
+2019-05-11T03:26:44.024Z - success: tester loaded
+2019-05-11T03:26:44.026Z - success: ui-grid loaded
+2019-05-11T03:26:44.029Z - success: ui-kit-preview-extra loaded
+2019-05-11T03:26:44.033Z - success: ui-kit-preview loaded
+2019-05-11T03:26:44.035Z - success: ui-kit loaded
+2019-05-11T03:26:44.035Z - success: ui-tree loaded
+2019-05-11T03:26:44.044Z - success: vivo-runtime loaded
+2019-05-11T03:26:44.044Z - success: weapp-adapter loaded
+2019-05-11T03:26:44.080Z - success: assets loaded
+2019-05-11T03:26:44.082Z - success: builder loaded
+2019-05-11T03:26:44.424Z - success: cocos-services loaded
+2019-05-11T03:26:44.434Z - success: console loaded
+2019-05-11T03:26:44.469Z - success: fb-instant-games loaded
+2019-05-11T03:26:44.472Z - success: google-instant-games loaded
+2019-05-11T03:26:44.481Z - success: hierarchy loaded
+2019-05-11T03:26:44.484Z - success: inspector loaded
+2019-05-11T03:26:44.486Z - success: keystore loaded
+2019-05-11T03:26:44.490Z - success: node-library loaded
+2019-05-11T03:26:44.492Z - success: package-asset loaded
+2019-05-11T03:26:44.494Z - success: preferences loaded
+2019-05-11T03:26:44.496Z - success: project-exporter loaded
+2019-05-11T03:26:44.499Z - success: project-importer loaded
+2019-05-11T03:26:44.500Z - success: project-settings loaded
+2019-05-11T03:26:44.504Z - success: scene loaded
+2019-05-11T03:26:44.506Z - success: simulator-debugger loaded
+2019-05-11T03:26:44.507Z - success: sprite-editor loaded
+2019-05-11T03:26:44.520Z - success: store loaded
+2019-05-11T03:26:44.526Z - success: timeline loaded
+2019-05-11T03:26:44.537Z - success: cc-inspector loaded
+2019-05-11T03:26:44.538Z - warn: Invalid package name: pathcreate: do not contains uppercase characters.
+2019-05-11T03:26:44.563Z - success: pathcreate loaded
+2019-05-11T03:26:48.343Z - info: Cocos Services load base data!
+2019-05-11T03:26:50.132Z - normal: Loading packages
+2019-05-11T03:26:50.139Z - normal: Watching packages
+2019-05-11T03:26:52.998Z - normal: Run Application
+2019-05-11T03:27:01.290Z - normal: [cc-inspector] 插件启动成功: 6543
+2019-05-11T06:50:36.158Z - error: `@disallowMultiple` should be used after @ccclass for class "vehicleButton"
+    at getClassCache (D:\Program Files (x86)\CocosCreator\resources\engine\bin\.cache\dev\cocos2d\core\platform\CCClassDecorator.js:74:20)
+    at D:\Program Files (x86)\CocosCreator\resources\engine\bin\.cache\dev\cocos2d\core\platform\CCClassDecorator.js:218:29
+    at D:\Program Files (x86)\CocosCreator\resources\engine\bin\.cache\dev\cocos2d\core\platform\CCClassDecorator.js:34:28
+    at window.__decorate (D:\Program Files (x86)\CocosCreator\resources\engine\bin\.cache\dev\polyfill\typescript.js:65:38)
+    at E:\Cocos_Project\CocosCreatorFrame\temp\quick-scripts\assets\script\UI\vehicleButton.js:97:21
+    at __define (E:\Cocos_Project\CocosCreatorFrame\temp\quick-scripts\assets\script\UI\vehicleButton.js:102:2)
+    at E:\Cocos_Project\CocosCreatorFrame\temp\quick-scripts\assets\script\UI\vehicleButton.js:108:13
+    at Object.<anonymous> (E:\Cocos_Project\CocosCreatorFrame\temp\quick-scripts\assets\script\UI\vehicleButton.js:115:11)
+    at Object.<anonymous> (E:\Cocos_Project\CocosCreatorFrame\temp\quick-scripts\assets\script\UI\vehicleButton.js:118:3)
+2019-05-11T08:34:04.799Z - info: shutdown preview server

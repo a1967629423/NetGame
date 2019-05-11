@@ -1,0 +1,1 @@
+function factorial(a){return a<=1?1:a*factorial(a-1)}window.morebsr=function(a,r){for(var o=r.length,t=0,f=0;f<o;f++)t+=factorial(o-1)/(factorial(f)*factorial(o-1-f))*r[f]*Math.pow(a,f)*Math.pow(1-a,o-1-f);return t};
