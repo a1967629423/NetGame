@@ -143,15 +143,17 @@ var MSM;
     }(AwaitNext));
     MSM.AwaitNextSecond = AwaitNextSecond;
     var DCoroutine = /** @class */ (function () {
-        function DCoroutine(Iter, callback) {
+        function DCoroutine(Iter, mask) {
             this.time = 0;
             this.count = 0;
             this.type = 0;
             this.timmer = 0;
             this.countor = 0;
+            this.mask = 0;
             this.NIter = Iter;
             this.setAttr(0);
-            this.callback = callback;
+            if (mask)
+                this.mask = mask;
         }
         DCoroutine.prototype.setAttr = function (dt) {
             var result = this.NIter.next(dt);
@@ -209,12 +211,14 @@ var MSM;
             _this.sqs = [];
             _this.stateIns = [];
             _this.Coroutines = [];
+            _this.CoroutinesSpeed = [];
             _this.listenlist = [];
             return _this;
         }
         StateMachine.prototype.unuse = function (value) {
             //回收时清理当前状态
             this.nowState = null;
+            this.CoroutinesSpeed = [];
         };
         StateMachine.prototype.reuse = function (value) {
             //启动状态
@@ -262,8 +266,8 @@ var MSM;
             this.Coroutines.push(iter);
             return iter;
         };
-        StateMachine.prototype.startCoroutine_Auto = function (iter) {
-            return this.startCoroutine(new DCoroutine(iter));
+        StateMachine.prototype.startCoroutine_Auto = function (iter, mask) {
+            return this.startCoroutine(new DCoroutine(iter, mask));
         };
         StateMachine.prototype.stopCoroutine = function (iter) {
             var idx = this.Coroutines.findIndex(function (value) { return value === iter; });
@@ -271,6 +275,35 @@ var MSM;
                 var oldCor = this.Coroutines[idx];
                 this.Coroutines.splice(idx);
                 //TODO:池化操作
+            }
+        };
+        /**
+         * 设置协同程序的运行速度
+         * @param speed 1为标准速度值越大越快
+         * @param mask 影响遮罩，（小范围的影响会覆盖大范围的影响）
+         */
+        StateMachine.prototype.setCoroutineSpeed = function (speed, mask) {
+            if (mask === void 0) { mask = 1; }
+            if (this.CoroutinesSpeed.length === 0) {
+                this.CoroutinesSpeed.push({ mask: mask, speed: speed });
+            }
+            else {
+                var csp = this.CoroutinesSpeed.find(function (v) { return v.mask === mask; });
+                if (!csp) {
+                    //从大到小插入
+                    var idx = this.CoroutinesSpeed.findIndex(function (v) { return mask < v.mask; });
+                    if (idx === -1) {
+                        this.CoroutinesSpeed.unshift({ mask: mask, speed: speed });
+                    }
+                    else {
+                        var del = this.CoroutinesSpeed.splice(idx + 1, this.CoroutinesSpeed.length - 1);
+                        this.CoroutinesSpeed.push({ mask: mask, speed: speed });
+                        this.CoroutinesSpeed = this.CoroutinesSpeed.concat(del);
+                    }
+                }
+                else {
+                    csp.speed = speed;
+                }
             }
         };
         StateMachine.prototype.AwaitUntil = function (target) {
@@ -296,7 +329,16 @@ var MSM;
         StateMachine.prototype.update = function (dt) {
             if (this.Coroutines.length != 0) {
                 for (var i = this.Coroutines.length - 1; i >= 0; i--) {
-                    this.Coroutines[i].Update(dt);
+                    var item = this.Coroutines[i];
+                    var ndt = dt;
+                    if (this.CoroutinesSpeed.length > 0) {
+                        this.CoroutinesSpeed.forEach(function (v) {
+                            if (item.mask & v.mask) {
+                                ndt = dt * v.speed;
+                            }
+                        });
+                    }
+                    this.Coroutines[i].Update(ndt);
                 }
             }
             var op = OperatorStruct.getinstance();
@@ -401,7 +443,7 @@ var MSM;
             });
             if (st) {
                 var tarIns = this.stateIns.find(function (value) { return value.Ins['constructor'] === st.target; });
-                if (tarIns && (st.type === 1 || st.type === 2)) {
+                if (tarIns && (st.type === 1 || st.type === 2) && this.nowState !== tarIns.Ins) {
                     this.changeState(tarIns.Ins);
                 }
                 else if (st.target && typeof st.target !== 'string') {

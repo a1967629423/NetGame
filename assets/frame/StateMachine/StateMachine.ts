@@ -136,11 +136,12 @@ export module MSM {
         NIter: Iterator<AwaitNext>;
         timmer: number = 0;
         countor: number = 0;
+        mask:number = 0;
         callback: (dc: DCoroutine) => void;
-        constructor(Iter: Iterator<AwaitNext>, callback?: (dc: DCoroutine) => void) {
+        constructor(Iter: Iterator<AwaitNext>,mask?:number) {
             this.NIter = Iter;
             this.setAttr(0);
-            this.callback = callback;
+            if(mask)this.mask = mask;
         }
         setAttr(dt: number) {
             var result = this.NIter.next(dt);
@@ -187,12 +188,14 @@ export module MSM {
             }
         }
     }
+    type CSpeed = {mask:number,speed:number}
     const { ccclass, property } = cc._decorator;
     @ccclass
     export class StateMachine extends cc.Component implements IObpool {
         unuse(value?) {
             //回收时清理当前状态
             this.nowState = null;
+            this.CoroutinesSpeed = [];
         }
         reuse(value?) {
             //启动状态
@@ -208,6 +211,7 @@ export module MSM {
         strelation: SR[];
         LSMDB: SM;
         Coroutines: DCoroutine[] = [];
+        CoroutinesSpeed:CSpeed[] = [];
         protected listenlist: { eventName: string, callback: (eventName: string) => void }[] = [];
         changeState(cs: State) {
             if (this.nowState) this.nowState.Quit();
@@ -251,8 +255,8 @@ export module MSM {
             this.Coroutines.push(iter);
             return iter;
         }
-        startCoroutine_Auto(iter: Iterator<AwaitNext>) {
-            return this.startCoroutine(new DCoroutine(iter));
+        startCoroutine_Auto(iter: Iterator<AwaitNext>,mask?:number) {
+            return this.startCoroutine(new DCoroutine(iter,mask));
         }
         stopCoroutine(iter:DCoroutine)
         {
@@ -262,6 +266,41 @@ export module MSM {
                 var oldCor = this.Coroutines[idx];
                 this.Coroutines.splice(idx);
                 //TODO:池化操作
+            }
+        }
+        /**
+         * 设置协同程序的运行速度
+         * @param speed 1为标准速度值越大越快
+         * @param mask 影响遮罩，（小范围的影响会覆盖大范围的影响）
+         */
+        setCoroutineSpeed(speed:number,mask:number=1)
+        {
+            if(this.CoroutinesSpeed.length===0)
+            {
+                this.CoroutinesSpeed.push({mask:mask,speed:speed});
+            }
+            else
+            {
+                var csp:CSpeed =this.CoroutinesSpeed.find(v=>v.mask===mask)
+                if(!csp)
+                {
+                    //从大到小插入
+                    var idx = this.CoroutinesSpeed.findIndex(v=>mask<v.mask);
+                    if(idx===-1)
+                    {
+                        this.CoroutinesSpeed.unshift({mask:mask,speed:speed});
+                    }
+                    else
+                    {
+                        var del = this.CoroutinesSpeed.splice(idx+1,this.CoroutinesSpeed.length-1);
+                        this.CoroutinesSpeed.push({mask:mask,speed:speed});
+                        this.CoroutinesSpeed = this.CoroutinesSpeed.concat(del);
+                    }
+                }
+                else
+                {
+                    csp.speed = speed;
+                }
             }
         }
         AwaitUntil(target:()=>boolean):Promise<any>
@@ -279,7 +318,18 @@ export module MSM {
         update(dt: number) {
             if (this.Coroutines.length != 0) {
                 for (var i = this.Coroutines.length - 1; i >= 0; i--) {
-                    this.Coroutines[i].Update(dt);
+                    var item = this.Coroutines[i];
+                    var ndt:number = dt;
+                    if(this.CoroutinesSpeed.length>0)
+                    {
+                        this.CoroutinesSpeed.forEach(v=>{
+                            if(item.mask&v.mask)
+                            {
+                                ndt = dt*v.speed;
+                            }
+                        });
+                    }
+                    this.Coroutines[i].Update(ndt);
                 }
             }
             var op = OperatorStruct.getinstance();
@@ -377,9 +427,9 @@ export module MSM {
             })
             if (st) {
                 var tarIns = this.stateIns.find(value => { return value.Ins['constructor'] === st.target })
-                if(tarIns&&(st.type===1||st.type===2))
+                if(tarIns&&(st.type===1||st.type===2)&&this.nowState!==tarIns.Ins)
                 {
-                    this.changeState(tarIns.Ins)
+                    this.changeState(tarIns.Ins);
                 }
                 else if(st.target&&typeof st.target !=='string')
                 {

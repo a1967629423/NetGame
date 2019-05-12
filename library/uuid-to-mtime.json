@@ -25,7 +25,7 @@
     "relativePath": "prefab"
   },
   "08001ad2-af90-4ece-941d-e8052fb4f51b": {
-    "asset": 1555469338101,
+    "asset": 1557563670991,
     "meta": 1554873988980,
     "relativePath": "frame"
   },
@@ -40,12 +40,12 @@
     "relativePath": "frame\\EventCenter.ts"
   },
   "615d1626-3e35-4dc1-b56b-8f2cad030274": {
-    "asset": 1555100137572,
+    "asset": 1557563670971,
     "meta": 1554873988982,
     "relativePath": "frame\\InputManage"
   },
   "87ea3722-b54c-435c-9517-b5beffdc38fe": {
-    "asset": 1555470039497,
+    "asset": 1557563670976,
     "meta": 1554873988983,
     "relativePath": "frame\\ObjectPool"
   },
@@ -55,12 +55,12 @@
     "relativePath": "frame\\OperationStateMachine.ts"
   },
   "d1052fca-3c96-4499-b00e-676c98b0857d": {
-    "asset": 1555470039497,
+    "asset": 1557563670978,
     "meta": 1554873988985,
     "relativePath": "frame\\PrefabFactory"
   },
   "18b6f9f2-3377-4544-b4e7-02bf805e5188": {
-    "asset": 1555100104931,
+    "asset": 1557563670983,
     "meta": 1554873988986,
     "relativePath": "frame\\ScenesManage"
   },
@@ -70,12 +70,12 @@
     "relativePath": "frame\\ScenesManage.ts"
   },
   "d5bd76f2-901e-4ce7-b7f0-86732cb90fa5": {
-    "asset": 1555186807442,
+    "asset": 1557563670989,
     "meta": 1554873988988,
     "relativePath": "frame\\StateMachine"
   },
   "a0a2aceb-4314-4a32-b51f-642a4dc7c3b0": {
-    "asset": 1555100104934,
+    "asset": 1557563670995,
     "meta": 1554873988990,
     "relativePath": "frame\\test"
   },
@@ -85,7 +85,7 @@
     "relativePath": "frame\\test.fire"
   },
   "8f27ceab-d638-43c2-9377-5b453f93f31b": {
-    "asset": 1557026273327,
+    "asset": 1557563671262,
     "meta": 1554873988994,
     "relativePath": "utility"
   },
@@ -95,22 +95,22 @@
     "relativePath": "utility\\setToRootNode.ts"
   },
   "eec148df-c6fd-4b0c-bf1e-585be519d2ab": {
-    "asset": 1557446478368,
+    "asset": 1557563671239,
     "meta": 1554874018528,
     "relativePath": "script"
   },
   "16eca894-60c9-42b2-8d83-0c2e57c98a99": {
-    "asset": 1554953828449,
+    "asset": 1557563671205,
     "meta": 1554874299327,
     "relativePath": "script\\player"
   },
   "f23b7ea9-a0fa-4f31-8727-9731fd76dd58": {
-    "asset": 1554875024107,
+    "asset": 1557563671207,
     "meta": 1554874310416,
     "relativePath": "script\\player\\playerState"
   },
   "c8a1a9e2-bdc7-47fe-838b-d5bb2972da4e": {
-    "asset": 1555199064104,
+    "asset": 1557563671163,
     "meta": 1554874587710,
     "relativePath": "scenes"
   },
@@ -120,12 +120,12 @@
     "relativePath": "scenes\\mainScene.fire"
   },
   "6ca02129-07b9-4684-bb17-910eb7d31f95": {
-    "asset": 1554963566684,
+    "asset": 1557563671184,
     "meta": 1554950270238,
     "relativePath": "script\\bscLine"
   },
   "6ecd5e8b-5118-4b31-98d2-6cd831212398": {
-    "asset": 1554953813380,
+    "asset": 1557563671003,
     "meta": 1554953555236,
     "relativePath": "prefab"
   },
@@ -135,7 +135,7 @@
     "relativePath": "prefab\\bullet.prefab"
   },
   "9ecbb307-e935-4770-9daf-79dbf3b6a8cb": {
-    "asset": 1555269423355,
+    "asset": 1557563671011,
     "meta": 1555269343512,
     "relativePath": "resources"
   },
@@ -150,12 +150,12 @@
     "relativePath": "script\\bscLine\\LineType.ts"
   },
   "29550be8-ada9-4ac3-98dc-f394246ec8e0": {
-    "asset": 1555095449352,
+    "asset": 1557563671266,
     "meta": 1555095271986,
     "relativePath": "utility\\cameraMove"
   },
   "0c17c38e-2df9-4f05-80fd-ac3351fcbdaf": {
-    "asset": 1555096675417,
+    "asset": 1557563671268,
     "meta": 1555095447014,
     "relativePath": "utility\\cameraMove\\States"
   },
@@ -175,27 +175,27 @@
     "relativePath": "script\\bscLine\\bscManage.ts"
   },
   "413e6563-4bc0-432e-b6ce-536c7a8ab056": {
-    "asset": 1555468656132,
+    "asset": 1557563671231,
     "meta": 1555217148415,
     "relativePath": "script\\site"
   },
   "1fb67e3d-289a-4b12-bf8b-3af9391ac6b2": {
-    "asset": 1556189861760,
+    "asset": 1557563671234,
     "meta": 1555218229496,
     "relativePath": "script\\site\\State"
   },
   "f99baa8f-6c4a-4843-a567-6f32d2224c6a": {
-    "asset": 1555227931451,
+    "asset": 1557563671242,
     "meta": 1555227569355,
     "relativePath": "script\\vehicle"
   },
   "809bb60d-1a54-4a16-9be5-7ed09b474fd5": {
-    "asset": 1555227947402,
+    "asset": 1557563671245,
     "meta": 1555227926369,
     "relativePath": "script\\vehicle\\states"
   },
   "5ad8abf7-5e39-4b89-97a8-23107f1cf7f6": {
-    "asset": 1556191757736,
+    "asset": 1557563671158,
     "meta": 1555268167095,
     "relativePath": "resources\\prefab"
   },
@@ -210,7 +210,7 @@
     "relativePath": "resources\\test.txt"
   },
   "4a5582d3-7f61-43c2-b389-cf5fa6500f86": {
-    "asset": 1557288959358,
+    "asset": 1557563671193,
     "meta": 1555271798234,
     "relativePath": "script\\manage"
   },
@@ -230,8 +230,8 @@
     "relativePath": "resources\\prefab\\vehicle.prefab"
   },
   "5cede206-1bd6-42e5-a7fe-b786c1f2ee82": {
-    "asset": 1557545220514,
-    "meta": 1557545220529,
+    "asset": 1557648449450,
+    "meta": 1557648449468,
     "relativePath": "resources\\cc-inspector.json"
   },
   "f9d06ce4-8c0f-48fa-80b1-6a0800abf796": {
@@ -270,7 +270,7 @@
     "relativePath": "resources\\prefab\\line_gree.prefab"
   },
   "66466c1c-3f39-48a5-97c9-848756394a20": {
-    "asset": 1557289976509,
+    "asset": 1557563671197,
     "meta": 1556098501188,
     "relativePath": "script\\manage\\states"
   },
@@ -350,12 +350,12 @@
     "relativePath": "frame\\test\\InputManageTest.ts"
   },
   "147c883c-b3ad-4b23-b3b9-b4b8b695a26d": {
-    "asset": 1556968925256,
+    "asset": 1557563671217,
     "meta": 1556955769444,
     "relativePath": "script\\render"
   },
   "0c41bfb1-cb9d-47b9-aa45-da5454f50a1b": {
-    "asset": 1556969365130,
+    "asset": 1557563671221,
     "meta": 1556968454705,
     "relativePath": "script\\render\\states"
   },
@@ -625,7 +625,7 @@
     "relativePath": "script\\site\\SiteMachine.ts"
   },
   "7473267b-4f83-419f-8768-a54b312076d1": {
-    "asset": 1557446486192,
+    "asset": 1557563671238,
     "meta": 1557446475510,
     "relativePath": "script\\UI"
   },
@@ -724,14 +724,14 @@
     "meta": 1557557466646,
     "relativePath": "script\\UI\\vehicleButton.ts"
   },
-  "0642348f-57a8-4a6d-9139-e306a298e809": {
-    "asset": 1557562603914,
-    "meta": 1557562827779,
-    "relativePath": "frame\\StateMachine\\StateMachine.ts"
-  },
   "c4fec95e-800c-494d-9ecb-4e9d8309aca9": {
     "asset": 1557563602761,
     "meta": 1557563614032,
     "relativePath": "script\\manage\\states\\ClearManageStates.ts"
+  },
+  "0642348f-57a8-4a6d-9139-e306a298e809": {
+    "asset": 1557650585085,
+    "meta": 1557650591511,
+    "relativePath": "frame\\StateMachine\\StateMachine.ts"
   }
 }
