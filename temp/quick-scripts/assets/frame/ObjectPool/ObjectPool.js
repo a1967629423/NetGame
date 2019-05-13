@@ -59,6 +59,8 @@ var ObjectPool = /** @class */ (function () {
             else {
                 this.ReuseCallback(re, reuseValue);
             }
+            if (!re['__factory'])
+                re['__factory'] = this;
             return re;
         }
         return null;
@@ -69,6 +71,11 @@ var ObjectPool = /** @class */ (function () {
                 value['destroy']();
         });
         this.__pool = [];
+    };
+    ObjectPool.GlobalPush = function (val) {
+        if (val['__factory']) {
+            val['__factory'].push(val);
+        }
     };
     return ObjectPool;
 }());

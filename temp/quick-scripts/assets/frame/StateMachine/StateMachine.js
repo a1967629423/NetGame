@@ -155,6 +155,32 @@ var MSM;
             if (mask)
                 this.mask = mask;
         }
+        DCoroutine.prototype.unuse = function () {
+            var value = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                value[_i] = arguments[_i];
+            }
+            this.time = 0;
+            this.count = 0;
+            this.type = 0;
+            this.timmer = 0;
+            this.countor = 0;
+            this.mask = 0;
+            this.NIter = null;
+        };
+        DCoroutine.prototype.reuse = function (Iter, mask) {
+            this.NIter = Iter;
+            this.setAttr(0);
+            if (mask)
+                this.mask = mask;
+        };
+        DCoroutine.prototype.recycle = function () {
+            var value = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                value[_i] = arguments[_i];
+            }
+            ObjectPool_1.default.GlobalPush(this);
+        };
         DCoroutine.prototype.setAttr = function (dt) {
             var result = this.NIter.next(dt);
             if (!result.done) {

@@ -19,14 +19,24 @@ var ObjectFactory = /** @class */ (function (_super) {
         return _this;
     }
     ObjectFactory.prototype.pop = function () {
-        var reuslt = _super.prototype.pop.call(this);
+        var v = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            v[_i] = arguments[_i];
+        }
+        var reuslt = _super.prototype.pop.call(this, v);
         if (!reuslt) {
             reuslt = Object.create({});
             reuslt['__proto__'] = this.csr.prototype;
             reuslt['__factory'] = this;
             this.csr.apply(reuslt, this.args);
         }
+        this.ReuseCallback(reuslt, v);
         return reuslt;
+    };
+    ObjectFactory.S_Push = function (val) {
+        if (val['__factory']) {
+            val['__factory'].push(val);
+        }
     };
     return ObjectFactory;
 }(ObjectPool_1.default));

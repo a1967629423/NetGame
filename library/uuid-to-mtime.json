@@ -230,8 +230,8 @@
     "relativePath": "resources\\prefab\\vehicle.prefab"
   },
   "5cede206-1bd6-42e5-a7fe-b786c1f2ee82": {
-    "asset": 1557648449450,
-    "meta": 1557648449468,
+    "asset": 1557712120409,
+    "meta": 1557712120428,
     "relativePath": "resources\\cc-inspector.json"
   },
   "f9d06ce4-8c0f-48fa-80b1-6a0800abf796": {
@@ -328,11 +328,6 @@
     "asset": 1556420699675,
     "meta": 1556420702506,
     "relativePath": "frame\\test\\MachineCor.ts"
-  },
-  "15e60385-392b-4fb3-848e-15818b16288c": {
-    "asset": 1556674026963,
-    "meta": 1556674180240,
-    "relativePath": "frame\\ObjectPool\\ObjectFactory.ts"
   },
   "bf30805d-631a-4c1d-aae2-67beb940052f": {
     "asset": 1556674886916,
@@ -689,11 +684,6 @@
     "meta": 1557555690697,
     "relativePath": "frame\\PrefabFactory\\PrefabFactory.ts"
   },
-  "71a60e9d-799e-494e-8974-ed72bf07bc48": {
-    "asset": 1557556023405,
-    "meta": 1557556076619,
-    "relativePath": "frame\\ObjectPool\\ObjectPool.ts"
-  },
   "ccd5479d-bd72-431c-8eba-9945806861ba": {
     "asset": 1557556240557,
     "meta": 1557556241530,
@@ -729,9 +719,29 @@
     "meta": 1557563614032,
     "relativePath": "script\\manage\\states\\ClearManageStates.ts"
   },
+  "a9cb21e9-9d6d-4de1-8853-3e957ac05a0d": {
+    "asset": 1557714002490,
+    "meta": 1557714002491,
+    "relativePath": "script\\Path"
+  },
+  "15e60385-392b-4fb3-848e-15818b16288c": {
+    "asset": 1557724050911,
+    "meta": 1557724222375,
+    "relativePath": "frame\\ObjectPool\\ObjectFactory.ts"
+  },
+  "71a60e9d-799e-494e-8974-ed72bf07bc48": {
+    "asset": 1557725192443,
+    "meta": 1557725420343,
+    "relativePath": "frame\\ObjectPool\\ObjectPool.ts"
+  },
   "0642348f-57a8-4a6d-9139-e306a298e809": {
-    "asset": 1557650585085,
-    "meta": 1557650591511,
+    "asset": 1557725332039,
+    "meta": 1557725420365,
     "relativePath": "frame\\StateMachine\\StateMachine.ts"
+  },
+  "ff1f2536-56b8-44d0-9f69-5b26f2dcf666": {
+    "asset": 1557726291602,
+    "meta": 1557726310731,
+    "relativePath": "script\\Path\\PathSM.ts"
   }
 }

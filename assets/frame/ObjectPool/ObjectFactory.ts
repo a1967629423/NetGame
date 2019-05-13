@@ -10,9 +10,9 @@ export default class ObjectFactory<T> extends ObjectPool<T>  {
         this.csr = csr;
         this.args = args;
     }
-    pop():T
+    pop(...v):T
     {
-        var reuslt = super.pop();
+        var reuslt = super.pop(v);
         if(!reuslt)
         {
             reuslt = Object.create({});
@@ -20,6 +20,14 @@ export default class ObjectFactory<T> extends ObjectPool<T>  {
             reuslt['__factory'] = this;
             this.csr.apply(reuslt,this.args);
         }
+        this.ReuseCallback(reuslt,v);
         return reuslt
+    }
+    static S_Push(val:any)
+    {
+        if(val['__factory'])
+        {
+            val['__factory'].push(val);
+        }
     }
 }

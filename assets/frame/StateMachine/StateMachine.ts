@@ -129,7 +129,24 @@ export module MSM {
             return re;
         }
     }
-    class DCoroutine {
+    class DCoroutine implements IObpool {
+        unuse(...value: any[]) {
+            this.time=0;
+            this.count=0;
+            this.type = 0;
+            this.timmer = 0;
+            this.countor = 0;
+            this.mask = 0;
+            this.NIter = null;
+        }
+        reuse(Iter: Iterator<AwaitNext>,mask?:number) {
+            this.NIter = Iter;
+            this.setAttr(0);
+            if(mask)this.mask = mask;
+        }
+        recycle(...value: any[]) {
+            ObjectPool.GlobalPush(this);
+        }
         time: number = 0;
         count: number = 0;
         type: number = 0;

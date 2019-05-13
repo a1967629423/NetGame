@@ -1,8 +1,8 @@
 export interface IObpool
 {
-    unuse(value?);
-    reuse(value?);
-    recycle(value?);
+    unuse(...value);
+    reuse(...value);
+    recycle(...value);
 }
 export interface IOFPool<T> extends IObpool
 {
@@ -73,6 +73,7 @@ export default class ObjectPool<T> {
             {
                 this.ReuseCallback(re,reuseValue);
             }
+            if(!re['__factory'])re['__factory']=this;
             return re;
         }
         return null
@@ -83,5 +84,12 @@ export default class ObjectPool<T> {
             if(value['destroy'])value['destroy']();
         })
         this.__pool=[]
+    }
+    static GlobalPush(val:any)
+    {
+        if(val['__factory'])
+        {
+            val['__factory'].push(val);
+        }
     }
 }
