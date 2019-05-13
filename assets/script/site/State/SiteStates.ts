@@ -108,7 +108,7 @@ export module SiteStates {
                         if(this.context.SiteLines.length>0)
                         {
                             //站点上有线默认就使用第一个
-                            type = this.context.SiteLines[0].LineType
+                            type = this.context.SiteLines[0].PathType
                         }
                         else
                         {
@@ -118,8 +118,8 @@ export module SiteStates {
                             else
                             return
                         }
-                        var nLine = this.context.SiteLines.find(value=>value.LineType===type);
-                        var lastSite = nLine&&nLine.LastLine?nLine.LastLine.NowSite:null;
+                        var nLine = this.context.SiteLines.find(value=>value.PathType===type&&value.nextSite===this.context&&!(value.mask&13));
+                        var lastSite = nLine&&nLine.lastSite;
                         var line = await GameObjectManage.Instance.getLine(type,lastSite,this.context,next);
                         if(line)
                         {

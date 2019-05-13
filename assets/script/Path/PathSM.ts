@@ -81,11 +81,11 @@ export module Path {
         }
         get NextPath():VehiclePath
         {
-            return this.nextSite.SiteLines.find(v=>v.PathType===this.PathType&&v!==this&&!(v.mask&1)&&!(v.mask&4));
+            return this.nextSite.SiteLines.find(v=>v.PathType===this.PathType&&v!==this&&!(v.mask&13));
         }
         get LastPath():VehiclePath
         {
-            return this.lastSite.SiteLines.find(v=>v.PathType===this.PathType&&v!==this&&!(v.mask&1)&&!(v.mask&4));
+            return this.lastSite.SiteLines.find(v=>v.PathType===this.PathType&&v!==this&&!(v.mask&13));
         }
         get ClearFlag():boolean
         {

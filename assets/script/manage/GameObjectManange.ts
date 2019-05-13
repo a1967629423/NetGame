@@ -54,7 +54,7 @@ export default class GameObjectManage extends cc.Component {
     residueLineType: SiteLineType[] = []
     GOCache: { Vehicle: boolean, Line: boolean, Site: boolean } = { Vehicle: false, Line: false, Site: false }
     PathFactory:ObjectFactory<Path.VehiclePath> = null;
-    async getVehicle(nowSite: SiteSM.SiteMachine, nowProgress: number, line:Path.VehiclePath) {
+    async getVehicle(nowProgress: number, line:Path.VehiclePath) {
         var config = await PrefabFactor.LoadRes(PrefabFactor.prefabConfig);
         if (config && config.json.vehicle && this.vehicleCount > 0) {
             this.vehicleCount--;
@@ -93,6 +93,10 @@ export default class GameObjectManage extends cc.Component {
                 {
                     return 3;
                 }
+            }
+            else if(nowLine.isEnd||nowLine.isBegin)
+            {
+                return 1;
             }
             else
             {
@@ -137,7 +141,7 @@ export default class GameObjectManage extends cc.Component {
                 if(newPath.isBegin&&newPath.isEnd)
                 {
                     var vehiclesNode =  ScenesObject.instance.node.getChildByName('vehicles')
-                    var vehicle = await this.getVehicle(nowSite,0,newPath);
+                    var vehicle = await this.getVehicle(0,newPath);
                     vehiclesNode.addChild(vehicle.node);
                 }
                 LR.updateRender();

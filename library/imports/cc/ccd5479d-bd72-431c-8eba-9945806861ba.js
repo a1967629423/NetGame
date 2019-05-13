@@ -68,7 +68,7 @@ var GameObjectManage = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
-    GameObjectManage.prototype.getVehicle = function (nowSite, nowProgress, line) {
+    GameObjectManage.prototype.getVehicle = function (nowProgress, line) {
         return __awaiter(this, void 0, void 0, function () {
             var config, vehicle, machine;
             return __generator(this, function (_a) {
@@ -119,6 +119,9 @@ var GameObjectManage = /** @class */ (function (_super) {
                 if (nextLine.isBegin || nextLine.isEnd || nowLine.isBegin || nowLine.isEnd) {
                     return 3;
                 }
+            }
+            else if (nowLine.isEnd || nowLine.isBegin) {
+                return 1;
             }
             else {
                 return 2;
@@ -172,7 +175,7 @@ var GameObjectManage = /** @class */ (function (_super) {
                         debugger;
                         if (!(newPath.isBegin && newPath.isEnd)) return [3 /*break*/, 4];
                         vehiclesNode = ScenesObject_1.default.instance.node.getChildByName('vehicles');
-                        return [4 /*yield*/, this.getVehicle(nowSite, 0, newPath)];
+                        return [4 /*yield*/, this.getVehicle(0, newPath)];
                     case 3:
                         vehicle = _b.sent();
                         vehiclesNode.addChild(vehicle.node);

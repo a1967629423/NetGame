@@ -4,6 +4,7 @@ import { SiteSM, SiteLineSM } from "./SiteMachine";
 import { SLDSM } from "./SiteLine";
 import ObjectPool, { IObpool, IOFPool } from "../../frame/ObjectPool/ObjectPool";
 import { Score } from "../manage/ScoreManage";
+import { Path } from "../Path/PathSM";
 
 // Learn TypeScript:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/typescript.html
@@ -38,99 +39,91 @@ export default class SitePeople extends cc.Component implements IObpool {
     GetInVehicle(vehicle: Vehicle.VehicleMachine): boolean {
         var dir = vehicle.rundir;
         var nowLine = vehicle.line;
-        var nextLine = dir ? nowLine.NextLine : nowLine.LastLine;
-        var hastOtherLineSite: SLDSM.SiteLine[] = []
-        while (nextLine) {
-            if (nextLine.NowSite.SiteType === this.peopleType && nextLine.NowSite !== this.sourceSite) {
-                return true;
-            }
-            if (nextLine.NowSite.SiteLines.find(value => value.LineType != nowLine.LineType)) {
-                hastOtherLineSite.push(nextLine);
-            }
-            nextLine = dir ? nextLine.NextLine : nextLine.LastLine;
-        }
-        //到终点都没有
-        for (var i in hastOtherLineSite) {
-            var value = hastOtherLineSite[i];
-            var next = value.NextLine;
-            while (next) {
-                if (next.NowSite.SiteType === this.peopleType&&next.NowSite!==this.sourceSite) {
-                    console.log('要去转车')
-                    return true;
-                }
-                next = next.NextLine;
-            }
-            var last = value.LastLine;
-            while (last) {
-                if (last.NowSite.SiteType === this.peopleType&&last.NowSite!==this.sourceSite) {
-                    console.log('要去转车')
-                    return true
-                }
-                last = last.LastLine
-            }
+        var nextLine = dir ? nowLine.NextPath : nowLine.LastPath;
+        var hastOtherLineSite: Path.VehiclePath[] = []
 
-        }
+        //到终点都没有
+        // for (var i in hastOtherLineSite) {
+        //     var value = hastOtherLineSite[i];
+        //     var next = value.NextLine;
+        //     while (next) {
+        //         if (next.NowSite.SiteType === this.peopleType&&next.NowSite!==this.sourceSite) {
+        //             console.log('要去转车')
+        //             return true;
+        //         }
+        //         next = next.NextLine;
+        //     }
+        //     var last = value.LastLine;
+        //     while (last) {
+        //         if (last.NowSite.SiteType === this.peopleType&&last.NowSite!==this.sourceSite) {
+        //             console.log('要去转车')
+        //             return true
+        //         }
+        //         last = last.LastLine
+        //     }
+
+        // }
         return false;
     }
     GetOffVehicle(vehicle: Vehicle.VehicleMachine): boolean {
-        var dir = vehicle.rundir;
-        var nowLine = vehicle.line;
-        if (nowLine.NowSite.SiteType === this.peopleType) return true;
-        var nextLine = dir ? nowLine.NextLine : nowLine.LastLine;
-        var ni =0;
-        var oni = 0;
-        var oli = 0;
-        var mainHave = false;
-        var otherHave = false;
-        while (nextLine) {
-            if (nextLine.NowSite.SiteType === this.peopleType&&nextLine.NowSite!=this.sourceSite) {
-                mainHave = true;
-                break
-            }
-            ni++;
-            nextLine = dir ? nextLine.NextLine : nextLine.LastLine;
-        }
-        for (var i in nowLine.NowSite.SiteLines) {
-            var value = nowLine.NowSite.SiteLines[i]
-            if (value.LineType !== nowLine.LineType) {
-                var next = value.NextLine
-                while (next) {
-                    if (next.NowSite.SiteType === this.peopleType) {
-                        console.log('转车')
-                        otherHave = true;
-                        break
-                    }
-                    oni++;
-                    next = next.NextLine;
-                }
-                var last = value.LastLine;
-                if (last) {
-                    if (last.NowSite.SiteType === this.peopleType) {
-                        console.log('转车')
-                        otherHave = true;
-                        break
-                    }
-                    oli++;
-                    last = last.LastLine;
-                }
+        // var dir = vehicle.rundir;
+        // var nowLine = vehicle.line;
+        // if (nowLine.NowSite.SiteType === this.peopleType) return true;
+        // var nextLine = dir ? nowLine.NextLine : nowLine.LastLine;
+        // var ni =0;
+        // var oni = 0;
+        // var oli = 0;
+        // var mainHave = false;
+        // var otherHave = false;
+        // while (nextLine) {
+        //     if (nextLine.NowSite.SiteType === this.peopleType&&nextLine.NowSite!=this.sourceSite) {
+        //         mainHave = true;
+        //         break
+        //     }
+        //     ni++;
+        //     nextLine = dir ? nextLine.NextLine : nextLine.LastLine;
+        // }
+        // for (var i in nowLine.NowSite.SiteLines) {
+        //     var value = nowLine.NowSite.SiteLines[i]
+        //     if (value.LineType !== nowLine.LineType) {
+        //         var next = value.NextLine
+        //         while (next) {
+        //             if (next.NowSite.SiteType === this.peopleType) {
+        //                 console.log('转车')
+        //                 otherHave = true;
+        //                 break
+        //             }
+        //             oni++;
+        //             next = next.NextLine;
+        //         }
+        //         var last = value.LastLine;
+        //         if (last) {
+        //             if (last.NowSite.SiteType === this.peopleType) {
+        //                 console.log('转车')
+        //                 otherHave = true;
+        //                 break
+        //             }
+        //             oli++;
+        //             last = last.LastLine;
+        //         }
 
-            }
-        }
-        if(mainHave&&otherHave)
-        {
-            if(mainHave&&(ni<=oni||ni<=oli))
-            {
-                return false;
-            }
-            return true;
-        }
-        else
-        {
-            if(otherHave)
-            {
-                return true;
-            }
-        }
+        //     }
+        // }
+        // if(mainHave&&otherHave)
+        // {
+        //     if(mainHave&&(ni<=oni||ni<=oli))
+        //     {
+        //         return false;
+        //     }
+        //     return true;
+        // }
+        // else
+        // {
+        //     if(otherHave)
+        //     {
+        //         return true;
+        //     }
+        // }
 
         return false;
     }

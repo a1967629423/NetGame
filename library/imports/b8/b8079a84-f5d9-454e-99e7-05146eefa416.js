@@ -34,23 +34,30 @@ var VehicleStates;
                 this.context.node.rotation = DMath.radianToAngle(radian);
             }
             else {
+                debugger;
                 if (this.context.rundir) {
-                    if (this.context.line.NextPath) {
+                    if (this.context.line.isEnd) {
+                        this.context.rundir = !this.context.rundir;
+                    }
+                    else if (this.context.line.NextPath) {
                         this.context.line = this.context.line.NextPath;
                     }
                 }
                 else {
-                    if (this.context.line.LastPath) {
+                    if (this.context.line.isBegin) {
+                        this.context.rundir = !this.context.rundir;
+                    }
+                    else if (this.context.line.LastPath) {
                         this.context.line = this.context.line.LastPath;
                     }
                 }
                 sLine.removeVehicle(this.context);
                 //this.context.line = this.context.nowSite.SiteLines.find(value=>value.LineType==this.context.line.LineType);
                 //this.context.nowSite = this.context.rundir? this.context.line.NextLine?this.context.line.NextLine.NowSite:this.context.line.NowSite:this.context.line.LastLine?this.context.line.LastLine.LastSite:this.context.line.NowSite;
-                if (this.context.line.isBegin || this.context.line.isEnd || this.context.getNextLine().ClearFlag) {
-                    this.context.rundir = !this.context.rundir;
-                    //this.context.nowProgress= this.context.line.isBegin?0.9:0.1;
-                }
+                // if (this.context.line.isBegin || this.context.line.isEnd||this.context.getNextLine().ClearFlag) {
+                //     this.context.rundir = !this.context.rundir;
+                //     //this.context.nowProgress= this.context.line.isBegin?0.9:0.1;
+                // }
                 this.context.nowProgress = 0;
                 debugger;
                 this.context.emit('loading');

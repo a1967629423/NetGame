@@ -102,6 +102,7 @@ var SiteStates;
         Default.prototype.touchCancel = function (t) {
             return __awaiter(this, void 0, void 0, function () {
                 var __pool, _a, _b, _i, f, value, next, type, nLine, lastSite, line;
+                var _this_1 = this;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
                         case 0:
@@ -121,7 +122,7 @@ var SiteStates;
                             type = 0;
                             if (this.context.SiteLines.length > 0) {
                                 //站点上有线默认就使用第一个
-                                type = this.context.SiteLines[0].LineType;
+                                type = this.context.SiteLines[0].PathType;
                             }
                             else {
                                 //站点没线默认使用剩下的第一个
@@ -130,8 +131,8 @@ var SiteStates;
                                 else
                                     return [2 /*return*/];
                             }
-                            nLine = this.context.SiteLines.find(function (value) { return value.LineType === type; });
-                            lastSite = nLine && nLine.LastLine ? nLine.LastLine.NowSite : null;
+                            nLine = this.context.SiteLines.find(function (value) { return value.PathType === type && value.nextSite === _this_1.context && !(value.mask & 13); });
+                            lastSite = nLine && nLine.lastSite;
                             return [4 /*yield*/, GameObjectManange_1.default.Instance.getLine(type, lastSite, this.context, next)];
                         case 2:
                             line = _c.sent();

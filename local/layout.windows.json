@@ -5,9 +5,9 @@
       "main": true,
       "url": "app://editor/index.html",
       "windowType": "dockable",
-      "x": 65,
+      "x": 64,
       "y": -8,
-      "width": 1479,
+      "width": 1483,
       "height": 880,
       "layout": {
         "children": [
@@ -20,7 +20,7 @@
                 ],
                 "height": 381.5,
                 "type": "panel",
-                "width": 238.3874969482422
+                "width": 237.5500030517578
               },
               {
                 "active": 0,
@@ -29,12 +29,12 @@
                 ],
                 "height": 377.5,
                 "type": "panel",
-                "width": 238.3874969482422
+                "width": 237.5500030517578
               }
             ],
             "height": 761,
             "type": "dock-v",
-            "width": 238.3874969482422
+            "width": 237.5500030517578
           },
           {
             "children": [
@@ -47,7 +47,7 @@
                     ],
                     "height": 379,
                     "type": "panel",
-                    "width": 564.5750122070312
+                    "width": 563.9125366210938
                   },
                   {
                     "active": 0,
@@ -56,12 +56,12 @@
                     ],
                     "height": 379,
                     "type": "panel",
-                    "width": 306.8500061035156
+                    "width": 306.4125061035156
                   }
                 ],
                 "height": 379,
                 "type": "dock-h",
-                "width": 873.4249877929688
+                "width": 872.3250122070312
               },
               {
                 "active": 0,
@@ -71,12 +71,12 @@
                 ],
                 "height": 380,
                 "type": "panel",
-                "width": 873.4249877929688
+                "width": 872.3250122070312
               }
             ],
             "height": 761,
             "type": "dock-v",
-            "width": 873.4249877929688
+            "width": 872.3250122070312
           },
           {
             "children": [
@@ -87,23 +87,23 @@
                   "cocos-services",
                   "cc-inspector"
                 ],
-                "height": 557.5250244140625,
+                "height": 557.2625122070312,
                 "type": "panel",
-                "width": 354.57501220703125
+                "width": 353.32501220703125
               },
               {
                 "active": 0,
                 "children": [
                   "cc-inspector.info"
                 ],
-                "height": 201.46250915527344,
+                "height": 201.7375030517578,
                 "type": "panel",
-                "width": 354.57501220703125
+                "width": 353.32501220703125
               }
             ],
             "height": 761,
             "type": "dock-v",
-            "width": 354.57501220703125
+            "width": 353.32501220703125
           }
         ],
         "type": "dock-h"

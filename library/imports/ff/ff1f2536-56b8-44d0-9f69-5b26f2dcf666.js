@@ -91,7 +91,7 @@ var Path;
         Object.defineProperty(VehiclePath.prototype, "NextPath", {
             get: function () {
                 var _this = this;
-                return this.nextSite.SiteLines.find(function (v) { return v.PathType === _this.PathType && v !== _this && !(v.mask & 1) && !(v.mask & 4); });
+                return this.nextSite.SiteLines.find(function (v) { return v.PathType === _this.PathType && v !== _this && !(v.mask & 13); });
             },
             enumerable: true,
             configurable: true
@@ -99,7 +99,7 @@ var Path;
         Object.defineProperty(VehiclePath.prototype, "LastPath", {
             get: function () {
                 var _this = this;
-                return this.lastSite.SiteLines.find(function (v) { return v.PathType === _this.PathType && v !== _this && !(v.mask & 1) && !(v.mask & 4); });
+                return this.lastSite.SiteLines.find(function (v) { return v.PathType === _this.PathType && v !== _this && !(v.mask & 13); });
             },
             enumerable: true,
             configurable: true
