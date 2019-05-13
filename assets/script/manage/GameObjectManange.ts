@@ -8,6 +8,8 @@ import ScenesObject from "../../utility/ScenesObject";
 import { LineRender } from "../render/LineRender";
 import { SiteRender } from "../render/SiteRender";
 import { LineClear } from "./LineClearManage";
+import ObjectFactory from "../../frame/ObjectPool/ObjectFactory";
+import { Path } from "../Path/PathSM";
 
 // Learn TypeScript:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/typescript.html
@@ -51,15 +53,16 @@ export default class GameObjectManage extends cc.Component {
     saveLineType: SiteLineType[] = []
     residueLineType: SiteLineType[] = []
     GOCache: { Vehicle: boolean, Line: boolean, Site: boolean } = { Vehicle: false, Line: false, Site: false }
-    async getVehicle(nowSite: SiteSM.SiteMachine, nowProgress: number, line: SLDSM.SiteLine) {
+    PathFactory:ObjectFactory<Path.VehiclePath> = null;
+    async getVehicle(nowSite: SiteSM.SiteMachine, nowProgress: number, line:Path.VehiclePath) {
         var config = await PrefabFactor.LoadRes(PrefabFactor.prefabConfig);
         if (config && config.json.vehicle && this.vehicleCount > 0) {
             this.vehicleCount--;
             var vehicle = await PrefabFactor.Instance.pop_path(config.json.vehicle.path)
             if (!this.GOCache.Vehicle) this.GOCache.Vehicle = true;
             if (vehicle) {
+                debugger;
                 var machine = vehicle.getComponent(Vehicle.VehicleMachine)
-                machine.nowSite = nowSite;
                 machine.nowProgress = nowProgress;
                 machine.line = line;
                 return machine;
@@ -81,154 +84,81 @@ export default class GameObjectManage extends cc.Component {
     }
     getOperatorType(t: SiteLineType, last: SiteSM.SiteMachine, now: SiteSM.SiteMachine, next: SiteSM.SiteMachine) {
         //0未知 1 增加 2 修改(中间跨越多个需要清除0) 3删除
-        var nowLine = now ? now.SiteLines.find(value => value.LineType === t) : null;
-        var nextLine = next ? next.SiteLines.find(value => value.LineType === t) : null;
+        var nowLine = now ? now.SiteLines.find(value => value.PathType === t) : null;
+        var nextLine = next ? next.SiteLines.find(value => value.PathType === t) : null;
         //var lastLine = last?last.SiteLines.find(value=>value.LineType===t):null;
         if (nowLine) {
             if (nextLine) {
-                if (nowLine.NextLine == nextLine) {
-                    if (nextLine.isEnd || nowLine.isBegin) {
-                        return 3;
-                    }
-                    else {
-                        return 0;
-                        //新加线
-                    }
-                }
-                else if (nowLine.LastLine == nextLine) {
-                    if (nowLine.isEnd || nextLine.isBegin) {
-                        return 3;
-                    }
-                    else {
-                        return 0;
-                    }
-                }
-                else {
-                    return 2;
+                if(nextLine.isBegin||nextLine.isEnd||nowLine.isBegin||nowLine.isEnd)
+                {
+                    return 3;
                 }
             }
-            else {
-                if (nowLine.isEnd) {
-                    return 1;
-                }
-                else if (nowLine.isBegin) {
-                    return 4;
-                }
-                else {
-                    return 2;
-                }
+            else
+            {
+                return 2;
             }
         }
-        else {
+        else if(!nextLine) 
+        {
             return 1;
+        }
+        else
+        {
+            return 0;
         }
 
 
     }
-    async CreateLine(lineName:string,Site:SiteSM.SiteMachine,type:SiteLineType)
+    async CreateLine(nowSite:SiteSM.SiteMachine,nextSite:SiteSM.SiteMachine,type:SiteLineType)
     {
-        var line = await PrefabFactor.Instance.pop_path(lineName,type);
+        if(!this.PathFactory)this.PathFactory = new ObjectFactory<Path.VehiclePath>(true,Path.VehiclePath);
+        var line = this.PathFactory.pop(nowSite,nextSite,type);
         if(line)
         {
-            var Sl = line.getComponent(SLDSM.SiteLine);
-            if(Sl)
-            {
-                Site.addLine(Sl)
-                Sl.LineType = type;
-                Sl.addSiteLines()
-            }
-            return Sl;
+            nowSite.addLine(line);
+            nextSite.addLine(line);
+            return line;
         }
         return null;
     }
     async getLine(type: SiteLineType, lastSite: SiteSM.SiteMachine, nowSite: SiteSM.SiteMachine, endSite: SiteSM.SiteMachine): Promise<SLDSM.SiteLine> {
-        var config = await PrefabFactor.LoadRes(PrefabFactor.prefabConfig);
-        if (config && config.json.line) {
-            var operatorType = this.getOperatorType(type, lastSite, nowSite, endSite)
-            this.getLineType(type);
-            var lines: [] = config.json.line;
-            var nSL = nowSite.SiteLines.find(value => value.LineType === type);
-            var nextSl = endSite.SiteLines.find(value => value.LineType === type);
-            var lineName = lines['baseline'];
-            if (!nextSl) {
-                nextSl = await this.CreateLine(lineName,endSite,type);
-            }
-            if (!nSL) {
-                nSL = await this.CreateLine(lineName,nowSite,type)
-            }
-            if (!this.GOCache.Line) this.GOCache.Line = true;
-            let linesnode = ScenesObject.instance.node.getChildByName('lines');
-            switch (operatorType) {
-                case 1:
-                    //增加
-                    nSL.linkTo(nextSl);
-                    if(!nSL.node.parent)
-                    linesnode.addChild(nSL.node);
-                    linesnode.addChild(nextSl.node);
-                    nSL.node.position = nowSite.node.position;
-                    nSL.caculatePath();
-                    break;
-                case 2:
-                    //修改
-                    //连接原先两个点
-                    //一次删两个
-                    nSL.ChangeFlag = true;
-                    nSL.ClearFlag = true;
-                    var lastLine = nSL.LastLine;
-                    var nextLine = nSL.NextLine;
-                    nSL = nextSl;
-                    nSL.linkTo(nextLine);
-                    lastLine.linkTo(nSL);
-                    linesnode.addChild(nextSl.node);
-                    nextSl.node.position = endSite.node.position;
-                    lastLine.caculatePath();
-                    nSL.caculatePath();
-                    LineClear.LineClearManage.Instance.updateClear();
-                    break;
-                case 3:
-                    debugger;
-                    var removeLine:SLDSM.SiteLine = null;
-                    if (nSL.isEnd || nextSl.isBegin) {
-                        removeLine = nSL;
-                    }
-                    if (nSL.isBegin || nextSl.isEnd) {
-                        removeLine = nSL;
-                    }
-                    if(nSL.isEnd)
-                    {
-                        nSL.LastLine.HidenFlag=true;
-                    }
-                    removeLine.ClearFlag = true;
-                    var render = ScenesObject.instance.getComponentInChildren(LineRender.LineRenderStateMachine);
-                    if(render)
-                    {
-                        render.updateRender();
-                    }
-                    LineClear.LineClearManage.Instance.updateClear();
+        var operatorType = this.getOperatorType(type, lastSite, nowSite, endSite)
+        this.getLineType(type);
+        var nSL = nowSite.SiteLines.find(value => value.PathType === type&&!(value.mask&13));
+        var nextSl = endSite.SiteLines.find(value => value.PathType === type&&!(value.mask&13));
+        var LR =ScenesObject.instance.getComponentInChildren(LineRender.LineRenderStateMachine);
+        switch (operatorType) {
+            case 1:
+                //增加
+                
+                var newPath = await this.CreateLine(nowSite,endSite,type);
+                debugger;
+                if(newPath.isBegin&&newPath.isEnd)
+                {
+                    var vehiclesNode =  ScenesObject.instance.node.getChildByName('vehicles')
+                    var vehicle = await this.getVehicle(nowSite,0,newPath);
+                    vehiclesNode.addChild(vehicle.node);
+                }
+                LR.updateRender();
+                break;
+            case 2:
+                //修改
+                //连接原先两个点
+                //一次删两个
+                nSL.mask |= 11;
+                nSL = await this.CreateLine(nowSite,endSite,type);
+                break;
+            case 3:
+            nSL.mask |= 7;
+            LineClear.LineClearManage.Instance.updateClear();
+                break;
+            case 4:
 
-                    break;
-                case 4:
-                    nextSl.linkTo(nSL);
-                    linesnode.addChild(nextSl.node);
-                    nextSl.node.position = endSite.node.position;
-                    nextSl.caculatePath();
-                    break;
-                //删除
-                default:
-                    break;
-            }
-            
-            return nSL;
-            // var LSm = await SiteLineSM.SiteLineMachine.getLM(nowSite,lastSite,endSite,type,Line);
-            // if(LSm)
-            // {
-            //     var siteline = Line.getComponent(SLDSM.SiteLine);
-            //     siteline.line = LSm;
-            //     var linesnode = ScenesObject.instance.node.getChildByName('lines');
-            //     linesnode.addChild(Line);
-            //     Line.position = nowSite.node.position;
-            //     return siteline
-            // }
+                break;
+            //删除
+            default:
+                break;
         }
         return null
 

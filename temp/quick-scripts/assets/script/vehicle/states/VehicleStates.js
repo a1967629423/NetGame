@@ -22,12 +22,12 @@ var VehicleStates;
             return _this_1;
         }
         Default.prototype.Start = function () {
-            this.context.line.node.emit('isRun', this.context);
+            this.context.line.addVehicle(this.context);
         };
         Default.prototype.update = function (dt) {
             var nPro = this.context.nowProgress + dt * this.context.rate;
             var sLine = this.context.line;
-            if (nPro > 0 && nPro < this.context.line.getAllLength(this.context.rundir)) {
+            if (nPro > 0 && nPro < this.context.line.allLength) {
                 var _a = this.context.line.getLocation(nPro, this.context.rundir), position = _a.position, radian = _a.radian;
                 this.context.node.position = position;
                 this.context.nowProgress = nPro;
@@ -35,16 +35,16 @@ var VehicleStates;
             }
             else {
                 if (this.context.rundir) {
-                    if (this.context.line.NextLine) {
-                        this.context.line = this.context.line.NextLine;
+                    if (this.context.line.NextPath) {
+                        this.context.line = this.context.line.NextPath;
                     }
                 }
                 else {
-                    if (this.context.line.LastLine) {
-                        this.context.line = this.context.line.LastLine;
+                    if (this.context.line.LastPath) {
+                        this.context.line = this.context.line.LastPath;
                     }
                 }
-                sLine.node.emit('runEnd', this.context);
+                sLine.removeVehicle(this.context);
                 //this.context.line = this.context.nowSite.SiteLines.find(value=>value.LineType==this.context.line.LineType);
                 //this.context.nowSite = this.context.rundir? this.context.line.NextLine?this.context.line.NextLine.NowSite:this.context.line.NowSite:this.context.line.LastLine?this.context.line.LastLine.LastSite:this.context.line.NowSite;
                 if (this.context.line.isBegin || this.context.line.isEnd || this.context.getNextLine().ClearFlag) {
@@ -70,9 +70,8 @@ var VehicleStates;
             return _super !== null && _super.apply(this, arguments) || this;
         }
         Loading.prototype.Start = function () {
-            debugger;
-            var sitePeople = this.context.line.NowSite.SitePeople;
-            var nowSite = this.context.line.NowSite;
+            var nowSite = this.context.getNowSite();
+            var sitePeople = nowSite.SitePeople;
             var peoples = this.context.peoples;
             var _this = this;
             this.context.startCoroutine_Auto((function () {

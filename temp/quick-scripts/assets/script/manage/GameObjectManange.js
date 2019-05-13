@@ -8,11 +8,12 @@ var Enums_1 = require("../Enums");
 var SiteMachine_1 = require("../site/SiteMachine");
 var VehicleMachine_1 = require("../vehicle/VehicleMachine");
 var SitePeople_1 = require("../site/SitePeople");
-var SiteLine_1 = require("../site/SiteLine");
 var ScenesObject_1 = require("../../utility/ScenesObject");
 var LineRender_1 = require("../render/LineRender");
 var SiteRender_1 = require("../render/SiteRender");
 var LineClearManage_1 = require("./LineClearManage");
+var ObjectFactory_1 = require("../../frame/ObjectPool/ObjectFactory");
+var PathSM_1 = require("../Path/PathSM");
 // Learn TypeScript:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/typescript.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/typescript.html
@@ -32,6 +33,7 @@ var GameObjectManage = /** @class */ (function (_super) {
         _this.saveLineType = [];
         _this.residueLineType = [];
         _this.GOCache = { Vehicle: false, Line: false, Site: false };
+        _this.PathFactory = null;
         // LIFE-CYCLE CALLBACKS:
         // onLoad () {}
         _this.ScenesComponent = null;
@@ -82,8 +84,8 @@ var GameObjectManage = /** @class */ (function (_super) {
                         if (!this.GOCache.Vehicle)
                             this.GOCache.Vehicle = true;
                         if (vehicle) {
+                            debugger;
                             machine = vehicle.getComponent(VehicleMachine_1.Vehicle.VehicleMachine);
-                            machine.nowSite = nowSite;
                             machine.nowProgress = nowProgress;
                             machine.line = line;
                             return [2 /*return*/, machine];
@@ -109,158 +111,91 @@ var GameObjectManage = /** @class */ (function (_super) {
     };
     GameObjectManage.prototype.getOperatorType = function (t, last, now, next) {
         //0未知 1 增加 2 修改(中间跨越多个需要清除0) 3删除
-        var nowLine = now ? now.SiteLines.find(function (value) { return value.LineType === t; }) : null;
-        var nextLine = next ? next.SiteLines.find(function (value) { return value.LineType === t; }) : null;
+        var nowLine = now ? now.SiteLines.find(function (value) { return value.PathType === t; }) : null;
+        var nextLine = next ? next.SiteLines.find(function (value) { return value.PathType === t; }) : null;
         //var lastLine = last?last.SiteLines.find(value=>value.LineType===t):null;
         if (nowLine) {
             if (nextLine) {
-                if (nowLine.NextLine == nextLine) {
-                    if (nextLine.isEnd || nowLine.isBegin) {
-                        return 3;
-                    }
-                    else {
-                        return 0;
-                        //新加线
-                    }
-                }
-                else if (nowLine.LastLine == nextLine) {
-                    if (nowLine.isEnd || nextLine.isBegin) {
-                        return 3;
-                    }
-                    else {
-                        return 0;
-                    }
-                }
-                else {
-                    return 2;
+                if (nextLine.isBegin || nextLine.isEnd || nowLine.isBegin || nowLine.isEnd) {
+                    return 3;
                 }
             }
             else {
-                if (nowLine.isEnd) {
-                    return 1;
-                }
-                else if (nowLine.isBegin) {
-                    return 4;
-                }
-                else {
-                    return 2;
-                }
+                return 2;
             }
         }
-        else {
+        else if (!nextLine) {
             return 1;
         }
+        else {
+            return 0;
+        }
     };
-    GameObjectManage.prototype.CreateLine = function (lineName, Site, type) {
+    GameObjectManage.prototype.CreateLine = function (nowSite, nextSite, type) {
         return __awaiter(this, void 0, void 0, function () {
-            var line, Sl;
+            var line;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, PrefabFactory_1.default.Instance.pop_path(lineName, type)];
-                    case 1:
-                        line = _a.sent();
-                        if (line) {
-                            Sl = line.getComponent(SiteLine_1.SLDSM.SiteLine);
-                            if (Sl) {
-                                Site.addLine(Sl);
-                                Sl.LineType = type;
-                                Sl.addSiteLines();
-                            }
-                            return [2 /*return*/, Sl];
-                        }
-                        return [2 /*return*/, null];
+                if (!this.PathFactory)
+                    this.PathFactory = new ObjectFactory_1.default(true, PathSM_1.Path.VehiclePath);
+                line = this.PathFactory.pop(nowSite, nextSite, type);
+                if (line) {
+                    nowSite.addLine(line);
+                    nextSite.addLine(line);
+                    return [2 /*return*/, line];
                 }
+                return [2 /*return*/, null];
             });
         });
     };
     GameObjectManage.prototype.getLine = function (type, lastSite, nowSite, endSite) {
         return __awaiter(this, void 0, Promise, function () {
-            var config, operatorType, lines, nSL, nextSl, lineName, linesnode, lastLine, nextLine, removeLine, render;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, PrefabFactory_1.default.LoadRes(PrefabFactory_1.default.prefabConfig)];
-                    case 1:
-                        config = _a.sent();
-                        if (!(config && config.json.line)) return [3 /*break*/, 6];
+            var operatorType, nSL, nextSl, LR, _a, newPath, vehiclesNode, vehicle;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
                         operatorType = this.getOperatorType(type, lastSite, nowSite, endSite);
                         this.getLineType(type);
-                        lines = config.json.line;
-                        nSL = nowSite.SiteLines.find(function (value) { return value.LineType === type; });
-                        nextSl = endSite.SiteLines.find(function (value) { return value.LineType === type; });
-                        lineName = lines['baseline'];
-                        if (!!nextSl) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.CreateLine(lineName, endSite, type)];
-                    case 2:
-                        nextSl = _a.sent();
-                        _a.label = 3;
-                    case 3:
-                        if (!!nSL) return [3 /*break*/, 5];
-                        return [4 /*yield*/, this.CreateLine(lineName, nowSite, type)];
-                    case 4:
-                        nSL = _a.sent();
-                        _a.label = 5;
-                    case 5:
-                        if (!this.GOCache.Line)
-                            this.GOCache.Line = true;
-                        linesnode = ScenesObject_1.default.instance.node.getChildByName('lines');
-                        switch (operatorType) {
-                            case 1:
-                                //增加
-                                nSL.linkTo(nextSl);
-                                if (!nSL.node.parent)
-                                    linesnode.addChild(nSL.node);
-                                linesnode.addChild(nextSl.node);
-                                nSL.node.position = nowSite.node.position;
-                                nSL.caculatePath();
-                                break;
-                            case 2:
-                                //修改
-                                //连接原先两个点
-                                //一次删两个
-                                nSL.ChangeFlag = true;
-                                nSL.ClearFlag = true;
-                                lastLine = nSL.LastLine;
-                                nextLine = nSL.NextLine;
-                                nSL = nextSl;
-                                nSL.linkTo(nextLine);
-                                lastLine.linkTo(nSL);
-                                linesnode.addChild(nextSl.node);
-                                nextSl.node.position = endSite.node.position;
-                                lastLine.caculatePath();
-                                nSL.caculatePath();
-                                LineClearManage_1.LineClear.LineClearManage.Instance.updateClear();
-                                break;
-                            case 3:
-                                debugger;
-                                removeLine = null;
-                                if (nSL.isEnd || nextSl.isBegin) {
-                                    removeLine = nSL;
-                                }
-                                if (nSL.isBegin || nextSl.isEnd) {
-                                    removeLine = nSL;
-                                }
-                                if (nSL.isEnd) {
-                                    nSL.LastLine.HidenFlag = true;
-                                }
-                                removeLine.ClearFlag = true;
-                                render = ScenesObject_1.default.instance.getComponentInChildren(LineRender_1.LineRender.LineRenderStateMachine);
-                                if (render) {
-                                    render.updateRender();
-                                }
-                                LineClearManage_1.LineClear.LineClearManage.Instance.updateClear();
-                                break;
-                            case 4:
-                                nextSl.linkTo(nSL);
-                                linesnode.addChild(nextSl.node);
-                                nextSl.node.position = endSite.node.position;
-                                nextSl.caculatePath();
-                                break;
-                            //删除
-                            default:
-                                break;
+                        nSL = nowSite.SiteLines.find(function (value) { return value.PathType === type && !(value.mask & 13); });
+                        nextSl = endSite.SiteLines.find(function (value) { return value.PathType === type && !(value.mask & 13); });
+                        LR = ScenesObject_1.default.instance.getComponentInChildren(LineRender_1.LineRender.LineRenderStateMachine);
+                        _a = operatorType;
+                        switch (_a) {
+                            case 1: return [3 /*break*/, 1];
+                            case 2: return [3 /*break*/, 5];
+                            case 3: return [3 /*break*/, 7];
+                            case 4: return [3 /*break*/, 8];
                         }
-                        return [2 /*return*/, nSL];
-                    case 6: return [2 /*return*/, null];
+                        return [3 /*break*/, 9];
+                    case 1: return [4 /*yield*/, this.CreateLine(nowSite, endSite, type)];
+                    case 2:
+                        newPath = _b.sent();
+                        debugger;
+                        if (!(newPath.isBegin && newPath.isEnd)) return [3 /*break*/, 4];
+                        vehiclesNode = ScenesObject_1.default.instance.node.getChildByName('vehicles');
+                        return [4 /*yield*/, this.getVehicle(nowSite, 0, newPath)];
+                    case 3:
+                        vehicle = _b.sent();
+                        vehiclesNode.addChild(vehicle.node);
+                        _b.label = 4;
+                    case 4:
+                        LR.updateRender();
+                        return [3 /*break*/, 10];
+                    case 5:
+                        //修改
+                        //连接原先两个点
+                        //一次删两个
+                        nSL.mask |= 11;
+                        return [4 /*yield*/, this.CreateLine(nowSite, endSite, type)];
+                    case 6:
+                        nSL = _b.sent();
+                        return [3 /*break*/, 10];
+                    case 7:
+                        nSL.mask |= 7;
+                        LineClearManage_1.LineClear.LineClearManage.Instance.updateClear();
+                        return [3 /*break*/, 10];
+                    case 8: return [3 /*break*/, 10];
+                    case 9: return [3 /*break*/, 10];
+                    case 10: return [2 /*return*/, null];
                 }
             });
         });

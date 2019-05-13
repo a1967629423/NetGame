@@ -8,9 +8,9 @@ var StateDec_1 = require("../../frame/StateMachine/StateDec");
 var Render_1 = require("./Render");
 var InputManage_1 = require("../../frame/InputManage");
 var Helper_1 = require("../../utility/Helper");
-var SiteLine_1 = require("../site/SiteLine");
 var SiteRender_1 = require("./SiteRender");
 var ScenesObject_1 = require("../../utility/ScenesObject");
+var PathSM_1 = require("../Path/PathSM");
 var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property;
 var StateMachine = StateMachine_1.MSM.StateMachine, State = StateMachine_1.MSM.State;
 var mStateMachine = StateDec_1.MSMDsc.mStateMachine, mSyncFunc = StateDec_1.MSMDsc.mSyncFunc;
@@ -30,7 +30,7 @@ var LineRender;
         };
         LineRenderStateMachine.prototype.touchStart = function (touchEvent) {
             if (this.siteRender) {
-                this.siteRender.active(this._HitedLine.LineType);
+                this.siteRender.active(this._HitedLine.PathType);
             }
         };
         LineRenderStateMachine.prototype.touchEnd = function (touchEvent) {
@@ -38,13 +38,13 @@ var LineRender;
         LineRenderStateMachine.prototype.touchCancel = function (touchEvent) {
         };
         LineRenderStateMachine.prototype.HitTest = function (point, listen) {
-            var childrens = this.node.children;
+            var childrens = PathSM_1.Path.VehiclePath.allPath;
             var testPoint = this.node.convertToNodeSpaceAR(InputManage_1.IPSM.ConvertInputPointToWorld(point, this.node));
             if (childrens.length > 1) {
                 for (var i = 0; i < childrens.length; i++) {
-                    var nSite = childrens[i].getComponent(SiteLine_1.SLDSM.SiteLine);
-                    var points = nSite.changPoint;
-                    var lastPoint = nSite.node.position;
+                    var nSite = childrens[i];
+                    var points = nSite.changePoint;
+                    var lastPoint = nSite.lastSite.node.position;
                     for (var idx = 0; idx < points.length; idx++) {
                         var nowPoint = points[idx].point;
                         if (Helper_1.Helper.HitTestHelper.LineHitTest(lastPoint, nowPoint, testPoint, this.lineWidth)) {

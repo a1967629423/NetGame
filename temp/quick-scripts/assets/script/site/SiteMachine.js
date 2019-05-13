@@ -259,7 +259,6 @@ var SiteSM;
         };
         SiteMachine.prototype.addLine = function (line) {
             this.SiteLines.push(line);
-            line.NowSite = this;
         };
         var SiteMachine_1;
         SiteMachine.SiteMachines = [];

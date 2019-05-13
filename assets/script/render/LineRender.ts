@@ -6,6 +6,8 @@ import { Helper } from "../../utility/Helper";
 import { SLDSM } from "../site/SiteLine";
 import { SiteRender } from "./SiteRender";
 import ScenesObject from "../../utility/ScenesObject";
+import { Path } from "../Path/PathSM";
+
 
 const { ccclass, property } = cc._decorator;
 const { StateMachine, State } = MSM;
@@ -21,7 +23,7 @@ export module LineRender {
         touchStart(touchEvent: cc.Touch) {
             if(this.siteRender)
             {
-                this.siteRender.active(this._HitedLine.LineType);
+                this.siteRender.active(this._HitedLine.PathType);
             }
         }
         @mSyncFunc
@@ -30,18 +32,18 @@ export module LineRender {
         @mSyncFunc
         touchCancel(touchEvent: cc.Touch) {
         }
-        _HitedLine:SLDSM.SiteLine = null;
+        _HitedLine:Path.VehiclePath = null;
         HitTest(point:cc.Vec2,listen):boolean
         {
-            var childrens = this.node.children;
+            var childrens = Path.VehiclePath.allPath;
             var testPoint=this.node.convertToNodeSpaceAR(IPSM.ConvertInputPointToWorld(point,this.node));
             if(childrens.length>1)
             {
                 for(var i =0;i<childrens.length;i++)
                 {
-                    var nSite = childrens[i].getComponent(SLDSM.SiteLine);
-                    var points = nSite.changPoint;
-                    var lastPoint:Helper.Point = nSite.node.position; 
+                    var nSite = childrens[i];
+                    var points = nSite.changePoint;
+                    var lastPoint:Helper.Point = nSite.lastSite.node.position; 
                     for(var idx=0;idx<points.length;idx++)
                     {
                         var nowPoint = points[idx].point;

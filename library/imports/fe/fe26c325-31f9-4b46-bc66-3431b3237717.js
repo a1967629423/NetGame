@@ -7,6 +7,7 @@ var LineRender_1 = require("../LineRender");
 var StateDec_1 = require("../../../frame/StateMachine/StateDec");
 var SiteLine_1 = require("../../site/SiteLine");
 var Enums_1 = require("../../Enums");
+var PathSM_1 = require("../../Path/PathSM");
 var LineRenderState = LineRender_1.LineRender.LineRenderState, LineRenderStateMachine = LineRender_1.LineRender.LineRenderStateMachine;
 var mState = StateDec_1.MSMDsc.mState, mDefaultState = StateDec_1.MSMDsc.mDefaultState, mLinkTo = StateDec_1.MSMDsc.mLinkTo;
 var SiteLine = SiteLine_1.SLDSM.SiteLine;
@@ -26,42 +27,17 @@ var LineRenderStates;
             var drawedSite = [];
             this.drawCache = drawedSite;
             g.clear();
-            SiteLine.SiteLines.forEach(function (value) {
-                var nowLine = SiteLine.getBeginLine(value.lineType);
-                if (!nowLine.isEnd) {
-                    //取得线段颜色
-                    var color = Enums_1.ConvertRGBToColor(value.lineType);
-                    g.strokeColor = color;
-                    //取第一个节点进行定位
-                    var SiteNode = nowLine;
-                    if (SiteNode.mask & 1) {
-                        g.strokeColor = g.strokeColor.setA(125);
-                    }
-                    g.moveTo(SiteNode.node.x, SiteNode.node.y);
-                    SiteNode.changPoint.forEach(function (value) {
-                        g.lineTo(value.point.x, value.point.y);
-                    });
-                    var nodes = [SiteNode];
-                    drawedSite.push({ type: value.lineType, node: nodes });
-                    nowLine = nowLine.NextLine;
-                    g.stroke();
-                    g.strokeColor = color;
-                    debugger;
-                    while (nowLine) {
-                        var nowSiteNode = nowLine;
-                        if (nowLine.mask & 1) {
-                            g.strokeColor = g.strokeColor.setA(125);
-                        }
-                        g.moveTo(nowSiteNode.node.x, nowSiteNode.node.y);
-                        nowSiteNode.changPoint.forEach(function (value) {
-                            g.lineTo(value.point.x, value.point.y);
-                        });
-                        nowLine = nowLine.NextLine;
-                        nodes.push(nowSiteNode);
-                        g.stroke();
-                        g.strokeColor = color;
-                    }
+            var allPath = PathSM_1.Path.VehiclePath.allPath;
+            allPath.forEach(function (v) {
+                var color = Enums_1.ConvertRGBToColor(v.PathType);
+                g.strokeColor = color;
+                var firstPoint = v.changePoint[0].point;
+                g.moveTo(firstPoint.x, firstPoint.y);
+                for (var i = 1; i < v.changePoint.length; i++) {
+                    var np = v.changePoint[i].point;
+                    g.lineTo(np.x, np.y);
                 }
+                g.stroke();
             });
             g.lineWidth = oldWidth;
         };

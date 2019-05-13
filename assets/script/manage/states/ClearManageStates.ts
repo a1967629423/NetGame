@@ -2,6 +2,7 @@ import { MSMDsc } from "../../../frame/StateMachine/StateDec";
 import { LineClear } from "../LineClearManage";
 import { MSM } from "../../../frame/StateMachine/StateMachine";
 import { SLDSM } from "../../site/SiteLine";
+import { Path } from "../../Path/PathSM";
 const {LineClearManage,LineClearState}=LineClear
 const {mDefaultState,mLinkTo,mState,mAttach,mUnique}=MSMDsc
 const {AwaitNextUpdate}=MSM
@@ -20,39 +21,39 @@ export module ClearManageStates
     @mState('Clear',LineClearManage)
     export class Clear extends LineClearState
     {
-        haveTageLines:SLDSM.SiteLine[] = []
-        wellBeClaer:SLDSM.SiteLine[] = []
+        haveTageLines:Path.VehiclePath[] = []
+        wellBeClaer:Path.VehiclePath[] = []
         checkLineHaveClearFlag()
         {
-            SiteLine.SiteLines.forEach(lineStruct=>{
-                lineStruct.lines.forEach(line=>{
-                    if(line.ClearFlag&&!this.haveTageLines.find(value=>value===line))
-                    {
-                        this.haveTageLines.push(line);
-                    }
-                });
+            Path.VehiclePath.allPath.forEach(line=>{
+                if(line.ClearFlag&&!this.haveTageLines.find(value=>value===line))
+                {
+                    this.haveTageLines.push(line);
+                }
             })
         }
         updateMaskAndClear()
         {
-            var saveLine:SLDSM.SiteLine[] = []
+            var saveLine:Path.VehiclePath[] = []
             SiteLine.LineVehicles.forEach(value=>{
                 value.Vehicles.forEach(vehicle=>{
                     var vline = vehicle.line;
                     saveLine.push(vline);
                     var rundir = vehicle.rundir;
+                    var next = vline.NextPath;
+                    var last = vline.LastPath;
                     if(vline.isBegin)
                     {
-                        var nl = vline.NextLine;
+                        var nl = next;
                         saveLine.push(nl);
                     }
-                    if(vline.NextLine&&vline.NextLine.isEnd&&rundir)
+                    if(next&&next.isEnd&&rundir)
                     {
-                        saveLine.push(vline.NextLine);
+                        saveLine.push(next);
                     }
-                    if(vline.LastLine&&vline.LastLine.isBegin&&!rundir)
+                    if(last&&last.isBegin&&!rundir)
                     {
-                        saveLine.push(vline.LastLine);
+                        saveLine.push(last);
                     }
 
                 })

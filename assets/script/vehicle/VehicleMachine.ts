@@ -3,6 +3,7 @@ import { MSMDsc } from "../../frame/StateMachine/StateDec";
 import SitePeople from "../site/SitePeople";
 import { SiteLineSM, SiteSM } from "../site/SiteMachine";
 import { SLDSM } from "../site/SiteLine";
+import { Path } from "../Path/PathSM";
 
 // Learn TypeScript:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/typescript.html
@@ -21,8 +22,11 @@ export module Vehicle {
     export class VehicleMachine extends MSM.StateMachine {
         @property(SitePeople)
         peoples:SitePeople[] = []
-        line:SLDSM.SiteLine = null
-        nowSite:SiteSM.SiteMachine = null
+        line:Path.VehiclePath= null
+        getNowSite():SiteSM.SiteMachine
+        {
+            return this.rundir?this.line.lastSite:this.line.nextSite;
+        }
         nowProgress:number= 0;
         allLength:number = 0;
         rate:number = 100;
@@ -31,17 +35,17 @@ export module Vehicle {
         {
             if(this.line)
             {
-                return this.rundir?this.line.NextLine:this.line.LastLine;
+                return this.rundir?this.line.NextPath:this.line.LastPath;
             }
         }
         getLastLine()
         {
             if(this.line)
             {
-                return this.rundir?this.line.LastLine:this.line.NextLine;
+                return this.rundir?this.line.NextPath:this.line.LastPath;
             }
         }
-        static Factory(line:SLDSM.SiteLine,progress:number|cc.Vec2,node:cc.Node)
+        static Factory(line:Path.VehiclePath,progress:number|cc.Vec2,node:cc.Node)
         {
             var vehicle = node.getComponent(VehicleMachine);
             var position:cc.Vec2 = null

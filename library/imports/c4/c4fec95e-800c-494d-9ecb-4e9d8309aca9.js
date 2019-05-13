@@ -7,6 +7,7 @@ var StateDec_1 = require("../../../frame/StateMachine/StateDec");
 var LineClearManage_1 = require("../LineClearManage");
 var StateMachine_1 = require("../../../frame/StateMachine/StateMachine");
 var SiteLine_1 = require("../../site/SiteLine");
+var PathSM_1 = require("../../Path/PathSM");
 var LineClearManage = LineClearManage_1.LineClear.LineClearManage, LineClearState = LineClearManage_1.LineClear.LineClearState;
 var mDefaultState = StateDec_1.MSMDsc.mDefaultState, mLinkTo = StateDec_1.MSMDsc.mLinkTo, mState = StateDec_1.MSMDsc.mState, mAttach = StateDec_1.MSMDsc.mAttach, mUnique = StateDec_1.MSMDsc.mUnique;
 var AwaitNextUpdate = StateMachine_1.MSM.AwaitNextUpdate;
@@ -36,12 +37,10 @@ var ClearManageStates;
         }
         Clear.prototype.checkLineHaveClearFlag = function () {
             var _this_1 = this;
-            SiteLine.SiteLines.forEach(function (lineStruct) {
-                lineStruct.lines.forEach(function (line) {
-                    if (line.ClearFlag && !_this_1.haveTageLines.find(function (value) { return value === line; })) {
-                        _this_1.haveTageLines.push(line);
-                    }
-                });
+            PathSM_1.Path.VehiclePath.allPath.forEach(function (line) {
+                if (line.ClearFlag && !_this_1.haveTageLines.find(function (value) { return value === line; })) {
+                    _this_1.haveTageLines.push(line);
+                }
             });
         };
         Clear.prototype.updateMaskAndClear = function () {
@@ -51,15 +50,17 @@ var ClearManageStates;
                     var vline = vehicle.line;
                     saveLine.push(vline);
                     var rundir = vehicle.rundir;
+                    var next = vline.NextPath;
+                    var last = vline.LastPath;
                     if (vline.isBegin) {
-                        var nl = vline.NextLine;
+                        var nl = next;
                         saveLine.push(nl);
                     }
-                    if (vline.NextLine && vline.NextLine.isEnd && rundir) {
-                        saveLine.push(vline.NextLine);
+                    if (next && next.isEnd && rundir) {
+                        saveLine.push(next);
                     }
-                    if (vline.LastLine && vline.LastLine.isBegin && !rundir) {
-                        saveLine.push(vline.LastLine);
+                    if (last && last.isBegin && !rundir) {
+                        saveLine.push(last);
                     }
                 });
             });

@@ -25,7 +25,6 @@ var Vehicle;
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.peoples = [];
             _this.line = null;
-            _this.nowSite = null;
             _this.nowProgress = 0;
             _this.allLength = 0;
             _this.rate = 100;
@@ -33,14 +32,17 @@ var Vehicle;
             return _this;
         }
         VehicleMachine_1 = VehicleMachine;
+        VehicleMachine.prototype.getNowSite = function () {
+            return this.rundir ? this.line.lastSite : this.line.nextSite;
+        };
         VehicleMachine.prototype.getNextLine = function () {
             if (this.line) {
-                return this.rundir ? this.line.NextLine : this.line.LastLine;
+                return this.rundir ? this.line.NextPath : this.line.LastPath;
             }
         };
         VehicleMachine.prototype.getLastLine = function () {
             if (this.line) {
-                return this.rundir ? this.line.LastLine : this.line.NextLine;
+                return this.rundir ? this.line.NextPath : this.line.LastPath;
             }
         };
         VehicleMachine.Factory = function (line, progress, node) {

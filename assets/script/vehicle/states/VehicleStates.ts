@@ -16,13 +16,13 @@ export module VehicleStates {
     export class Default extends Vehicle.VehicleState {
         lastLine: SLDSM.SiteLine = null;
         Start() {
-            this.context.line.node.emit('isRun', this.context);
+            this.context.line.addVehicle(this.context)
 
         }
         update(dt) {
             var nPro = this.context.nowProgress + dt * this.context.rate;
             var sLine = this.context.line;
-            if (nPro > 0 && nPro < this.context.line.getAllLength(this.context.rundir)) {
+            if (nPro > 0 && nPro < this.context.line.allLength) {
                 var { position, radian } = this.context.line.getLocation(nPro, this.context.rundir);
                 this.context.node.position = position;
                 this.context.nowProgress = nPro;
@@ -30,24 +30,23 @@ export module VehicleStates {
             }
             else {
                 if (this.context.rundir) {
-                    if (this.context.line.NextLine) {
-                        this.context.line = this.context.line.NextLine;
+                    if (this.context.line.NextPath) {
+                        this.context.line = this.context.line.NextPath;
                     }
                 }
                 else {
-                    if (this.context.line.LastLine) {
-                        this.context.line = this.context.line.LastLine;
+                    if (this.context.line.LastPath) {
+                        this.context.line = this.context.line.LastPath;
                     }
                 }
 
-                sLine.node.emit('runEnd', this.context);
+                sLine.removeVehicle(this.context);
 
                 //this.context.line = this.context.nowSite.SiteLines.find(value=>value.LineType==this.context.line.LineType);
 
                 //this.context.nowSite = this.context.rundir? this.context.line.NextLine?this.context.line.NextLine.NowSite:this.context.line.NowSite:this.context.line.LastLine?this.context.line.LastLine.LastSite:this.context.line.NowSite;
                 if (this.context.line.isBegin || this.context.line.isEnd||this.context.getNextLine().ClearFlag) {
                     this.context.rundir = !this.context.rundir;
-
                     //this.context.nowProgress= this.context.line.isBegin?0.9:0.1;
                 }
                 this.context.nowProgress = 0;
@@ -62,9 +61,9 @@ export module VehicleStates {
     @mState('Load', Vehicle.VehicleMachine)
     export class Loading extends Vehicle.VehicleState {
         Start() {
-            debugger
-            var sitePeople = this.context.line.NowSite.SitePeople
-            var nowSite = this.context.line.NowSite
+            var nowSite = this.context.getNowSite()
+            var sitePeople = nowSite.SitePeople;
+            
             var peoples = this.context.peoples;
             var _this = this;
             this.context.startCoroutine_Auto((function* () {

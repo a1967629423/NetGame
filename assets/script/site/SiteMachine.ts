@@ -9,6 +9,8 @@ import { IObpool } from "../../frame/ObjectPool/ObjectPool";
 import GameObjectManage from "../manage/GameObjectManange";
 import ScenesObject from "../../utility/ScenesObject";
 import { SLDSM } from "./SiteLine";
+import { Path } from "../Path/PathSM";
+
 
 
 const { ccclass, property } = cc._decorator;
@@ -223,7 +225,7 @@ export module SiteSM {
         }
         @property([SitePeople])
         SitePeople: SitePeople[] = []
-        SiteLines: SLDSM.SiteLine[] = []
+        SiteLines: Path.VehiclePath[] = []
         PF: PrefabFactor = null
         @property({type:cc.Enum(SiteType)})
         SiteType: SiteType = SiteType.rect
@@ -258,16 +260,15 @@ export module SiteSM {
             if(idx>-1)
             SiteMachine.SiteMachines.splice(idx, 1);
         }
-        removeLine(line:SLDSM.SiteLine)
+        removeLine(line:Path.VehiclePath)
         {
             var idx = this.SiteLines.findIndex(value=>value===line);
             if(idx>-1)
             this.SiteLines.splice(idx,1);
         }
-        addLine(line:SLDSM.SiteLine)
+        addLine(line:Path.VehiclePath)
         {
             this.SiteLines.push(line);
-            line.NowSite = this;
         }
 
 
