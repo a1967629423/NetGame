@@ -1,70 +1,70 @@
-2019-05-14T07:25:23.404Z - normal: Load ~/.CocosCreator/settings.json
-2019-05-14T07:25:24.739Z - normal: Initializing Asset Database
-2019-05-14T07:25:24.769Z - normal: checking language setting...
-2019-05-14T07:25:24.770Z - normal: Language: zh
-2019-05-14T07:25:27.258Z - success: preview server running at http://localhost:7456
-2019-05-14T07:25:27.261Z - success: protocol editor-framework registered
-2019-05-14T07:25:27.261Z - success: protocol app registered
-2019-05-14T07:25:27.261Z - success: protocol theme registered
-2019-05-14T07:25:27.261Z - success: protocol packages registered
-2019-05-14T07:25:27.262Z - success: protocol uuid registerred
-2019-05-14T07:25:27.262Z - success: protocol db registerred
-2019-05-14T07:25:27.262Z - success: protocol thumbnail registerred
-2019-05-14T07:25:27.262Z - success: protocol unpack registerred
-2019-05-14T07:25:27.262Z - success: protocol disable-commonjs registerred
-2019-05-14T07:25:28.066Z - normal: connected!
-2019-05-14T07:25:28.068Z - normal: Check project E:\Cocos_Project\CocosCreatorFrame-NetGame
-2019-05-14T07:25:28.070Z - normal: Initializing project E:\Cocos_Project\CocosCreatorFrame-NetGame
-2019-05-14T07:25:28.631Z - normal: Initializing Cocos2d
-2019-05-14T07:25:29.404Z - normal: Initializing engine extends
-2019-05-14T07:25:29.566Z - success: asset-db-debugger loaded
-2019-05-14T07:25:29.572Z - success: baidu-adapter loaded
-2019-05-14T07:25:29.586Z - success: code-editor loaded
-2019-05-14T07:25:29.590Z - success: color-picker loaded
-2019-05-14T07:25:29.802Z - success: fb-audience-network loaded
-2019-05-14T07:25:29.955Z - success: fb-live-stream loaded
-2019-05-14T07:25:29.964Z - success: google-play-instant loaded
-2019-05-14T07:25:29.992Z - success: huawei-runtime loaded
-2019-05-14T07:25:29.993Z - success: jsb-adapter loaded
-2019-05-14T07:25:30.005Z - success: oppo-runtime loaded
-2019-05-14T07:25:30.036Z - success: package-manager loaded
-2019-05-14T07:25:30.395Z - success: qqplay-adapter loaded
-2019-05-14T07:25:30.411Z - success: runtime-dev-tools loaded
-2019-05-14T07:25:30.444Z - success: sdkbox loaded
-2019-05-14T07:25:30.449Z - success: tester loaded
-2019-05-14T07:25:30.452Z - success: ui-grid loaded
-2019-05-14T07:25:30.459Z - success: ui-kit-preview-extra loaded
-2019-05-14T07:25:30.470Z - success: ui-kit-preview loaded
-2019-05-14T07:25:30.472Z - success: ui-kit loaded
-2019-05-14T07:25:30.483Z - success: ui-tree loaded
-2019-05-14T07:25:30.495Z - success: vivo-runtime loaded
-2019-05-14T07:25:30.496Z - success: weapp-adapter loaded
-2019-05-14T07:25:30.547Z - success: assets loaded
-2019-05-14T07:25:30.551Z - success: builder loaded
-2019-05-14T07:25:31.320Z - success: cocos-services loaded
-2019-05-14T07:25:31.326Z - success: console loaded
-2019-05-14T07:25:31.371Z - success: fb-instant-games loaded
-2019-05-14T07:25:31.373Z - success: google-instant-games loaded
-2019-05-14T07:25:31.380Z - success: hierarchy loaded
-2019-05-14T07:25:31.383Z - success: inspector loaded
-2019-05-14T07:25:31.385Z - success: keystore loaded
-2019-05-14T07:25:31.391Z - success: node-library loaded
-2019-05-14T07:25:31.393Z - success: package-asset loaded
-2019-05-14T07:25:31.396Z - success: preferences loaded
-2019-05-14T07:25:31.402Z - success: project-exporter loaded
-2019-05-14T07:25:31.405Z - success: project-importer loaded
-2019-05-14T07:25:31.407Z - success: project-settings loaded
-2019-05-14T07:25:31.418Z - success: scene loaded
-2019-05-14T07:25:31.421Z - success: simulator-debugger loaded
-2019-05-14T07:25:31.423Z - success: sprite-editor loaded
-2019-05-14T07:25:31.443Z - success: store loaded
-2019-05-14T07:25:31.449Z - success: timeline loaded
-2019-05-14T07:25:31.459Z - success: cc-inspector loaded
-2019-05-14T07:25:31.460Z - warn: Invalid package name: pathcreate: do not contains uppercase characters.
-2019-05-14T07:25:31.465Z - success: pathcreate loaded
-2019-05-14T07:25:34.808Z - normal: Loading packages
-2019-05-14T07:25:34.859Z - normal: Watching packages
-2019-05-14T07:25:34.983Z - info: Cocos Services load base data!
-2019-05-14T07:25:37.675Z - normal: Run Application
-2019-05-14T07:25:46.685Z - normal: [cc-inspector] 插件启动成功: 6543
-2019-05-14T15:05:36.968Z - info: shutdown preview server
+2019-05-14T15:25:23.443Z - normal: Load ~/.CocosCreator/settings.json
+2019-05-14T15:25:25.022Z - normal: Initializing Asset Database
+2019-05-14T15:25:25.029Z - normal: checking language setting...
+2019-05-14T15:25:25.029Z - normal: Language: zh
+2019-05-14T15:25:28.234Z - success: preview server running at http://localhost:7456
+2019-05-14T15:25:28.241Z - success: protocol editor-framework registered
+2019-05-14T15:25:28.242Z - success: protocol app registered
+2019-05-14T15:25:28.242Z - success: protocol theme registered
+2019-05-14T15:25:28.242Z - success: protocol packages registered
+2019-05-14T15:25:28.243Z - success: protocol uuid registerred
+2019-05-14T15:25:28.243Z - success: protocol db registerred
+2019-05-14T15:25:28.243Z - success: protocol thumbnail registerred
+2019-05-14T15:25:28.243Z - success: protocol unpack registerred
+2019-05-14T15:25:28.243Z - success: protocol disable-commonjs registerred
+2019-05-14T15:25:31.235Z - normal: failed to connect login server due to request timeout
+2019-05-14T15:25:31.236Z - normal: Check project E:\Cocos_Project\CocosCreatorFrame-NetGame
+2019-05-14T15:25:31.239Z - normal: Initializing project E:\Cocos_Project\CocosCreatorFrame-NetGame
+2019-05-14T15:25:32.713Z - normal: Initializing Cocos2d
+2019-05-14T15:25:35.668Z - normal: Initializing engine extends
+2019-05-14T15:25:35.883Z - success: asset-db-debugger loaded
+2019-05-14T15:25:35.888Z - success: baidu-adapter loaded
+2019-05-14T15:25:35.903Z - success: code-editor loaded
+2019-05-14T15:25:35.911Z - success: color-picker loaded
+2019-05-14T15:25:36.309Z - success: fb-audience-network loaded
+2019-05-14T15:25:36.480Z - success: fb-live-stream loaded
+2019-05-14T15:25:36.491Z - success: google-play-instant loaded
+2019-05-14T15:25:36.520Z - success: huawei-runtime loaded
+2019-05-14T15:25:36.522Z - success: jsb-adapter loaded
+2019-05-14T15:25:36.545Z - success: oppo-runtime loaded
+2019-05-14T15:25:36.570Z - success: package-manager loaded
+2019-05-14T15:25:37.340Z - success: qqplay-adapter loaded
+2019-05-14T15:25:37.344Z - success: runtime-dev-tools loaded
+2019-05-14T15:25:37.360Z - success: sdkbox loaded
+2019-05-14T15:25:37.378Z - success: tester loaded
+2019-05-14T15:25:37.384Z - success: ui-grid loaded
+2019-05-14T15:25:37.389Z - success: ui-kit-preview-extra loaded
+2019-05-14T15:25:37.394Z - success: ui-kit-preview loaded
+2019-05-14T15:25:37.398Z - success: ui-kit loaded
+2019-05-14T15:25:37.404Z - success: ui-tree loaded
+2019-05-14T15:25:37.420Z - success: vivo-runtime loaded
+2019-05-14T15:25:37.421Z - success: weapp-adapter loaded
+2019-05-14T15:25:37.723Z - success: assets loaded
+2019-05-14T15:25:37.729Z - success: builder loaded
+2019-05-14T15:25:38.757Z - success: cocos-services loaded
+2019-05-14T15:25:38.766Z - success: console loaded
+2019-05-14T15:25:38.854Z - success: fb-instant-games loaded
+2019-05-14T15:25:38.858Z - success: google-instant-games loaded
+2019-05-14T15:25:38.871Z - success: hierarchy loaded
+2019-05-14T15:25:38.878Z - success: inspector loaded
+2019-05-14T15:25:38.882Z - success: keystore loaded
+2019-05-14T15:25:38.893Z - success: node-library loaded
+2019-05-14T15:25:38.899Z - success: package-asset loaded
+2019-05-14T15:25:38.902Z - success: preferences loaded
+2019-05-14T15:25:38.906Z - success: project-exporter loaded
+2019-05-14T15:25:38.913Z - success: project-importer loaded
+2019-05-14T15:25:38.918Z - success: project-settings loaded
+2019-05-14T15:25:38.930Z - success: scene loaded
+2019-05-14T15:25:38.935Z - success: simulator-debugger loaded
+2019-05-14T15:25:38.940Z - success: sprite-editor loaded
+2019-05-14T15:25:38.949Z - success: store loaded
+2019-05-14T15:25:38.960Z - success: timeline loaded
+2019-05-14T15:25:38.987Z - success: cc-inspector loaded
+2019-05-14T15:25:38.987Z - warn: Invalid package name: pathcreate: do not contains uppercase characters.
+2019-05-14T15:25:38.997Z - success: pathcreate loaded
+2019-05-14T15:25:45.761Z - normal: Loading packages
+2019-05-14T15:25:45.781Z - normal: Watching packages
+2019-05-14T15:25:46.928Z - info: Cocos Services load base data!
+2019-05-14T15:25:51.563Z - normal: Run Application
+2019-05-14T15:26:10.758Z - normal: [cc-inspector] 插件启动成功: 6543
+2019-05-14T15:36:44.588Z - info: shutdown preview server

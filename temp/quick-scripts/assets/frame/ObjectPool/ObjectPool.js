@@ -18,8 +18,13 @@ var ObjectPool = /** @class */ (function () {
         this.dir = dir;
     }
     ObjectPool.prototype.UnuseCallback = function (v) {
-        if (v['unuse'])
-            v['unuse']();
+        if (v['__poolInit']) {
+            if (v['unuse'])
+                v['unuse']();
+        }
+        else {
+            v['__poolInit'] = true;
+        }
     };
     ObjectPool.prototype.ReuseCallback = function (re, reuseValue) {
         if (re && re['reuse'])

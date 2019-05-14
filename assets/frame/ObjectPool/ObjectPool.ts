@@ -24,7 +24,15 @@ export default class ObjectPool<T> {
     }
     UnuseCallback(v:any)
     {
-        if(v['unuse'])v['unuse']();
+        if(v['__poolInit'])
+        {
+            if(v['unuse'])v['unuse']();
+        }
+        else
+        {
+            v['__poolInit'] = true;
+        }
+        
     }
     ReuseCallback(re:any,reuseValue:any[])
     {

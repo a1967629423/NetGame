@@ -29,6 +29,7 @@ var ObjectFactory = /** @class */ (function (_super) {
             reuslt['__proto__'] = this.csr.prototype;
             reuslt['__factory'] = this;
             this.csr.apply(reuslt, this.args);
+            this.UnuseCallback(reuslt);
         }
         this.ReuseCallback(reuslt, v);
         return reuslt;

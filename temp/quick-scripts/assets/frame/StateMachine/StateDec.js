@@ -224,12 +224,15 @@ var MSMDsc;
         if (callback === void 0) { callback = null; }
         return function (target, methodName, descriptor) {
             var oldStart = target.Start;
-            var nowTime = 0;
-            var dir = true;
             //init action pool
             var actions = target['__actions'];
             if (!actions)
                 target['__actions'] = [];
+            var ad = target['__actionData'];
+            if (!ad) {
+                ad = { nowTime: 0, direction: true };
+                target['__actionData'] = ad;
+            }
             var actionFunction = target[methodName];
             //set action name
             var actionName = name;
@@ -239,7 +242,7 @@ var MSMDsc;
             target.Start = function () {
                 oldStart.apply(this, arguments);
                 var iter = this.context.startCoroutine_Auto((function (_this) {
-                    var count, dt, dt;
+                    var count, dt, dir, nowTime, dt, dir, nowTime;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
@@ -251,23 +254,25 @@ var MSMDsc;
                                 return [4 /*yield*/, StateMachine_1.MSM.AwaitNextUpdate.getInstance()];
                             case 2:
                                 dt = _a.sent();
+                                dir = ad.direction;
+                                nowTime = ad.nowTime;
                                 if (dir ? nowTime < duration : nowTime >= 0) {
                                     _this[methodName](nowTime === 0 ? 0 : nowTime / duration);
-                                    nowTime += dt * (dir ? 1 : -1);
+                                    ad.nowTime += dt * (dir ? 1 : -1);
                                 }
                                 else {
                                     count--;
                                     if (havereverse) {
-                                        nowTime = dir ? duration : 0;
-                                        dir = !dir;
+                                        ad.nowTime = dir ? duration : 0;
+                                        ad.direction = !dir;
                                     }
                                     else {
-                                        nowTime = 0;
+                                        ad.nowTime = 0;
                                     }
                                 }
                                 return [3 /*break*/, 1];
                             case 3:
-                                _this[methodName](nowTime === 0 ? 0 : nowTime / duration);
+                                _this[methodName](ad.nowTime === 0 ? 0 : ad.nowTime / duration);
                                 if (callback)
                                     callback.apply(_this);
                                 return [3 /*break*/, 6];
@@ -276,16 +281,18 @@ var MSMDsc;
                                 return [4 /*yield*/, StateMachine_1.MSM.AwaitNextUpdate.getInstance()];
                             case 5:
                                 dt = _a.sent();
+                                dir = ad.direction;
+                                nowTime = ad.nowTime;
                                 if (dir ? nowTime < duration : nowTime >= 0) {
                                     _this[methodName](nowTime === 0 ? 0 : nowTime / duration);
-                                    nowTime += dt * (dir ? 1 : -1);
+                                    ad.nowTime += dt * (dir ? 1 : -1);
                                 }
                                 else if (havereverse) {
-                                    nowTime = dir ? duration : 0;
-                                    dir = !dir;
+                                    ad.nowTime = dir ? duration : 0;
+                                    ad.direction = !dir;
                                 }
                                 else {
-                                    nowTime = 0;
+                                    ad.nowTime = 0;
                                 }
                                 return [3 /*break*/, 4];
                             case 6: return [2 /*return*/];

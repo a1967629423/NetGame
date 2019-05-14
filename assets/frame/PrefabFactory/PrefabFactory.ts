@@ -173,7 +173,8 @@ export default class PrefabFactor extends cc.Component {
         var renode = result.pool.pop(reuseValue)
         if(!renode)
         {
-            renode = this.Nodefactory(result)
+            renode = this.Nodefactory(result);
+            renode['__poolInit'] = true;
             //result.pool.push(renode);
         }
         return renode;

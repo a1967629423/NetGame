@@ -187,6 +187,7 @@ var PrefabFactor = /** @class */ (function (_super) {
                         renode = result.pool.pop(reuseValue);
                         if (!renode) {
                             renode = this.Nodefactory(result);
+                            renode['__poolInit'] = true;
                             //result.pool.push(renode);
                         }
                         return [2 /*return*/, renode];

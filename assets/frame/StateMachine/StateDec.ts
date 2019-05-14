@@ -75,8 +75,7 @@ export module MSMDsc {
                 if (linkc) {
                     gsu.stateRelation.push({ source: tar, target: linkc.st, eventname: eventname, type: 1 });
                 }
-                else
-                {
+                else {
                     gsu.stateRelation.push({ source: tar, target: targenamet, eventname: eventname, type: 1 });
                 }
                 if (!gsu.eventsName.find(value => { return value === eventname })) gsu.eventsName.push(eventname)
@@ -84,7 +83,7 @@ export module MSMDsc {
         }
         return (target: { new(cxt: P): T }) => {
             if (!target.prototype['_su_']) {
-                console.warn('mState应该声明在前面:'+target.name);
+                console.warn('mState应该声明在前面:' + target.name);
                 setTimeout(() => { initLink(target) });
             }
             else {
@@ -191,6 +190,7 @@ export module MSMDsc {
     }
     //当actionfunction的name项为空时，使用idx作为name
     var actionNameIdx: number = 1;
+    type actionData = { nowTime: number, direction: boolean }
     /**
      * 标识为动作函数，在每次update时调用，每次调用传入dt。注：无论duration设置多长dt始终为0 - 1
      * 基本与Cocos Creator的Action保持一致
@@ -203,11 +203,14 @@ export module MSMDsc {
     export function ActionUpdate<T extends MSM.State>(duration: number, havereverse: boolean = true, loopCount: number = 0, callback: (this: T) => any = null, name?: string) {
         return (target: T, methodName: string, descriptor: TypedPropertyDescriptor<any>) => {
             var oldStart = target.Start;
-            var nowTime = 0;
-            var dir: boolean = true;
             //init action pool
             var actions = target['__actions'];
             if (!actions) target['__actions'] = [];
+            var ad: actionData = target['__actionData'];
+            if (!ad) {
+                ad = { nowTime: 0, direction: true }
+                target['__actionData'] = ad;
+            }
             var actionFunction = target[methodName];
             //set action name
             var actionName = name
@@ -220,37 +223,42 @@ export module MSMDsc {
                         var count = havereverse ? loopCount * 2 : loopCount;
                         while (count) {
                             var dt = yield MSM.AwaitNextUpdate.getInstance();
+                            let dir = ad.direction;
+                            let nowTime = ad.nowTime;
                             if (dir ? nowTime < duration : nowTime >= 0) {
                                 _this[methodName](nowTime === 0 ? 0 : nowTime / duration);
-                                nowTime += dt * (dir ? 1 : -1);
+                                ad.nowTime += dt * (dir ? 1 : -1);
                             }
                             else {
                                 count--;
                                 if (havereverse) {
-                                    nowTime = dir ? duration : 0;
-                                    dir = !dir;
+                                    ad.nowTime = dir ? duration : 0;
+                                    ad.direction = !dir;
                                 }
                                 else {
-                                    nowTime = 0;
+                                    ad.nowTime = 0;
                                 }
                             }
                         }
-                        _this[methodName](nowTime === 0 ? 0 : nowTime / duration);
+
+                        _this[methodName](ad.nowTime === 0 ? 0 : ad.nowTime / duration);
                         if (callback) callback.apply(_this);
                     }
                     else {
                         while (true) {
                             var dt = yield MSM.AwaitNextUpdate.getInstance();
+                            let dir = ad.direction;
+                            let nowTime = ad.nowTime;
                             if (dir ? nowTime < duration : nowTime >= 0) {
                                 _this[methodName](nowTime === 0 ? 0 : nowTime / duration);
-                                nowTime += dt * (dir ? 1 : -1);
+                                ad.nowTime += dt * (dir ? 1 : -1);
                             }
                             else if (havereverse) {
-                                nowTime = dir ? duration : 0;
-                                dir = !dir;
+                                ad.nowTime = dir ? duration : 0;
+                                ad.direction = !dir;
                             }
                             else {
-                                nowTime = 0;
+                                ad.nowTime = 0;
                             }
                         }
                     }
