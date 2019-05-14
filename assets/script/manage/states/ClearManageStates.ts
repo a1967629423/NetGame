@@ -3,6 +3,9 @@ import { LineClear } from "../LineClearManage";
 import { MSM } from "../../../frame/StateMachine/StateMachine";
 import { SLDSM } from "../../site/SiteLine";
 import { Path } from "../../Path/PathSM";
+import { Vehicle } from "../../vehicle/VehicleMachine";
+import ScenesObject from "../../../utility/ScenesObject";
+import { LineRender } from "../../render/LineRender";
 const {LineClearManage,LineClearState}=LineClear
 const {mDefaultState,mLinkTo,mState,mAttach,mUnique}=MSMDsc
 const {AwaitNextUpdate}=MSM
@@ -25,6 +28,7 @@ export module ClearManageStates
         wellBeClaer:Path.VehiclePath[] = []
         checkLineHaveClearFlag()
         {
+            debugger;
             Path.VehiclePath.allPath.forEach(line=>{
                 if(line.ClearFlag&&!this.haveTageLines.find(value=>value===line))
                 {
@@ -35,37 +39,28 @@ export module ClearManageStates
         updateMaskAndClear()
         {
             var saveLine:Path.VehiclePath[] = []
-            SiteLine.LineVehicles.forEach(value=>{
-                value.Vehicles.forEach(vehicle=>{
-                    var vline = vehicle.line;
-                    saveLine.push(vline);
-                    var rundir = vehicle.rundir;
-                    var next = vline.NextPath;
-                    var last = vline.LastPath;
-                    if(vline.isBegin)
-                    {
-                        var nl = next;
-                        saveLine.push(nl);
-                    }
-                    if(next&&next.isEnd&&rundir)
-                    {
-                        saveLine.push(next);
-                    }
-                    if(last&&last.isBegin&&!rundir)
-                    {
-                        saveLine.push(last);
-                    }
-
-                })
-            });
+            Vehicle.VehicleMachine.allVehicle.forEach(vehicle=>{
+                if(saveLine.every(v=>v!==vehicle.line))
+                {
+                    saveLine.push(vehicle.line);
+                }
+            })
+            var recycleFlag = false;
             for(var i = this.haveTageLines.length-1;i>=0;i--)
             {
                 var tl = this.haveTageLines[i];
+                
                 if(!saveLine.find(v=>v===tl))
                 {
+                    recycleFlag = true;
                     tl.recycle();
                     this.haveTageLines.splice(i);
                 }
+            }
+            if(recycleFlag)
+            {
+                var LR = ScenesObject.instance.node.getComponentInChildren(LineRender.LineRenderStateMachine);
+                LR.updateRender();
             }
         }
         Start()

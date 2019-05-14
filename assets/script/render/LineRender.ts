@@ -37,23 +37,20 @@ export module LineRender {
         {
             var childrens = Path.VehiclePath.allPath;
             var testPoint=this.node.convertToNodeSpaceAR(IPSM.ConvertInputPointToWorld(point,this.node));
-            if(childrens.length>1)
+            for(var i =0;i<childrens.length;i++)
             {
-                for(var i =0;i<childrens.length;i++)
+                var nSite = childrens[i];
+                var points = nSite.changePoint;
+                var lastPoint:Helper.Point = nSite.lastSite.node.position; 
+                for(var idx=0;idx<points.length;idx++)
                 {
-                    var nSite = childrens[i];
-                    var points = nSite.changePoint;
-                    var lastPoint:Helper.Point = nSite.lastSite.node.position; 
-                    for(var idx=0;idx<points.length;idx++)
+                    var nowPoint = points[idx].point;
+                    if(Helper.HitTestHelper.LineHitTest(lastPoint,nowPoint,testPoint,this.lineWidth))
                     {
-                        var nowPoint = points[idx].point;
-                        if(Helper.HitTestHelper.LineHitTest(lastPoint,nowPoint,testPoint,this.lineWidth))
-                        {
-                            this._HitedLine = nSite;
-                            return true;
-                        }
-                        lastPoint = nowPoint;
+                        this._HitedLine = nSite;
+                        return true;
                     }
+                    lastPoint = nowPoint;
                 }
             }
             return false;

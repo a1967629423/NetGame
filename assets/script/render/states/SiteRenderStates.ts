@@ -4,6 +4,7 @@ import { SLDSM } from "../../site/SiteLine";
 import { ConvertRGBToColor } from "../../Enums";
 import { Helper } from "../../../utility/Helper";
 import { SiteSM } from "../../site/SiteMachine";
+import { Path } from "../../Path/PathSM";
 
 const {mState,mLinkTo,mDefaultState,ActionUpdate}=MSMDsc
 const {SiteRenderState,SiteRenderStateMachine}=SiteRender
@@ -64,15 +65,20 @@ export module SiteRenderStates
             var oldWidth = g.lineWidth;
             g.lineWidth = this.nowLineWith;
             g.moveTo(0,0);
-            this.context.node.children.forEach(value=>{
-                var now = SiteLine.getBeginLine(this.context.nowShowType)
-                while(now)
+            var firstPath = Path.VehiclePath.findForFirstPathInAllPath(this.context.nowShowType);
+            debugger
+            while(firstPath)
+            {
+                var renderNode = firstPath.lastSite.node;
+                if(firstPath.isEnd)
                 {
-                    var nowNode = now.NowSite.node;
-                    g.circle(nowNode.x,nowNode.y,this.context.SiteRadius);
-                    now = now.NextLine;
+                    renderNode = firstPath.nextSite.node;
+                    var renderNode1 = firstPath.lastSite.node;
+                    g.circle(renderNode1.x,renderNode1.y,this.context.SiteRadius)
                 }
-            });
+                g.circle(renderNode.x,renderNode.y,this.context.SiteRadius);
+                firstPath = firstPath.NextPath;
+            }
             g.stroke();
             g.lineWidth = oldWidth;
         }

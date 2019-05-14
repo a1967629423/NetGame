@@ -40,19 +40,17 @@ var LineRender;
         LineRenderStateMachine.prototype.HitTest = function (point, listen) {
             var childrens = PathSM_1.Path.VehiclePath.allPath;
             var testPoint = this.node.convertToNodeSpaceAR(InputManage_1.IPSM.ConvertInputPointToWorld(point, this.node));
-            if (childrens.length > 1) {
-                for (var i = 0; i < childrens.length; i++) {
-                    var nSite = childrens[i];
-                    var points = nSite.changePoint;
-                    var lastPoint = nSite.lastSite.node.position;
-                    for (var idx = 0; idx < points.length; idx++) {
-                        var nowPoint = points[idx].point;
-                        if (Helper_1.Helper.HitTestHelper.LineHitTest(lastPoint, nowPoint, testPoint, this.lineWidth)) {
-                            this._HitedLine = nSite;
-                            return true;
-                        }
-                        lastPoint = nowPoint;
+            for (var i = 0; i < childrens.length; i++) {
+                var nSite = childrens[i];
+                var points = nSite.changePoint;
+                var lastPoint = nSite.lastSite.node.position;
+                for (var idx = 0; idx < points.length; idx++) {
+                    var nowPoint = points[idx].point;
+                    if (Helper_1.Helper.HitTestHelper.LineHitTest(lastPoint, nowPoint, testPoint, this.lineWidth)) {
+                        this._HitedLine = nSite;
+                        return true;
                     }
+                    lastPoint = nowPoint;
                 }
             }
             return false;

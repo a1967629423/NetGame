@@ -37,8 +37,13 @@ var Path;
             this.vehicles = [];
             this.__np = cc.v2();
         }
+        VehiclePath.findForFirstPathInAllPath = function (type) {
+            return this.allPath.find(function (v) { return v.PathType === type && !(v.mask & 13) && v.isBegin; });
+        };
         VehiclePath.prototype.unuse = function (value) {
             var _this = this;
+            this.lastSite.removeLine(this);
+            this.nextSite.removeLine(this);
             this.lastSite = null;
             this.nextSite = null;
             this.mask = 0;
@@ -106,7 +111,7 @@ var Path;
         });
         Object.defineProperty(VehiclePath.prototype, "ClearFlag", {
             get: function () {
-                return !!(this.mask & 8);
+                return !!(this.mask & 4);
             },
             enumerable: true,
             configurable: true

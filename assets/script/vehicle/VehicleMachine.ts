@@ -20,6 +20,7 @@ export module Vehicle {
     @MSMDsc.mStateMachine
     @ccclass
     export class VehicleMachine extends MSM.StateMachine {
+        static allVehicle:VehicleMachine[] = [];
         @property(SitePeople)
         peoples:SitePeople[] = []
         line:Path.VehiclePath= null
@@ -27,6 +28,21 @@ export module Vehicle {
         {
             return this.rundir?this.line.lastSite:this.line.nextSite;
         }
+        unuse()
+        {
+            super.unuse();
+            var idx = VehicleMachine.allVehicle.findIndex(v=>v===this)
+            if(idx!==-1)
+            {
+                VehicleMachine.allVehicle.splice(idx);
+            }
+        }
+        reuse()
+        {
+            super.reuse();
+            VehicleMachine.allVehicle.push(this);
+        }
+        nowSite:SiteSM.SiteMachine = null;
         nowProgress:number= 0;
         allLength:number = 0;
         rate:number = 100;

@@ -48,13 +48,13 @@ export default class GameObjectManage extends cc.Component {
         }
         return this._instance;
     }
-    vehicleCount: number = 3;
+    vehicleCount: number = 2;
     lineCount: number = 2;
     saveLineType: SiteLineType[] = []
     residueLineType: SiteLineType[] = []
     GOCache: { Vehicle: boolean, Line: boolean, Site: boolean } = { Vehicle: false, Line: false, Site: false }
-    PathFactory:ObjectFactory<Path.VehiclePath> = null;
-    async getVehicle(nowProgress: number, line:Path.VehiclePath) {
+    PathFactory: ObjectFactory<Path.VehiclePath> = null;
+    async getVehicle(nowProgress: number, line: Path.VehiclePath) {
         var config = await PrefabFactor.LoadRes(PrefabFactor.prefabConfig);
         if (config && config.json.vehicle && this.vehicleCount > 0) {
             this.vehicleCount--;
@@ -65,6 +65,7 @@ export default class GameObjectManage extends cc.Component {
                 var machine = vehicle.getComponent(Vehicle.VehicleMachine)
                 machine.nowProgress = nowProgress;
                 machine.line = line;
+                machine.nowSite = nowProgress === line.allLength ? line.nextSite : line.lastSite;
                 return machine;
             }
         }
@@ -89,37 +90,30 @@ export default class GameObjectManage extends cc.Component {
         //var lastLine = last?last.SiteLines.find(value=>value.LineType===t):null;
         if (nowLine) {
             if (nextLine) {
-                if(nextLine.isBegin||nextLine.isEnd||nowLine.isBegin||nowLine.isEnd)
-                {
+                if (nextLine.isBegin || nextLine.isEnd || nowLine.isBegin || nowLine.isEnd) {
                     return 3;
                 }
             }
-            else if(nowLine.isEnd||nowLine.isBegin)
-            {
+            else if (nowLine.isEnd || nowLine.isBegin) {
                 return 1;
             }
-            else
-            {
+            else {
                 return 2;
             }
         }
-        else if(!nextLine) 
-        {
+        else if (!nextLine) {
             return 1;
         }
-        else
-        {
+        else {
             return 0;
         }
 
 
     }
-    async CreateLine(nowSite:SiteSM.SiteMachine,nextSite:SiteSM.SiteMachine,type:SiteLineType)
-    {
-        if(!this.PathFactory)this.PathFactory = new ObjectFactory<Path.VehiclePath>(true,Path.VehiclePath);
-        var line = this.PathFactory.pop(nowSite,nextSite,type);
-        if(line)
-        {
+    async CreateLine(nowSite: SiteSM.SiteMachine, nextSite: SiteSM.SiteMachine, type: SiteLineType) {
+        if (!this.PathFactory) this.PathFactory = new ObjectFactory<Path.VehiclePath>(true, Path.VehiclePath);
+        var line = this.PathFactory.pop(nowSite, nextSite, type);
+        if (line) {
             nowSite.addLine(line);
             nextSite.addLine(line);
             return line;
@@ -129,41 +123,36 @@ export default class GameObjectManage extends cc.Component {
     async getLine(type: SiteLineType, lastSite: SiteSM.SiteMachine, nowSite: SiteSM.SiteMachine, endSite: SiteSM.SiteMachine): Promise<SLDSM.SiteLine> {
         var operatorType = this.getOperatorType(type, lastSite, nowSite, endSite)
         this.getLineType(type);
-        var nSL = nowSite.SiteLines.find(value => value.PathType === type&&!(value.mask&13));
-        var nextSl = endSite.SiteLines.find(value => value.PathType === type&&!(value.mask&13));
-        var LR =ScenesObject.instance.getComponentInChildren(LineRender.LineRenderStateMachine);
+        var nSL = nowSite.SiteLines.find(value => value.PathType === type && !(value.mask & 13));
+        var nextSl = endSite.SiteLines.find(value => value.PathType === type && !(value.mask & 13));
+        var LR = ScenesObject.instance.getComponentInChildren(LineRender.LineRenderStateMachine);
         switch (operatorType) {
             case 1:
                 //增加
-                
-                var newPath = await this.CreateLine(nowSite,endSite,type);
+                var newPath = await this.CreateLine(nowSite, endSite, type);
                 debugger;
-                if(newPath.isBegin&&newPath.isEnd)
-                {
-                    var vehiclesNode =  ScenesObject.instance.node.getChildByName('vehicles')
-                    var vehicle = await this.getVehicle(0,newPath);
+                if (newPath.isBegin && newPath.isEnd) {
+                    var vehiclesNode = ScenesObject.instance.node.getChildByName('vehicles')
+                    var vehicle = await this.getVehicle(0, newPath);
                     vehiclesNode.addChild(vehicle.node);
                 }
-                LR.updateRender();
                 break;
             case 2:
-                //修改
-                //连接原先两个点
-                //一次删两个
                 nSL.mask |= 11;
-                nSL = await this.CreateLine(nowSite,endSite,type);
+                nSL = await this.CreateLine(nowSite, endSite, type);
                 break;
             case 3:
-            nSL.mask |= 7;
-            LineClear.LineClearManage.Instance.updateClear();
+                nSL.mask |= 5;
+                LineClear.LineClearManage.Instance.updateClear();
+                
                 break;
             case 4:
 
                 break;
-            //删除
             default:
                 break;
         }
+        LR.updateRender();
         return null
 
     }

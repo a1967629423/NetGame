@@ -28,7 +28,7 @@ var GameObjectManage = /** @class */ (function (_super) {
     __extends(GameObjectManage, _super);
     function GameObjectManage() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.vehicleCount = 3;
+        _this.vehicleCount = 2;
         _this.lineCount = 2;
         _this.saveLineType = [];
         _this.residueLineType = [];
@@ -88,6 +88,7 @@ var GameObjectManage = /** @class */ (function (_super) {
                             machine = vehicle.getComponent(VehicleMachine_1.Vehicle.VehicleMachine);
                             machine.nowProgress = nowProgress;
                             machine.line = line;
+                            machine.nowSite = nowProgress === line.allLength ? line.nextSite : line.lastSite;
                             return [2 /*return*/, machine];
                         }
                         _a.label = 3;
@@ -180,25 +181,22 @@ var GameObjectManage = /** @class */ (function (_super) {
                         vehicle = _b.sent();
                         vehiclesNode.addChild(vehicle.node);
                         _b.label = 4;
-                    case 4:
-                        LR.updateRender();
-                        return [3 /*break*/, 10];
+                    case 4: return [3 /*break*/, 10];
                     case 5:
-                        //修改
-                        //连接原先两个点
-                        //一次删两个
                         nSL.mask |= 11;
                         return [4 /*yield*/, this.CreateLine(nowSite, endSite, type)];
                     case 6:
                         nSL = _b.sent();
                         return [3 /*break*/, 10];
                     case 7:
-                        nSL.mask |= 7;
+                        nSL.mask |= 5;
                         LineClearManage_1.LineClear.LineClearManage.Instance.updateClear();
                         return [3 /*break*/, 10];
                     case 8: return [3 /*break*/, 10];
                     case 9: return [3 /*break*/, 10];
-                    case 10: return [2 /*return*/, null];
+                    case 10:
+                        LR.updateRender();
+                        return [2 /*return*/, null];
                 }
             });
         });

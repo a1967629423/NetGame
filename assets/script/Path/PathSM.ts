@@ -13,7 +13,13 @@ export module Path {
          * 当路线从对象池中取出之后会注册到此数组中
          */
         static allPath: VehiclePath[] = [];
+        static findForFirstPathInAllPath(type:SiteLineType)
+        {
+            return this.allPath.find(v=>v.PathType===type&&!(v.mask&13)&&v.isBegin)
+        }
         unuse(value?: any) {
+            this.lastSite.removeLine(this);
+            this.nextSite.removeLine(this);
             this.lastSite = null;
             this.nextSite = null;
             this.mask = 0;
@@ -89,7 +95,7 @@ export module Path {
         }
         get ClearFlag():boolean
         {
-            return !!(this.mask&8);
+            return !!(this.mask&4);
         }
         caculatePath(n:cc.Vec2,e:cc.Vec2) {
             var Line = this;

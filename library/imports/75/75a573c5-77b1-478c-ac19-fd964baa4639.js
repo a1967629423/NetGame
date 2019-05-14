@@ -25,6 +25,7 @@ var Vehicle;
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.peoples = [];
             _this.line = null;
+            _this.nowSite = null;
             _this.nowProgress = 0;
             _this.allLength = 0;
             _this.rate = 100;
@@ -34,6 +35,18 @@ var Vehicle;
         VehicleMachine_1 = VehicleMachine;
         VehicleMachine.prototype.getNowSite = function () {
             return this.rundir ? this.line.lastSite : this.line.nextSite;
+        };
+        VehicleMachine.prototype.unuse = function () {
+            var _this = this;
+            _super.prototype.unuse.call(this);
+            var idx = VehicleMachine_1.allVehicle.findIndex(function (v) { return v === _this; });
+            if (idx !== -1) {
+                VehicleMachine_1.allVehicle.splice(idx);
+            }
+        };
+        VehicleMachine.prototype.reuse = function () {
+            _super.prototype.reuse.call(this);
+            VehicleMachine_1.allVehicle.push(this);
         };
         VehicleMachine.prototype.getNextLine = function () {
             if (this.line) {
@@ -59,6 +72,7 @@ var Vehicle;
             vehicle.line = line;
         };
         var VehicleMachine_1;
+        VehicleMachine.allVehicle = [];
         __decorate([
             property(SitePeople_1.default)
         ], VehicleMachine.prototype, "peoples", void 0);

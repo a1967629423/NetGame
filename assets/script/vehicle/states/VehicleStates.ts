@@ -9,7 +9,7 @@ import { SLDSM } from "../../site/SiteLine";
  */
 const { mDefaultState, mLinkTo, mState } = MSMDsc
 export module VehicleStates {
-    
+
     @mDefaultState
     @mLinkTo('Load', 'loading')
     @mState('Default', Vehicle.VehicleMachine)
@@ -29,21 +29,22 @@ export module VehicleStates {
                 this.context.node.rotation = DMath.radianToAngle(radian)
             }
             else {
-                debugger;
                 if (this.context.rundir) {
-                    if(this.context.line.isEnd)
-                    {
-                        this.context.rundir=!this.context.rundir;
+                    this.context.nowSite = this.context.line.nextSite;
+                    if (this.context.line.isEnd) {
+                        this.context.rundir = !this.context.rundir;
                     }
                     else if (this.context.line.NextPath) {
+
                         this.context.line = this.context.line.NextPath;
                     }
                 }
                 else {
-                    if(this.context.line.isBegin)
-                    {
-                        this.context.rundir=!this.context.rundir;
+                    this.context.nowSite = this.context.line.lastSite;
+                    if (this.context.line.isBegin) {
+                        this.context.rundir = !this.context.rundir;
                     } else if (this.context.line.LastPath) {
+
                         this.context.line = this.context.line.LastPath;
                     }
                 }
@@ -58,20 +59,19 @@ export module VehicleStates {
                 //     //this.context.nowProgress= this.context.line.isBegin?0.9:0.1;
                 // }
                 this.context.nowProgress = 0;
-                debugger;
                 this.context.emit('loading')
             }
 
         }
     }
-    
+
     @mLinkTo('Default', 'loaded')
     @mState('Load', Vehicle.VehicleMachine)
     export class Loading extends Vehicle.VehicleState {
         Start() {
-            var nowSite = this.context.getNowSite()
+            var nowSite = this.context.nowSite
             var sitePeople = nowSite.SitePeople;
-            
+
             var peoples = this.context.peoples;
             var _this = this;
             this.context.startCoroutine_Auto((function* () {

@@ -8,6 +8,9 @@ var LineClearManage_1 = require("../LineClearManage");
 var StateMachine_1 = require("../../../frame/StateMachine/StateMachine");
 var SiteLine_1 = require("../../site/SiteLine");
 var PathSM_1 = require("../../Path/PathSM");
+var VehicleMachine_1 = require("../../vehicle/VehicleMachine");
+var ScenesObject_1 = require("../../../utility/ScenesObject");
+var LineRender_1 = require("../../render/LineRender");
 var LineClearManage = LineClearManage_1.LineClear.LineClearManage, LineClearState = LineClearManage_1.LineClear.LineClearState;
 var mDefaultState = StateDec_1.MSMDsc.mDefaultState, mLinkTo = StateDec_1.MSMDsc.mLinkTo, mState = StateDec_1.MSMDsc.mState, mAttach = StateDec_1.MSMDsc.mAttach, mUnique = StateDec_1.MSMDsc.mUnique;
 var AwaitNextUpdate = StateMachine_1.MSM.AwaitNextUpdate;
@@ -37,6 +40,7 @@ var ClearManageStates;
         }
         Clear.prototype.checkLineHaveClearFlag = function () {
             var _this_1 = this;
+            debugger;
             PathSM_1.Path.VehiclePath.allPath.forEach(function (line) {
                 if (line.ClearFlag && !_this_1.haveTageLines.find(function (value) { return value === line; })) {
                     _this_1.haveTageLines.push(line);
@@ -45,31 +49,23 @@ var ClearManageStates;
         };
         Clear.prototype.updateMaskAndClear = function () {
             var saveLine = [];
-            SiteLine.LineVehicles.forEach(function (value) {
-                value.Vehicles.forEach(function (vehicle) {
-                    var vline = vehicle.line;
-                    saveLine.push(vline);
-                    var rundir = vehicle.rundir;
-                    var next = vline.NextPath;
-                    var last = vline.LastPath;
-                    if (vline.isBegin) {
-                        var nl = next;
-                        saveLine.push(nl);
-                    }
-                    if (next && next.isEnd && rundir) {
-                        saveLine.push(next);
-                    }
-                    if (last && last.isBegin && !rundir) {
-                        saveLine.push(last);
-                    }
-                });
+            VehicleMachine_1.Vehicle.VehicleMachine.allVehicle.forEach(function (vehicle) {
+                if (saveLine.every(function (v) { return v !== vehicle.line; })) {
+                    saveLine.push(vehicle.line);
+                }
             });
+            var recycleFlag = false;
             for (var i = this.haveTageLines.length - 1; i >= 0; i--) {
                 var tl = this.haveTageLines[i];
                 if (!saveLine.find(function (v) { return v === tl; })) {
+                    recycleFlag = true;
                     tl.recycle();
                     this.haveTageLines.splice(i);
                 }
+            }
+            if (recycleFlag) {
+                var LR = ScenesObject_1.default.instance.node.getComponentInChildren(LineRender_1.LineRender.LineRenderStateMachine);
+                LR.updateRender();
             }
         };
         Clear.prototype.Start = function () {

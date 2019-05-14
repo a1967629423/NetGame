@@ -34,8 +34,8 @@ var VehicleStates;
                 this.context.node.rotation = DMath.radianToAngle(radian);
             }
             else {
-                debugger;
                 if (this.context.rundir) {
+                    this.context.nowSite = this.context.line.nextSite;
                     if (this.context.line.isEnd) {
                         this.context.rundir = !this.context.rundir;
                     }
@@ -44,6 +44,7 @@ var VehicleStates;
                     }
                 }
                 else {
+                    this.context.nowSite = this.context.line.lastSite;
                     if (this.context.line.isBegin) {
                         this.context.rundir = !this.context.rundir;
                     }
@@ -59,7 +60,6 @@ var VehicleStates;
                 //     //this.context.nowProgress= this.context.line.isBegin?0.9:0.1;
                 // }
                 this.context.nowProgress = 0;
-                debugger;
                 this.context.emit('loading');
             }
         };
@@ -77,7 +77,7 @@ var VehicleStates;
             return _super !== null && _super.apply(this, arguments) || this;
         }
         Loading.prototype.Start = function () {
-            var nowSite = this.context.getNowSite();
+            var nowSite = this.context.nowSite;
             var sitePeople = nowSite.SitePeople;
             var peoples = this.context.peoples;
             var _this = this;

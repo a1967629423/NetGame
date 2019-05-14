@@ -1,8 +1,7 @@
 import { SiteType } from "../Enums";
 import { Vehicle } from "../vehicle/VehicleMachine";
-import { SiteSM, SiteLineSM } from "./SiteMachine";
-import { SLDSM } from "./SiteLine";
-import ObjectPool, { IObpool, IOFPool } from "../../frame/ObjectPool/ObjectPool";
+import { SiteSM } from "./SiteMachine";
+import { IObpool } from "../../frame/ObjectPool/ObjectPool";
 import { Score } from "../manage/ScoreManage";
 import { Path } from "../Path/PathSM";
 
@@ -38,92 +37,69 @@ export default class SitePeople extends cc.Component implements IObpool {
     }
     GetInVehicle(vehicle: Vehicle.VehicleMachine): boolean {
         var dir = vehicle.rundir;
-        var nowLine = vehicle.line;
-        var nextLine = dir ? nowLine.NextPath : nowLine.LastPath;
-        var hastOtherLineSite: Path.VehiclePath[] = []
+        var nowPath = vehicle.line;
+        var hasOtherLineSite: Path.VehiclePath[] = [];
+        while (nowPath) {
+            var nowSite = dir ? nowPath.nextSite : nowPath.lastSite;
+            if (nowSite !== this.sourceSite) {
+                if (nowSite.SiteType === this.peopleType) {
+                    return true;
+                }
+                else {
+                    nowSite.SiteLines.forEach(P => {
+                        if (!(P.mask & 13) && P.PathType !== nowPath.PathType) {
+                            if (!hasOtherLineSite.some(v => v.PathType === P.PathType)) {
+                                hasOtherLineSite.push(P);
+                            }
+                        }
+                    })
+                }
+            }
+            nowPath = dir ? nowPath.NextPath : nowPath.LastPath;
+        }
 
-        //到终点都没有
-        // for (var i in hastOtherLineSite) {
-        //     var value = hastOtherLineSite[i];
-        //     var next = value.NextLine;
-        //     while (next) {
-        //         if (next.NowSite.SiteType === this.peopleType&&next.NowSite!==this.sourceSite) {
-        //             console.log('要去转车')
-        //             return true;
-        //         }
-        //         next = next.NextLine;
-        //     }
-        //     var last = value.LastLine;
-        //     while (last) {
-        //         if (last.NowSite.SiteType === this.peopleType&&last.NowSite!==this.sourceSite) {
-        //             console.log('要去转车')
-        //             return true
-        //         }
-        //         last = last.LastLine
-        //     }
+        //检测从其他线能否到达目的地
+        for (var i in hasOtherLineSite) {
 
-        // }
+            for (var ndir = true, idx = 0; idx < 2; idx++ , ndir = !ndir) {
+                var P = hasOtherLineSite[i];
+                while (P) {
+                    var nowSite = ndir ? P.nextSite : P.lastSite;
+                    if (nowSite.SiteType === this.peopleType && nowSite !== this.sourceSite) {
+                        return true;
+                    }
+                    P = ndir ? P.NextPath : P.LastPath;
+                }
+            }
+        }
         return false;
     }
     GetOffVehicle(vehicle: Vehicle.VehicleMachine): boolean {
-        // var dir = vehicle.rundir;
-        // var nowLine = vehicle.line;
-        // if (nowLine.NowSite.SiteType === this.peopleType) return true;
-        // var nextLine = dir ? nowLine.NextLine : nowLine.LastLine;
-        // var ni =0;
-        // var oni = 0;
-        // var oli = 0;
-        // var mainHave = false;
-        // var otherHave = false;
-        // while (nextLine) {
-        //     if (nextLine.NowSite.SiteType === this.peopleType&&nextLine.NowSite!=this.sourceSite) {
-        //         mainHave = true;
-        //         break
-        //     }
-        //     ni++;
-        //     nextLine = dir ? nextLine.NextLine : nextLine.LastLine;
-        // }
-        // for (var i in nowLine.NowSite.SiteLines) {
-        //     var value = nowLine.NowSite.SiteLines[i]
-        //     if (value.LineType !== nowLine.LineType) {
-        //         var next = value.NextLine
-        //         while (next) {
-        //             if (next.NowSite.SiteType === this.peopleType) {
-        //                 console.log('转车')
-        //                 otherHave = true;
-        //                 break
-        //             }
-        //             oni++;
-        //             next = next.NextLine;
-        //         }
-        //         var last = value.LastLine;
-        //         if (last) {
-        //             if (last.NowSite.SiteType === this.peopleType) {
-        //                 console.log('转车')
-        //                 otherHave = true;
-        //                 break
-        //             }
-        //             oli++;
-        //             last = last.LastLine;
-        //         }
-
-        //     }
-        // }
-        // if(mainHave&&otherHave)
-        // {
-        //     if(mainHave&&(ni<=oni||ni<=oli))
-        //     {
-        //         return false;
-        //     }
-        //     return true;
-        // }
-        // else
-        // {
-        //     if(otherHave)
-        //     {
-        //         return true;
-        //     }
-        // }
+        var hasOtherLineSite: Path.VehiclePath[] = []
+        var nowSite = vehicle.nowSite;
+        if (nowSite && nowSite !== this.sourceSite && nowSite.SiteType === this.peopleType) {
+            return true;
+        }
+        nowSite.SiteLines.forEach(P => {
+            if (!(P.mask & 13)) {
+                if (!hasOtherLineSite.some(v => v.PathType === P.PathType)) {
+                    hasOtherLineSite.push(P);
+                }
+            }
+        });
+        //检测从其他线能否到达目的地
+        for (var i in hasOtherLineSite) {
+            for (var ndir = true, idx = 0; idx < 2; idx++ , ndir = !ndir) {
+                var P = hasOtherLineSite[i];
+                while (P) {
+                    var nowSite = ndir ? P.nextSite : P.lastSite;
+                    if (nowSite.SiteType === this.peopleType && nowSite !== this.sourceSite) {
+                        return true;
+                    }
+                    P = ndir ? P.NextPath : P.LastPath;
+                }
+            }
+        }
 
         return false;
     }

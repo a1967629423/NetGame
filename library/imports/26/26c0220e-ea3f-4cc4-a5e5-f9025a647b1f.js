@@ -8,6 +8,7 @@ var SiteRender_1 = require("../SiteRender");
 var SiteLine_1 = require("../../site/SiteLine");
 var Enums_1 = require("../../Enums");
 var Helper_1 = require("../../../utility/Helper");
+var PathSM_1 = require("../../Path/PathSM");
 var mState = StateDec_1.MSMDsc.mState, mLinkTo = StateDec_1.MSMDsc.mLinkTo, mDefaultState = StateDec_1.MSMDsc.mDefaultState, ActionUpdate = StateDec_1.MSMDsc.ActionUpdate;
 var SiteRenderState = SiteRender_1.SiteRender.SiteRenderState, SiteRenderStateMachine = SiteRender_1.SiteRender.SiteRenderStateMachine;
 var SiteLine = SiteLine_1.SLDSM.SiteLine;
@@ -69,20 +70,23 @@ var SiteRenderStates;
             this.context.graphics.strokeColor = Enums_1.ConvertRGBToColor(this.context.nowShowType);
         };
         Active.prototype.draw = function () {
-            var _this = this;
             _super.prototype.draw.call(this);
             var g = this.context.graphics;
             var oldWidth = g.lineWidth;
             g.lineWidth = this.nowLineWith;
             g.moveTo(0, 0);
-            this.context.node.children.forEach(function (value) {
-                var now = SiteLine.getBeginLine(_this.context.nowShowType);
-                while (now) {
-                    var nowNode = now.NowSite.node;
-                    g.circle(nowNode.x, nowNode.y, _this.context.SiteRadius);
-                    now = now.NextLine;
+            var firstPath = PathSM_1.Path.VehiclePath.findForFirstPathInAllPath(this.context.nowShowType);
+            debugger;
+            while (firstPath) {
+                var renderNode = firstPath.lastSite.node;
+                if (firstPath.isEnd) {
+                    renderNode = firstPath.nextSite.node;
+                    var renderNode1 = firstPath.lastSite.node;
+                    g.circle(renderNode1.x, renderNode1.y, this.context.SiteRadius);
                 }
-            });
+                g.circle(renderNode.x, renderNode.y, this.context.SiteRadius);
+                firstPath = firstPath.NextPath;
+            }
             g.stroke();
             g.lineWidth = oldWidth;
         };
