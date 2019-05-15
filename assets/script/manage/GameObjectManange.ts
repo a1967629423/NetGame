@@ -94,7 +94,7 @@ export default class GameObjectManage extends cc.Component {
                     return 3;
                 }
             }
-            else if (nowLine.isEnd || nowLine.isBegin) {
+            else if ((nowLine.nextSite===now&&nowLine.isEnd) || (nowLine.lastSite===now&&nowLine.isBegin)) {
                 return 1;
             }
             else {
@@ -130,7 +130,6 @@ export default class GameObjectManage extends cc.Component {
             case 1:
                 //增加
                 var newPath = await this.CreateLine(nowSite, endSite, type);
-                debugger;
                 if (newPath.isBegin && newPath.isEnd) {
                     var vehiclesNode = ScenesObject.instance.node.getChildByName('vehicles')
                     var vehicle = await this.getVehicle(0, newPath);
@@ -138,8 +137,13 @@ export default class GameObjectManage extends cc.Component {
                 }
                 break;
             case 2:
-                nSL.mask |= 11;
-                nSL = await this.CreateLine(nowSite, endSite, type);
+                var nextPath = nSL.NextPath
+                var nextSite = nextPath.nextSite;
+                nextPath.mask|=15;
+                var line1 = await this.CreateLine(endSite,nextSite,type);
+                var line2 = await this.CreateLine(nowSite, endSite, type);
+                LR.updateRender();
+                LineClear.LineClearManage.Instance.updateClear();
                 break;
             case 3:
                 nSL.mask |= 5;

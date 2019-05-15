@@ -56,7 +56,7 @@ var Path;
                     return true;
                 }
             })) {
-                VehiclePath.allPath.splice(idx);
+                VehiclePath.allPath.splice(idx, 1);
             }
         };
         VehiclePath.prototype.reuse = function (lastSite, nextSite, Type) {

@@ -32,7 +32,7 @@ export module Path {
                     return true;
                 }
             })) {
-                VehiclePath.allPath.splice(idx);
+                VehiclePath.allPath.splice(idx,1);
             }
         }
         reuse(lastSite: SiteSM.SiteMachine, nextSite: SiteSM.SiteMachine, Type: SiteLineType) {

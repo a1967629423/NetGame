@@ -40,7 +40,6 @@ var ClearManageStates;
         }
         Clear.prototype.checkLineHaveClearFlag = function () {
             var _this_1 = this;
-            debugger;
             PathSM_1.Path.VehiclePath.allPath.forEach(function (line) {
                 if (line.ClearFlag && !_this_1.haveTageLines.find(function (value) { return value === line; })) {
                     _this_1.haveTageLines.push(line);

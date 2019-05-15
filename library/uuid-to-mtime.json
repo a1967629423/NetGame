@@ -230,8 +230,8 @@
     "relativePath": "resources\\prefab\\vehicle.prefab"
   },
   "5cede206-1bd6-42e5-a7fe-b786c1f2ee82": {
-    "asset": 1557847569328,
-    "meta": 1557847569364,
+    "asset": 1557886752744,
+    "meta": 1557886752771,
     "relativePath": "resources\\cc-inspector.json"
   },
   "f9d06ce4-8c0f-48fa-80b1-6a0800abf796": {
@@ -669,11 +669,6 @@
     "meta": 1557741218111,
     "relativePath": "script\\render\\SiteRender.ts"
   },
-  "fe26c325-31f9-4b46-bc66-3431b3237717": {
-    "asset": 1557741997968,
-    "meta": 1557742661054,
-    "relativePath": "script\\render\\states\\lineRenderStates.ts"
-  },
   "55eccf17-0dc4-49cf-8214-7c9c21b8d918": {
     "asset": 1557741352610,
     "meta": 1557742661056,
@@ -709,21 +704,6 @@
     "meta": 1557839947322,
     "relativePath": "script\\vehicle\\VehicleMachine.ts"
   },
-  "ccd5479d-bd72-431c-8eba-9945806861ba": {
-    "asset": 1557845842048,
-    "meta": 1557845845556,
-    "relativePath": "script\\manage\\GameObjectManange.ts"
-  },
-  "c4fec95e-800c-494d-9ecb-4e9d8309aca9": {
-    "asset": 1557845918774,
-    "meta": 1557845920598,
-    "relativePath": "script\\manage\\states\\ClearManageStates.ts"
-  },
-  "ff1f2536-56b8-44d0-9f69-5b26f2dcf666": {
-    "asset": 1557846288732,
-    "meta": 1557846291010,
-    "relativePath": "script\\Path\\PathSM.ts"
-  },
   "d5508e69-3c64-46d2-9fda-d3f0f3d1d187": {
     "asset": 1557847675805,
     "meta": 1557847678083,
@@ -743,5 +723,25 @@
     "asset": 1557848079348,
     "meta": 1557848089233,
     "relativePath": "frame\\PrefabFactory\\PrefabFactory.ts"
+  },
+  "ccd5479d-bd72-431c-8eba-9945806861ba": {
+    "asset": 1557891752911,
+    "meta": 1557891762535,
+    "relativePath": "script\\manage\\GameObjectManange.ts"
+  },
+  "c4fec95e-800c-494d-9ecb-4e9d8309aca9": {
+    "asset": 1557891760792,
+    "meta": 1557891762576,
+    "relativePath": "script\\manage\\states\\ClearManageStates.ts"
+  },
+  "ff1f2536-56b8-44d0-9f69-5b26f2dcf666": {
+    "asset": 1557891729537,
+    "meta": 1557891762614,
+    "relativePath": "script\\Path\\PathSM.ts"
+  },
+  "fe26c325-31f9-4b46-bc66-3431b3237717": {
+    "asset": 1557891735832,
+    "meta": 1557891762614,
+    "relativePath": "script\\render\\states\\lineRenderStates.ts"
   }
 }

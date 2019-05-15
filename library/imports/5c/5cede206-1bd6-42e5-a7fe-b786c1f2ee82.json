@@ -4,7 +4,7 @@
   "_objFlags": 0,
   "_native": "",
   "json": {
-    "host": "192.168.191.1",
+    "host": "192.168.12.112",
     "port": 6543,
     "isRunInGameStart": true
   }

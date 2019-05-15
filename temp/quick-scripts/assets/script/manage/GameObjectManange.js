@@ -121,7 +121,7 @@ var GameObjectManage = /** @class */ (function (_super) {
                     return 3;
                 }
             }
-            else if (nowLine.isEnd || nowLine.isBegin) {
+            else if ((nowLine.nextSite === now && nowLine.isEnd) || (nowLine.lastSite === now && nowLine.isBegin)) {
                 return 1;
             }
             else {
@@ -153,7 +153,7 @@ var GameObjectManage = /** @class */ (function (_super) {
     };
     GameObjectManage.prototype.getLine = function (type, lastSite, nowSite, endSite) {
         return __awaiter(this, void 0, Promise, function () {
-            var operatorType, nSL, nextSl, LR, _a, newPath, vehiclesNode, vehicle;
+            var operatorType, nSL, nextSl, LR, _a, newPath, vehiclesNode, vehicle, nextPath, nextSite, line1, line2;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -166,14 +166,13 @@ var GameObjectManage = /** @class */ (function (_super) {
                         switch (_a) {
                             case 1: return [3 /*break*/, 1];
                             case 2: return [3 /*break*/, 5];
-                            case 3: return [3 /*break*/, 7];
-                            case 4: return [3 /*break*/, 8];
+                            case 3: return [3 /*break*/, 8];
+                            case 4: return [3 /*break*/, 9];
                         }
-                        return [3 /*break*/, 9];
+                        return [3 /*break*/, 10];
                     case 1: return [4 /*yield*/, this.CreateLine(nowSite, endSite, type)];
                     case 2:
                         newPath = _b.sent();
-                        debugger;
                         if (!(newPath.isBegin && newPath.isEnd)) return [3 /*break*/, 4];
                         vehiclesNode = ScenesObject_1.default.instance.node.getChildByName('vehicles');
                         return [4 /*yield*/, this.getVehicle(0, newPath)];
@@ -181,20 +180,27 @@ var GameObjectManage = /** @class */ (function (_super) {
                         vehicle = _b.sent();
                         vehiclesNode.addChild(vehicle.node);
                         _b.label = 4;
-                    case 4: return [3 /*break*/, 10];
+                    case 4: return [3 /*break*/, 11];
                     case 5:
-                        nSL.mask |= 11;
-                        return [4 /*yield*/, this.CreateLine(nowSite, endSite, type)];
+                        nextPath = nSL.NextPath;
+                        nextSite = nextPath.nextSite;
+                        nextPath.mask |= 15;
+                        return [4 /*yield*/, this.CreateLine(endSite, nextSite, type)];
                     case 6:
-                        nSL = _b.sent();
-                        return [3 /*break*/, 10];
+                        line1 = _b.sent();
+                        return [4 /*yield*/, this.CreateLine(nowSite, endSite, type)];
                     case 7:
+                        line2 = _b.sent();
+                        LR.updateRender();
+                        LineClearManage_1.LineClear.LineClearManage.Instance.updateClear();
+                        return [3 /*break*/, 11];
+                    case 8:
                         nSL.mask |= 5;
                         LineClearManage_1.LineClear.LineClearManage.Instance.updateClear();
-                        return [3 /*break*/, 10];
-                    case 8: return [3 /*break*/, 10];
-                    case 9: return [3 /*break*/, 10];
-                    case 10:
+                        return [3 /*break*/, 11];
+                    case 9: return [3 /*break*/, 11];
+                    case 10: return [3 /*break*/, 11];
+                    case 11:
                         LR.updateRender();
                         return [2 /*return*/, null];
                 }

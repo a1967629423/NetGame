@@ -28,7 +28,6 @@ export module ClearManageStates
         wellBeClaer:Path.VehiclePath[] = []
         checkLineHaveClearFlag()
         {
-            debugger;
             Path.VehiclePath.allPath.forEach(line=>{
                 if(line.ClearFlag&&!this.haveTageLines.find(value=>value===line))
                 {
