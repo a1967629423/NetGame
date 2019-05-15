@@ -29,12 +29,12 @@ export default class VehicleButton extends cc.Component implements IInput {
         {
             var site = ScenesObject.instance.getComponentInChildren(SiteSM.SiteMachine);
             var lien = site.SiteLines[0];
-            var vechicle = await GameObjectManage.Instance.getVehicle(site,0,lien);
+            var vechicle = await GameObjectManage.Instance.getVehicle(0,lien);
             if(vechicle)
             {
                 var vehicles = ScenesObject.instance.node.getChildByName('vehicles');
                 vehicles.addChild(vechicle.node);
-                lien.registerVehicle(vechicle);
+                lien.addVehicle(vechicle);
             }
         }
     }
@@ -43,12 +43,12 @@ export default class VehicleButton extends cc.Component implements IInput {
         {
             var site = ScenesObject.instance.getComponentInChildren(SiteSM.SiteMachine);
             var lien = site.SiteLines[0];
-            var vechicle = await GameObjectManage.Instance.getVehicle(site,0,lien);
+            var vechicle = await GameObjectManage.Instance.getVehicle(0,lien);
             if(vechicle)
             {
                 var vehicles = ScenesObject.instance.node.getChildByName('vehicles');
                 vehicles.addChild(vechicle.node);
-                lien.registerVehicle(vechicle);
+                lien.addVehicle(vechicle);
             }
         }
     }

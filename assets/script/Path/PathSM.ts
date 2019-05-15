@@ -1,14 +1,15 @@
 import { SiteSM } from "../site/SiteMachine";
-import ObjectPool, { IObpool } from "../../frame/ObjectPool/ObjectPool";
+import ObjectPool, { IObpool, IOFPool } from "../../frame/ObjectPool/ObjectPool";
 import { SiteLineType } from "../Enums";
 import { Vehicle } from "../vehicle/VehicleMachine";
+import ObjectFactory from "../../frame/ObjectPool/ObjectFactory";
 export module Path {
     /**
  * 载具路线类
  * 储存:所有线路，上一个以及下一个线路，处于线路上的载具，当前状态遮罩
  * 功能:获取此线路上的中间插值点
  */
-    export class VehiclePath implements IObpool {
+    export class VehiclePath implements IOFPool<VehiclePath> {
         /**
          * 当路线从对象池中取出之后会注册到此数组中
          */
@@ -18,8 +19,8 @@ export module Path {
             return this.allPath.find(v=>v.PathType===type&&!(v.mask&13)&&v.isBegin)
         }
         unuse(value?: any) {
-            this.lastSite.removeLine(this);
-            this.nextSite.removeLine(this);
+            if(this.lastSite)this.lastSite.removeLine(this);
+            if(this.nextSite)this.nextSite.removeLine(this);
             this.lastSite = null;
             this.nextSite = null;
             this.mask = 0;
@@ -57,7 +58,20 @@ export module Path {
         recycle(value?: any) {
             ObjectPool.GlobalPush(this);
         }
-
+        __factory:ObjectPool<VehiclePath>
+        copy()
+        {
+            return this.__factory.pop(this.lastSite.node.position,this.nextSite.node.position,this.PathType);
+        }
+        /**
+         * 设置起始点和终点
+         * @param first 起始点
+         * @param second 终点
+         */
+        setPoint(first:cc.Vec2,second:cc.Vec2)
+        {
+            this.caculatePath(first,second);
+        }
         lastSite: SiteSM.SiteMachine = null;
         nextSite: SiteSM.SiteMachine = null;
         /**
@@ -97,7 +111,23 @@ export module Path {
         {
             return !!(this.mask&4);
         }
-        caculatePath(n:cc.Vec2,e:cc.Vec2) {
+        get HideFlag():boolean
+        {
+            return !!(this.mask&1);
+        }
+        get ActiveFlag():boolean
+        {
+            return !(this.mask&13)
+        }
+        get beginPoint():cc.Vec2
+        {
+            return this.changePoint.length>0?this.changePoint[0].point:null;
+        }
+        get endPoint():cc.Vec2
+        {
+            return this.changePoint.length>0?this.changePoint[this.changePoint.length-1].point:null;
+        }
+        protected caculatePath(n:cc.Vec2,e:cc.Vec2) {
             var Line = this;
             var { x, y, allLength, firstRadian, lastRadian, rectDir, rectH, rectW } = DMath.pathCalcaulate(n.x, n.y, e.x, e.y)
             Line.allLength = allLength;

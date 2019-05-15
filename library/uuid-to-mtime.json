@@ -115,8 +115,8 @@
     "relativePath": "scenes"
   },
   "f98ad84e-0f5f-40e0-864b-b2ab60298406": {
-    "asset": 1557563639687,
-    "meta": 1557563639701,
+    "asset": 1557911007302,
+    "meta": 1557911007687,
     "relativePath": "scenes\\mainScene.fire"
   },
   "6ca02129-07b9-4684-bb17-910eb7d31f95": {
@@ -219,19 +219,14 @@
     "meta": 1556331979107,
     "relativePath": "resources\\prefab\\line_red.prefab"
   },
-  "24d6842f-f34f-4970-bc9f-9dc0638536b9": {
-    "asset": 1555593032349,
-    "meta": 1555593055915,
-    "relativePath": "utility\\ScenesObject.ts"
-  },
   "6b5e2b4c-abf6-4813-9d9c-fb8357b6ae51": {
     "asset": 1556331345442,
     "meta": 1556331979163,
     "relativePath": "resources\\prefab\\vehicle.prefab"
   },
   "5cede206-1bd6-42e5-a7fe-b786c1f2ee82": {
-    "asset": 1557886752744,
-    "meta": 1557886752771,
+    "asset": 1557897734489,
+    "meta": 1557897734504,
     "relativePath": "resources\\cc-inspector.json"
   },
   "f9d06ce4-8c0f-48fa-80b1-6a0800abf796": {
@@ -649,11 +644,6 @@
     "meta": 1557556241532,
     "relativePath": "script\\site\\SiteLine.ts"
   },
-  "8e65d816-684a-45f2-8de9-eb9d51a22ec1": {
-    "asset": 1557557458141,
-    "meta": 1557557466646,
-    "relativePath": "script\\UI\\vehicleButton.ts"
-  },
   "a9cb21e9-9d6d-4de1-8853-3e957ac05a0d": {
     "asset": 1557714400120,
     "meta": 1557714002491,
@@ -689,16 +679,6 @@
     "meta": 1557831024748,
     "relativePath": "script\\site\\SitePeople.ts"
   },
-  "17adeaa4-6739-494e-9798-abd0d5af6a34": {
-    "asset": 1557832836115,
-    "meta": 1557832837182,
-    "relativePath": "script\\render\\LineRender.ts"
-  },
-  "26c0220e-ea3f-4cc4-a5e5-f9025a647b1f": {
-    "asset": 1557833943970,
-    "meta": 1557833945396,
-    "relativePath": "script\\render\\states\\SiteRenderStates.ts"
-  },
   "75a573c5-77b1-478c-ac19-fd964baa4639": {
     "asset": 1557839931673,
     "meta": 1557839947322,
@@ -714,34 +694,74 @@
     "meta": 1557848088966,
     "relativePath": "frame\\ObjectPool\\ObjectFactory.ts"
   },
-  "71a60e9d-799e-494e-8974-ed72bf07bc48": {
-    "asset": 1557847822890,
-    "meta": 1557848089202,
-    "relativePath": "frame\\ObjectPool\\ObjectPool.ts"
-  },
-  "90023c83-198d-4913-87c4-48810212b012": {
-    "asset": 1557848079348,
-    "meta": 1557848089233,
-    "relativePath": "frame\\PrefabFactory\\PrefabFactory.ts"
-  },
-  "ccd5479d-bd72-431c-8eba-9945806861ba": {
-    "asset": 1557891752911,
-    "meta": 1557891762535,
-    "relativePath": "script\\manage\\GameObjectManange.ts"
-  },
   "c4fec95e-800c-494d-9ecb-4e9d8309aca9": {
     "asset": 1557891760792,
     "meta": 1557891762576,
     "relativePath": "script\\manage\\states\\ClearManageStates.ts"
   },
+  "ccd5479d-bd72-431c-8eba-9945806861ba": {
+    "asset": 1557898717770,
+    "meta": 1557898760641,
+    "relativePath": "script\\manage\\GameObjectManange.ts"
+  },
+  "66781699-1290-467a-9220-f07b1392fa2d": {
+    "asset": 1557908348917,
+    "meta": 1557908348920,
+    "relativePath": "resources\\SOConfig"
+  },
+  "8e65d816-684a-45f2-8de9-eb9d51a22ec1": {
+    "asset": 1557908493031,
+    "meta": 1557908494779,
+    "relativePath": "script\\UI\\vehicleButton.ts"
+  },
+  "501dc523-70cf-462c-a946-0e52755c7498": {
+    "asset": 1557910207009,
+    "meta": 1557910211269,
+    "relativePath": "resources\\SOConfig\\config.json"
+  },
+  "24d6842f-f34f-4970-bc9f-9dc0638536b9": {
+    "asset": 1557910259066,
+    "meta": 1557910260576,
+    "relativePath": "utility\\ScenesObject.ts"
+  },
+  "ac78523c-ed20-40c4-8b39-06f87280fbb8": {
+    "asset": 1557910291440,
+    "meta": 1557910297263,
+    "relativePath": "scenes\\beginScene.fire"
+  },
+  "26d43311-ad85-45fd-943f-e48e4eeddbc9": {
+    "asset": 1557935559010,
+    "meta": 1557935559042,
+    "relativePath": "scenes\\testScene.fire"
+  },
+  "71a60e9d-799e-494e-8974-ed72bf07bc48": {
+    "asset": 1557932371896,
+    "meta": 1557933551721,
+    "relativePath": "frame\\ObjectPool\\ObjectPool.ts"
+  },
+  "90023c83-198d-4913-87c4-48810212b012": {
+    "asset": 1557932548874,
+    "meta": 1557933551847,
+    "relativePath": "frame\\PrefabFactory\\PrefabFactory.ts"
+  },
+  "17adeaa4-6739-494e-9798-abd0d5af6a34": {
+    "asset": 1557933988537,
+    "meta": 1557934023445,
+    "relativePath": "script\\render\\LineRender.ts"
+  },
+  "26c0220e-ea3f-4cc4-a5e5-f9025a647b1f": {
+    "asset": 1557934155763,
+    "meta": 1557934157384,
+    "relativePath": "script\\render\\states\\SiteRenderStates.ts"
+  },
   "ff1f2536-56b8-44d0-9f69-5b26f2dcf666": {
-    "asset": 1557891729537,
-    "meta": 1557891762614,
+    "asset": 1557935405741,
+    "meta": 1557935433264,
     "relativePath": "script\\Path\\PathSM.ts"
   },
   "fe26c325-31f9-4b46-bc66-3431b3237717": {
-    "asset": 1557891735832,
-    "meta": 1557891762614,
+    "asset": 1557935499578,
+    "meta": 1557935501191,
     "relativePath": "script\\render\\states\\lineRenderStates.ts"
   }
 }

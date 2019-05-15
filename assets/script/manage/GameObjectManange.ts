@@ -122,15 +122,23 @@ export default class GameObjectManage extends cc.Component {
     }
     async getLine(type: SiteLineType, lastSite: SiteSM.SiteMachine, nowSite: SiteSM.SiteMachine, endSite: SiteSM.SiteMachine): Promise<SLDSM.SiteLine> {
         var operatorType = this.getOperatorType(type, lastSite, nowSite, endSite)
-        this.getLineType(type);
         var nSL = nowSite.SiteLines.find(value => value.PathType === type && !(value.mask & 13));
         var nextSl = endSite.SiteLines.find(value => value.PathType === type && !(value.mask & 13));
         var LR = ScenesObject.instance.getComponentInChildren(LineRender.LineRenderStateMachine);
         switch (operatorType) {
             case 1:
                 //增加
-                var newPath = await this.CreateLine(nowSite, endSite, type);
-                if (newPath.isBegin && newPath.isEnd) {
+                var newPath = null
+                //如果当前选中的站点是线上的上的头站点则可以判断是向后连接
+                if(nSL&&nSL.lastSite===nowSite)
+                {
+                    newPath = await this.CreateLine(endSite, nowSite, type);
+                }
+                else
+                newPath = await this.CreateLine(nowSite, endSite, type);
+                if(this.residueLineType.some(v=>v===type))
+                {
+                    this.getLineType(type);
                     var vehiclesNode = ScenesObject.instance.node.getChildByName('vehicles')
                     var vehicle = await this.getVehicle(0, newPath);
                     vehiclesNode.addChild(vehicle.node);
@@ -140,8 +148,8 @@ export default class GameObjectManage extends cc.Component {
                 var nextPath = nSL.NextPath
                 var nextSite = nextPath.nextSite;
                 nextPath.mask|=15;
-                var line1 = await this.CreateLine(endSite,nextSite,type);
-                var line2 = await this.CreateLine(nowSite, endSite, type);
+                await this.CreateLine(endSite,nextSite,type);
+                await this.CreateLine(nowSite, endSite, type);
                 LR.updateRender();
                 LineClear.LineClearManage.Instance.updateClear();
                 break;

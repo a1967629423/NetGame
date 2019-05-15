@@ -41,13 +41,13 @@ var VehicleButton = /** @class */ (function (_super) {
                         if (!this.lineRender.HitTest(touchEvent.getLocation(), null)) return [3 /*break*/, 2];
                         site = ScenesObject_1.default.instance.getComponentInChildren(SiteMachine_1.SiteSM.SiteMachine);
                         lien = site.SiteLines[0];
-                        return [4 /*yield*/, GameObjectManange_1.default.Instance.getVehicle(site, 0, lien)];
+                        return [4 /*yield*/, GameObjectManange_1.default.Instance.getVehicle(0, lien)];
                     case 1:
                         vechicle = _a.sent();
                         if (vechicle) {
                             vehicles = ScenesObject_1.default.instance.node.getChildByName('vehicles');
                             vehicles.addChild(vechicle.node);
-                            lien.registerVehicle(vechicle);
+                            lien.addVehicle(vechicle);
                         }
                         _a.label = 2;
                     case 2: return [2 /*return*/];
@@ -64,13 +64,13 @@ var VehicleButton = /** @class */ (function (_super) {
                         if (!this.lineRender.HitTest(touchEvent.getLocation(), null)) return [3 /*break*/, 2];
                         site = ScenesObject_1.default.instance.getComponentInChildren(SiteMachine_1.SiteSM.SiteMachine);
                         lien = site.SiteLines[0];
-                        return [4 /*yield*/, GameObjectManange_1.default.Instance.getVehicle(site, 0, lien)];
+                        return [4 /*yield*/, GameObjectManange_1.default.Instance.getVehicle(0, lien)];
                     case 1:
                         vechicle = _a.sent();
                         if (vechicle) {
                             vehicles = ScenesObject_1.default.instance.node.getChildByName('vehicles');
                             vehicles.addChild(vechicle.node);
-                            lien.registerVehicle(vechicle);
+                            lien.addVehicle(vechicle);
                         }
                         _a.label = 2;
                     case 2: return [2 /*return*/];

@@ -76,7 +76,6 @@ var SiteRenderStates;
             g.lineWidth = this.nowLineWith;
             g.moveTo(0, 0);
             var firstPath = PathSM_1.Path.VehiclePath.findForFirstPathInAllPath(this.context.nowShowType);
-            debugger;
             while (firstPath) {
                 var renderNode = firstPath.lastSite.node;
                 if (firstPath.isEnd) {

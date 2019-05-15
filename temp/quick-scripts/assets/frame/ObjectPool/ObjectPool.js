@@ -46,8 +46,11 @@ var ObjectPool = /** @class */ (function () {
         }
         this.__pool.push(v);
     };
-    ObjectPool.prototype.pop = function (reuseValue) {
-        if (reuseValue === void 0) { reuseValue = []; }
+    ObjectPool.prototype.pop = function () {
+        var reuseValue = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            reuseValue[_i] = arguments[_i];
+        }
         if (this.__pool.length) {
             var re = this.dir ? this.__pool.pop() : this.__pool.shift();
             if (re instanceof cc.Node) {

@@ -42,8 +42,10 @@ var Path;
         };
         VehiclePath.prototype.unuse = function (value) {
             var _this = this;
-            this.lastSite.removeLine(this);
-            this.nextSite.removeLine(this);
+            if (this.lastSite)
+                this.lastSite.removeLine(this);
+            if (this.nextSite)
+                this.nextSite.removeLine(this);
             this.lastSite = null;
             this.nextSite = null;
             this.mask = 0;
@@ -76,6 +78,17 @@ var Path;
         };
         VehiclePath.prototype.recycle = function (value) {
             ObjectPool_1.default.GlobalPush(this);
+        };
+        VehiclePath.prototype.copy = function () {
+            return this.__factory.pop(this.lastSite.node.position, this.nextSite.node.position, this.PathType);
+        };
+        /**
+         * 设置起始点和终点
+         * @param first 起始点
+         * @param second 终点
+         */
+        VehiclePath.prototype.setPoint = function (first, second) {
+            this.caculatePath(first, second);
         };
         Object.defineProperty(VehiclePath.prototype, "isEnd", {
             get: function () {
@@ -112,6 +125,34 @@ var Path;
         Object.defineProperty(VehiclePath.prototype, "ClearFlag", {
             get: function () {
                 return !!(this.mask & 4);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(VehiclePath.prototype, "HideFlag", {
+            get: function () {
+                return !!(this.mask & 1);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(VehiclePath.prototype, "ActiveFlag", {
+            get: function () {
+                return !(this.mask & 13);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(VehiclePath.prototype, "beginPoint", {
+            get: function () {
+                return this.changePoint.length > 0 ? this.changePoint[0].point : null;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(VehiclePath.prototype, "endPoint", {
+            get: function () {
+                return this.changePoint.length > 0 ? this.changePoint[this.changePoint.length - 1].point : null;
             },
             enumerable: true,
             configurable: true

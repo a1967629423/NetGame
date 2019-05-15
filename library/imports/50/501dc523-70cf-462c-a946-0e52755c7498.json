@@ -1,0 +1,15 @@
+{
+  "__type__": "cc.JsonAsset",
+  "_name": "config",
+  "_objFlags": 0,
+  "_native": "",
+  "json": {
+    "1": {
+      "children": [
+        "lines",
+        "sites",
+        "vehicles"
+      ]
+    }
+  }
+}

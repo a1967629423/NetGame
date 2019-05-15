@@ -59,6 +59,27 @@ export module LineRender {
         {
             this.updateRender()
         }
+        createGraphics(source?:cc.Graphics):cc.Graphics
+        {
+            var node = new cc.Node('new Graphics');
+            this.node.addChild(node);
+            var ng = node.addComponent(cc.Graphics);
+            if(source)
+            {
+                ng.fillColor = source.fillColor;
+                ng.strokeColor = source.strokeColor;
+                ng.lineWidth = source.lineWidth;
+                ng.lineCap = source.lineCap;
+                ng.lineJoin = source.lineJoin;
+                ng.miterLimit = source.miterLimit;
+            }
+            return ng;
+        }
+        dropGraphics(g:cc.Graphics)
+        {
+            if(g)
+            g.node.removeFromParent(true); 
+        }
         @property
         lineWidth:number = 10;
         siteRender:SiteRender.SiteRenderStateMachine = null;

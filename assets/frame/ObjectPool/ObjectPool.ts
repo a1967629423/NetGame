@@ -57,7 +57,7 @@ export default class ObjectPool<T> {
         this.__pool.push(v)
     }
 
-    public pop(reuseValue:any[]=[]):T
+    public pop(...reuseValue:any[]):T
     {
         if(this.__pool.length)
         {

@@ -58,6 +58,24 @@ var LineRender;
         LineRenderStateMachine.prototype.childChange = function () {
             this.updateRender();
         };
+        LineRenderStateMachine.prototype.createGraphics = function (source) {
+            var node = new cc.Node('new Graphics');
+            this.node.addChild(node);
+            var ng = node.addComponent(cc.Graphics);
+            if (source) {
+                ng.fillColor = source.fillColor;
+                ng.strokeColor = source.strokeColor;
+                ng.lineWidth = source.lineWidth;
+                ng.lineCap = source.lineCap;
+                ng.lineJoin = source.lineJoin;
+                ng.miterLimit = source.miterLimit;
+            }
+            return ng;
+        };
+        LineRenderStateMachine.prototype.dropGraphics = function (g) {
+            if (g)
+                g.node.removeFromParent(true);
+        };
         LineRenderStateMachine.prototype.start = function () {
             _super.prototype.start.call(this);
             this.node.on(cc.Node.EventType.CHILD_ADDED, this.childChange, this);

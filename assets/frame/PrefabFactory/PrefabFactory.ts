@@ -170,7 +170,7 @@ export default class PrefabFactor extends cc.Component {
             var prefab:cc.Prefab =  await PrefabFactor.LoadRes(path,cc.Prefab);
             result = this.LPoolInit({prefab:prefab,path:path})
         }
-        var renode = result.pool.pop(reuseValue)
+        var renode = result.pool.pop.apply(result.pool,reuseValue)
         if(!renode)
         {
             renode = this.Nodefactory(result);

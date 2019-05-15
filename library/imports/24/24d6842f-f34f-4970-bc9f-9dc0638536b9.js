@@ -16,7 +16,9 @@ var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property;
 var ScenesObject = /** @class */ (function (_super) {
     __extends(ScenesObject, _super);
     function ScenesObject() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.loadModle = "1";
+        return _this;
     }
     ScenesObject_1 = ScenesObject;
     Object.defineProperty(ScenesObject, "instance", {
@@ -37,12 +39,35 @@ var ScenesObject = /** @class */ (function (_super) {
         enumerable: true,
         configurable: true
     });
+    ScenesObject.prototype.start = function () {
+        var _this = this;
+        cc.loader.loadRes('SOConfig/config.json', function (err, data) {
+            if (err) {
+                console.error('SOConfig/config.json not exist');
+            }
+            else {
+                var json = data['json'];
+                var loadConfig = json[_this.loadModle]['children'];
+                for (var key in loadConfig) {
+                    debugger;
+                    var item = loadConfig[key];
+                    if (_this.node.children.every(function (v) { return v.name !== item; })) {
+                        var node = new cc.Node(item);
+                        _this.node.addChild(node);
+                    }
+                }
+            }
+        });
+    };
     ScenesObject.prototype.onDestroy = function () {
         if (ScenesObject_1._instance)
             ScenesObject_1._instance = null;
     };
     var ScenesObject_1;
     ScenesObject._instance = null;
+    __decorate([
+        property
+    ], ScenesObject.prototype, "loadModle", void 0);
     ScenesObject = ScenesObject_1 = __decorate([
         ccclass
     ], ScenesObject);

@@ -66,7 +66,6 @@ export module SiteRenderStates
             g.lineWidth = this.nowLineWith;
             g.moveTo(0,0);
             var firstPath = Path.VehiclePath.findForFirstPathInAllPath(this.context.nowShowType);
-            debugger
             while(firstPath)
             {
                 var renderNode = firstPath.lastSite.node;

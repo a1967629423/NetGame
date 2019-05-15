@@ -184,7 +184,7 @@ var PrefabFactor = /** @class */ (function (_super) {
                         result = this.LPoolInit({ prefab: prefab, path: path });
                         _a.label = 2;
                     case 2:
-                        renode = result.pool.pop(reuseValue);
+                        renode = result.pool.pop.apply(result.pool, reuseValue);
                         if (!renode) {
                             renode = this.Nodefactory(result);
                             renode['__poolInit'] = true;

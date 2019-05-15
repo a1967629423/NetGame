@@ -153,54 +153,63 @@ var GameObjectManage = /** @class */ (function (_super) {
     };
     GameObjectManage.prototype.getLine = function (type, lastSite, nowSite, endSite) {
         return __awaiter(this, void 0, Promise, function () {
-            var operatorType, nSL, nextSl, LR, _a, newPath, vehiclesNode, vehicle, nextPath, nextSite, line1, line2;
+            var operatorType, nSL, nextSl, LR, _a, newPath, vehiclesNode, vehicle, nextPath, nextSite;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         operatorType = this.getOperatorType(type, lastSite, nowSite, endSite);
-                        this.getLineType(type);
                         nSL = nowSite.SiteLines.find(function (value) { return value.PathType === type && !(value.mask & 13); });
                         nextSl = endSite.SiteLines.find(function (value) { return value.PathType === type && !(value.mask & 13); });
                         LR = ScenesObject_1.default.instance.getComponentInChildren(LineRender_1.LineRender.LineRenderStateMachine);
                         _a = operatorType;
                         switch (_a) {
                             case 1: return [3 /*break*/, 1];
-                            case 2: return [3 /*break*/, 5];
-                            case 3: return [3 /*break*/, 8];
-                            case 4: return [3 /*break*/, 9];
+                            case 2: return [3 /*break*/, 8];
+                            case 3: return [3 /*break*/, 11];
+                            case 4: return [3 /*break*/, 12];
                         }
-                        return [3 /*break*/, 10];
-                    case 1: return [4 /*yield*/, this.CreateLine(nowSite, endSite, type)];
+                        return [3 /*break*/, 13];
+                    case 1:
+                        newPath = null;
+                        if (!(nSL && nSL.lastSite === nowSite)) return [3 /*break*/, 3];
+                        return [4 /*yield*/, this.CreateLine(endSite, nowSite, type)];
                     case 2:
                         newPath = _b.sent();
-                        if (!(newPath.isBegin && newPath.isEnd)) return [3 /*break*/, 4];
+                        return [3 /*break*/, 5];
+                    case 3: return [4 /*yield*/, this.CreateLine(nowSite, endSite, type)];
+                    case 4:
+                        newPath = _b.sent();
+                        _b.label = 5;
+                    case 5:
+                        if (!this.residueLineType.some(function (v) { return v === type; })) return [3 /*break*/, 7];
+                        this.getLineType(type);
                         vehiclesNode = ScenesObject_1.default.instance.node.getChildByName('vehicles');
                         return [4 /*yield*/, this.getVehicle(0, newPath)];
-                    case 3:
+                    case 6:
                         vehicle = _b.sent();
                         vehiclesNode.addChild(vehicle.node);
-                        _b.label = 4;
-                    case 4: return [3 /*break*/, 11];
-                    case 5:
+                        _b.label = 7;
+                    case 7: return [3 /*break*/, 14];
+                    case 8:
                         nextPath = nSL.NextPath;
                         nextSite = nextPath.nextSite;
                         nextPath.mask |= 15;
                         return [4 /*yield*/, this.CreateLine(endSite, nextSite, type)];
-                    case 6:
-                        line1 = _b.sent();
+                    case 9:
+                        _b.sent();
                         return [4 /*yield*/, this.CreateLine(nowSite, endSite, type)];
-                    case 7:
-                        line2 = _b.sent();
+                    case 10:
+                        _b.sent();
                         LR.updateRender();
                         LineClearManage_1.LineClear.LineClearManage.Instance.updateClear();
-                        return [3 /*break*/, 11];
-                    case 8:
+                        return [3 /*break*/, 14];
+                    case 11:
                         nSL.mask |= 5;
                         LineClearManage_1.LineClear.LineClearManage.Instance.updateClear();
-                        return [3 /*break*/, 11];
-                    case 9: return [3 /*break*/, 11];
-                    case 10: return [3 /*break*/, 11];
-                    case 11:
+                        return [3 /*break*/, 14];
+                    case 12: return [3 /*break*/, 14];
+                    case 13: return [3 /*break*/, 14];
+                    case 14:
                         LR.updateRender();
                         return [2 /*return*/, null];
                 }

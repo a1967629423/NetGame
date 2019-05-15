@@ -31,6 +31,33 @@ export default class ScenesObject extends cc.Component {
         }
         return this._instance;
     }
+    @property
+    loadModle:string = "1";
+    start()
+    {
+        cc.loader.loadRes('SOConfig/config.json',(err,data)=>{
+            if(err)
+            {
+                console.error('SOConfig/config.json not exist')
+            }
+            else
+            {
+                var json:[string[]] = data['json'];
+                var loadConfig = json[this.loadModle]['children'];
+                for(var key in loadConfig)
+                {
+                    debugger;
+                    var item = loadConfig[key]
+                    if(this.node.children.every(v=>v.name!==item))
+                    {
+                        var node = new cc.Node(item);
+                        this.node.addChild(node);
+                    }
+
+                }
+            }
+        })
+    }
     onDestroy()
     {
         if(ScenesObject._instance)ScenesObject._instance = null;
