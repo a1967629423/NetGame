@@ -32,6 +32,7 @@ export module SiteRenderStates
     
     @mDefaultState
     @mLinkTo('Active','active')
+    @mLinkTo('Drag','drag')
     @mState('Default',SiteRenderStateMachine)
     export class Default extends BaseDraw
     {
@@ -40,7 +41,12 @@ export module SiteRenderStates
             this.draw();
         }
     }
+    @mLinkTo('Default','dragEnd')
+    @mState('Drag',SiteRenderStateMachine)
+    export class Drag extends BaseDraw
+    {
 
+    }
     
     @mLinkTo('Default','activeEnd')
     @mState('Active',SiteRenderStateMachine)

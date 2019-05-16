@@ -27,6 +27,29 @@ export default class RenderBase extends MSM.StateMachine {
     draw(){}
     @MSMDsc.mSyncFunc
     updateRender(){}
+    createGraphics(source?:cc.Graphics)
+    {
+        var node = new cc.Node('childeGraphics');
+        var ng = node.addComponent(cc.Graphics);
+        if(source)
+        {
+            ng.fillColor = source.fillColor;
+            ng.strokeColor = source.strokeColor;
+            ng.lineWidth = source.lineWidth;
+            ng.lineCap = source.lineCap;
+            ng.lineJoin = source.lineJoin;
+            ng.miterLimit = source.miterLimit;
+        }
+        return ng;
+    }
+    dropGraphics(g:cc.Graphics)
+    {
+        if(g)
+        {
+            g.clear();
+            g.node.removeFromParent();
+        }
+    }                   
 }
 export class RenderBaseState extends MSM.State
 {
