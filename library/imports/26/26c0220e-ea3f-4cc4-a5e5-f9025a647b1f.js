@@ -49,11 +49,24 @@ var SiteRenderStates;
         Default = __decorate([
             mDefaultState,
             mLinkTo('Active', 'active'),
+            mLinkTo('Drag', 'drag'),
             mState('Default', SiteRenderStateMachine)
         ], Default);
         return Default;
     }(BaseDraw));
     SiteRenderStates.Default = Default;
+    var Drag = /** @class */ (function (_super) {
+        __extends(Drag, _super);
+        function Drag() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Drag = __decorate([
+            mLinkTo('Default', 'dragEnd'),
+            mState('Drag', SiteRenderStateMachine)
+        ], Drag);
+        return Drag;
+    }(BaseDraw));
+    SiteRenderStates.Drag = Drag;
     var Active = /** @class */ (function (_super) {
         __extends(Active, _super);
         function Active() {

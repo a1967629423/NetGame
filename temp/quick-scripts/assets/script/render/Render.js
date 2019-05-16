@@ -29,6 +29,31 @@ var RenderBase = /** @class */ (function (_super) {
     RenderBase.prototype.drawBegin = function () { this.graphics.moveTo(0, 0); };
     RenderBase.prototype.draw = function () { };
     RenderBase.prototype.updateRender = function () { };
+    RenderBase.prototype.createGraphics = function (source, parent) {
+        var node = new cc.Node('childeGraphics');
+        var ng = node.addComponent(cc.Graphics);
+        if (parent) {
+            parent.addChild(node);
+        }
+        else {
+            this.node.addChild(node);
+        }
+        if (source) {
+            ng.fillColor = source.fillColor;
+            ng.strokeColor = source.strokeColor;
+            ng.lineWidth = source.lineWidth;
+            ng.lineCap = source.lineCap;
+            ng.lineJoin = source.lineJoin;
+            ng.miterLimit = source.miterLimit;
+        }
+        return ng;
+    };
+    RenderBase.prototype.dropGraphics = function (g) {
+        if (g) {
+            g.clear();
+            g.node.removeFromParent();
+        }
+    };
     __decorate([
         StateDec_1.MSMDsc.mSyncFunc
     ], RenderBase.prototype, "draw", null);

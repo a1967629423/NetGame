@@ -49,11 +49,24 @@ var ScenesObject = /** @class */ (function (_super) {
                 var json = data['json'];
                 var loadConfig = json[_this.loadModle]['children'];
                 for (var key in loadConfig) {
-                    debugger;
-                    var item = loadConfig[key];
+                    var item = key;
                     if (_this.node.children.every(function (v) { return v.name !== item; })) {
-                        var node = new cc.Node(item);
-                        _this.node.addChild(node);
+                        var path = loadConfig[key]['prefabPath'];
+                        if (path) {
+                            cc.loader.loadRes(path, cc.Prefab, function (err, resource) {
+                                if (err) {
+                                    console.error(err.message);
+                                }
+                                else {
+                                    var node = cc.instantiate(resource);
+                                    _this.node.addChild(node);
+                                }
+                            });
+                        }
+                        else {
+                            var node = new cc.Node(key);
+                            _this.node.addChild(node);
+                        }
                     }
                 }
             }

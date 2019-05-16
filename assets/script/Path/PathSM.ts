@@ -59,9 +59,9 @@ export module Path {
             ObjectPool.GlobalPush(this);
         }
         __factory:ObjectPool<VehiclePath>
-        copy()
+        clone()
         {
-            return this.__factory.pop(this.lastSite.node.position,this.nextSite.node.position,this.PathType);
+            return this.__factory.pop(this.beginPoint,this.endPoint,this.PathType);
         }
         /**
          * 设置起始点和终点

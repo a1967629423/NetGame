@@ -79,8 +79,8 @@ var Path;
         VehiclePath.prototype.recycle = function (value) {
             ObjectPool_1.default.GlobalPush(this);
         };
-        VehiclePath.prototype.copy = function () {
-            return this.__factory.pop(this.lastSite.node.position, this.nextSite.node.position, this.PathType);
+        VehiclePath.prototype.clone = function () {
+            return this.__factory.pop(this.beginPoint, this.endPoint, this.PathType);
         };
         /**
          * 设置起始点和终点

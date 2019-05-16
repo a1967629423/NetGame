@@ -46,12 +46,29 @@ export default class ScenesObject extends cc.Component {
                 var loadConfig = json[this.loadModle]['children'];
                 for(var key in loadConfig)
                 {
-                    debugger;
-                    var item = loadConfig[key]
+                    var item = key
                     if(this.node.children.every(v=>v.name!==item))
                     {
-                        var node = new cc.Node(item);
-                        this.node.addChild(node);
+                        var path = loadConfig[key]['prefabPath'];
+                        if(path)
+                        {
+                            cc.loader.loadRes(path,cc.Prefab,(err,resource)=>{
+                                if(err)
+                                {
+                                    console.error(err.message);
+                                }
+                                else
+                                {
+                                    var node = cc.instantiate(resource);
+                                    this.node.addChild(node);
+                                }
+                            })
+                        }
+                        else
+                        {
+                            var node = new cc.Node(key);
+                            this.node.addChild(node);
+                        }
                     }
 
                 }

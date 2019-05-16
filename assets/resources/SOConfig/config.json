@@ -1,9 +1,15 @@
 {
     "1":{
-        "children":[
-            "lines",
-            "sites",
-            "vehicles"
-        ]
+        "children":{
+            "lines":{
+                "prefabPath":""
+            },
+            "sites":{
+                "prefabPath":""
+            },
+            "vehicles":{
+                "prefabPath":""
+            }
+    }
     }
 }

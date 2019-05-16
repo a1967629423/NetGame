@@ -37,6 +37,8 @@ var MSMDsc;
                 SMDB.push(p);
             }
             target.prototype.stateName = name;
+            if (!target.prototype['_su_']) {
+            }
             target.prototype['_su_'] = su;
         };
     }
@@ -230,7 +232,7 @@ var MSMDsc;
                 target['__actions'] = [];
             var ad = target['__actionData'];
             if (!ad) {
-                ad = { nowTime: 0, direction: true };
+                ad = { nowTime: 0, direction: true, iterator: null };
                 target['__actionData'] = ad;
             }
             var actionFunction = target[methodName];
@@ -299,6 +301,7 @@ var MSMDsc;
                         }
                     });
                 })(this));
+                ad.iterator = iter;
                 this['__actions'].push({ iter: iter, actionName: actionName });
             };
         };

@@ -59,7 +59,15 @@ export module LineRender {
         {
             this.updateRender()
         }
-
+        private static _Instance:LineRenderStateMachine = null;
+        static get Instance()
+        {
+            if(!this._Instance)
+            {
+                this._Instance = ScenesObject.instance.getComponentInChildren(LineRenderStateMachine);
+            }
+            return this._Instance;
+        }
         @property
         lineWidth:number = 10;
         siteRender:SiteRender.SiteRenderStateMachine = null;
@@ -79,6 +87,7 @@ export module LineRender {
             this.node.off(cc.Node.EventType.CHILD_ADDED,this.childChange,this);
             this.node.off(cc.Node.EventType.CHILD_REMOVED,this.childChange,this);
             this.node.off(cc.Node.EventType.CHILD_REORDER,this.childChange,this);
+            if(LineRenderStateMachine._Instance)LineRenderStateMachine._Instance = null;
         }
         draw()
         {

@@ -27,10 +27,18 @@ export default class RenderBase extends MSM.StateMachine {
     draw(){}
     @MSMDsc.mSyncFunc
     updateRender(){}
-    createGraphics(source?:cc.Graphics)
+    createGraphics(source?:cc.Graphics,parent?:cc.Node)
     {
         var node = new cc.Node('childeGraphics');
         var ng = node.addComponent(cc.Graphics);
+        if(parent)
+        {
+            parent.addChild(node);
+        }
+        else
+        {
+            this.node.addChild(node);
+        }
         if(source)
         {
             ng.fillColor = source.fillColor;
@@ -42,6 +50,7 @@ export default class RenderBase extends MSM.StateMachine {
         }
         return ng;
     }
+    
     dropGraphics(g:cc.Graphics)
     {
         if(g)

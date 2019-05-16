@@ -120,8 +120,8 @@ export module LineRenderStates
             this.nG = this.context.createGraphics(this.context.graphics);
             if(this.nG&&this.context._HitedLine)
             {
-                this.firstPath = this.context._HitedLine.copy();
-                this.secondPath = this.context._HitedLine.copy();
+                this.firstPath = this.context._HitedLine.clone();
+                this.secondPath = this.firstPath.clone();
                 this.renderPaths = [this.firstPath,this.secondPath];
                 this.nG.lineWidth = this.context.lineWidth;
                 var color = ConvertRGBToColor(this.firstPath.PathType).clone();

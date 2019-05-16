@@ -156,8 +156,11 @@ export module MSM {
         mask:number = 0;
         callback: (dc: DCoroutine) => void;
         constructor(Iter: Iterator<AwaitNext>,mask?:number) {
-            this.NIter = Iter;
-            this.setAttr(0);
+            if(Iter)
+            {
+                this.NIter = Iter;
+                this.setAttr(0);
+            }
             if(mask)this.mask = mask;
         }
         setAttr(dt: number) {
@@ -167,7 +170,7 @@ export module MSM {
             }
             else {
                 if (this.callback)this.callback(this);
-                
+                //this.recycle()
             }
         }
         setValue(value: AwaitNext) {
@@ -263,6 +266,7 @@ export module MSM {
         {
             this.Init();
         }
+        private DCFactor:ObjectFactory<DCoroutine> = null;
         startCoroutine(iter: DCoroutine) {
             iter.callback = value => {
                 var idx = this.Coroutines.findIndex(cor => { return cor === value })
@@ -273,6 +277,7 @@ export module MSM {
             return iter;
         }
         startCoroutine_Auto(iter: Iterator<AwaitNext>,mask?:number) {
+            if(!this.DCFactor)this.DCFactor = new ObjectFactory<DCoroutine>(true,DCoroutine);
             return this.startCoroutine(new DCoroutine(iter,mask));
         }
         stopCoroutine(iter:DCoroutine)

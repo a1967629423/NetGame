@@ -31,6 +31,10 @@ export module MSMDsc {
                 SMDB.push(p);
             }
             target.prototype.stateName = name;
+            if(!target.prototype['_su_'])
+            {
+
+            }
             target.prototype['_su_'] = su;
         }
     }
@@ -190,7 +194,7 @@ export module MSMDsc {
     }
     //当actionfunction的name项为空时，使用idx作为name
     var actionNameIdx: number = 1;
-    type actionData = { nowTime: number, direction: boolean }
+    type actionData = { nowTime: number, direction: boolean ,iterator:any}
     /**
      * 标识为动作函数，在每次update时调用，每次调用传入dt。注：无论duration设置多长dt始终为0 - 1
      * 基本与Cocos Creator的Action保持一致
@@ -208,7 +212,7 @@ export module MSMDsc {
             if (!actions) target['__actions'] = [];
             var ad: actionData = target['__actionData'];
             if (!ad) {
-                ad = { nowTime: 0, direction: true }
+                ad = { nowTime: 0, direction: true ,iterator:null}
                 target['__actionData'] = ad;
             }
             var actionFunction = target[methodName];
@@ -263,6 +267,7 @@ export module MSMDsc {
                         }
                     }
                 })(this));
+                ad.iterator = iter;
                 this['__actions'].push({ iter: iter, actionName: actionName });
             }
         }

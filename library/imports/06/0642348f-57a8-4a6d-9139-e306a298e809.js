@@ -150,8 +150,10 @@ var MSM;
             this.timmer = 0;
             this.countor = 0;
             this.mask = 0;
-            this.NIter = Iter;
-            this.setAttr(0);
+            if (Iter) {
+                this.NIter = Iter;
+                this.setAttr(0);
+            }
             if (mask)
                 this.mask = mask;
         }
@@ -189,6 +191,7 @@ var MSM;
             else {
                 if (this.callback)
                     this.callback(this);
+                //this.recycle()
             }
         };
         DCoroutine.prototype.setValue = function (value) {
@@ -239,6 +242,7 @@ var MSM;
             _this.Coroutines = [];
             _this.CoroutinesSpeed = [];
             _this.listenlist = [];
+            _this.DCFactor = null;
             return _this;
         }
         StateMachine.prototype.unuse = function (value) {
@@ -293,6 +297,8 @@ var MSM;
             return iter;
         };
         StateMachine.prototype.startCoroutine_Auto = function (iter, mask) {
+            if (!this.DCFactor)
+                this.DCFactor = new ObjectFactory_1.default(true, DCoroutine);
             return this.startCoroutine(new DCoroutine(iter, mask));
         };
         StateMachine.prototype.stopCoroutine = function (iter) {
