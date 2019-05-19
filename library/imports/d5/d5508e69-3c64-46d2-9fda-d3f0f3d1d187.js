@@ -37,9 +37,14 @@ var MSMDsc;
                 SMDB.push(p);
             }
             target.prototype.stateName = name;
-            if (!target.prototype['_su_']) {
+            var sus = target.prototype['_su_'];
+            if (!sus) {
+                sus = [{ machine: su, sname: name }];
+                target.prototype['_su_'] = sus;
             }
-            target.prototype['_su_'] = su;
+            else {
+                sus.push({ machine: su, sname: name });
+            }
         };
     }
     MSMDsc.mState = mState;
@@ -49,8 +54,9 @@ var MSMDsc;
      */
     function mDefaultState(target) {
         function initDefault() {
-            var su = target.prototype['_su_'];
-            if (su) {
+            var _su = target.prototype['_su_'];
+            if (_su) {
+                var su = _su[0].machine;
                 if (su.prototype.strelation.find(function (value) { return value.eventname === 'start'; })) {
                     console.log("DefaultState only one");
                     return;
@@ -71,24 +77,28 @@ var MSMDsc;
      * @param targenamet 目标状态名
      * @param eventname 触发事件名
      */
-    function mLinkTo(targenamet, eventname) {
+    function mLinkTo(targenamet, eventname, applyAllMachine) {
+        if (applyAllMachine === void 0) { applyAllMachine = false; }
+        var e_name = eventname;
+        var t_name = targenamet;
         function initLink(tar) {
             var gsu;
-            var su = tar.prototype['_su_'];
-            if (!su) {
+            var _su = tar.prototype['_su_'];
+            if (!_su) {
                 console.error("su is undefind");
                 return;
             }
+            var su = _su[0].machine;
             if (gsu = SMDB.find(function (value) { return value.sm == su; })) {
-                var linkc = gsu.sts.find(function (value) { return value.name == targenamet; });
+                var linkc = gsu.sts.find(function (value) { return value.name == t_name; });
                 if (linkc) {
-                    gsu.stateRelation.push({ source: tar, target: linkc.st, eventname: eventname, type: 1 });
+                    gsu.stateRelation.push({ source: tar, target: linkc.st, eventname: e_name, type: 1 });
                 }
                 else {
-                    gsu.stateRelation.push({ source: tar, target: targenamet, eventname: eventname, type: 1 });
+                    gsu.stateRelation.push({ source: tar, target: t_name, eventname: e_name, type: 1 });
                 }
-                if (!gsu.eventsName.find(function (value) { return value === eventname; }))
-                    gsu.eventsName.push(eventname);
+                if (!gsu.eventsName.find(function (value) { return value === e_name; }))
+                    gsu.eventsName.push(e_name);
             }
         }
         return function (target) {
@@ -102,84 +112,113 @@ var MSMDsc;
         };
     }
     MSMDsc.mLinkTo = mLinkTo;
-    function initAttach(tar, eventname) {
+    function initAttach(tar, eventname, applyAllMachine) {
+        if (applyAllMachine === void 0) { applyAllMachine = false; }
         var gsu;
-        var su = tar.prototype['_su_'];
-        if (!su) {
+        var _su = tar.prototype['_su_'];
+        if (!_su) {
             console.error("su is undefind");
             return;
         }
-        if (gsu = SMDB.find(function (value) { return value.sm === su; })) {
-            gsu.stateRelation.push({ source: null, target: tar, eventname: eventname, type: 4 });
-            if (!gsu.eventsName.find(function (value) { return value === eventname; }))
-                gsu.eventsName.push(eventname);
+        if (applyAllMachine) {
+            for (var idx in _su) {
+                var su = _su[idx].machine;
+                if (gsu = SMDB.find(function (value) { return value.sm === su; })) {
+                    gsu.stateRelation.push({ source: null, target: tar, eventname: eventname, type: 4 });
+                    if (!gsu.eventsName.find(function (value) { return value === eventname; }))
+                        gsu.eventsName.push(eventname);
+                }
+            }
+        }
+        else {
+            var su = _su[0].machine;
+            if (gsu = SMDB.find(function (value) { return value.sm === su; })) {
+                gsu.stateRelation.push({ source: null, target: tar, eventname: eventname, type: 4 });
+                if (!gsu.eventsName.find(function (value) { return value === eventname; }))
+                    gsu.eventsName.push(eventname);
+            }
         }
     }
     /**
      * 作为Attach状态，当事件被触发时会将此状态附加到状态机上
      * @param eventname 事件名
      */
-    function mAttach(eventname) {
+    function mAttach(eventname, applyAllMachine) {
+        if (applyAllMachine === void 0) { applyAllMachine = false; }
         return function (target) {
             if (!target.prototype['_su_']) {
-                setTimeout(function () { initAttach(target, eventname); });
+                setTimeout(function () { initAttach(target, eventname), applyAllMachine; });
             }
             else {
-                initAttach(target, eventname);
+                initAttach(target, eventname, applyAllMachine);
             }
         };
     }
     MSMDsc.mAttach = mAttach;
-    function changegsu(target) {
+    function changegsu(target, applyAllMachine) {
+        if (applyAllMachine === void 0) { applyAllMachine = false; }
         var gsu;
-        var su = target.prototype['_su_'];
-        if (!su) {
+        var _su = target.prototype['_su_'];
+        if (!_su) {
             console.error("su is undefind");
             return;
         }
-        if (gsu = SMDB.find(function (value) { return value.sm === su; })) {
-            var tars = [];
-            gsu.stateRelation.forEach(function (value) {
-                if (value.target === target) {
-                    tars.push(value);
-                }
-            });
-            if (tars.length !== 0) {
-                tars.forEach(function (sr) {
-                    sr.type |= 8;
-                });
-            }
-            else {
-                console.warn('mAttach或mLinkTo应该在前面声明');
-                setTimeout(function () {
-                    gsu.stateRelation.forEach(function (value) {
-                        if (value.target === target) {
-                            tars.push(value);
-                        }
-                    });
-                    if (tars.length !== 0) {
-                        tars.forEach(function (sr) {
-                            sr.type |= 8;
-                        });
+        function changeoperator(su) {
+            if (gsu = SMDB.find(function (value) { return value.sm === su; })) {
+                var tars = [];
+                gsu.stateRelation.forEach(function (value) {
+                    if (value.target === target) {
+                        tars.push(value);
                     }
                 });
+                if (tars.length !== 0) {
+                    tars.forEach(function (sr) {
+                        sr.type |= 8;
+                    });
+                }
+                else {
+                    console.warn('mAttach或mLinkTo应该在前面声明');
+                    setTimeout(function () {
+                        gsu.stateRelation.forEach(function (value) {
+                            if (value.target === target) {
+                                tars.push(value);
+                            }
+                        });
+                        if (tars.length !== 0) {
+                            tars.forEach(function (sr) {
+                                sr.type |= 8;
+                            });
+                        }
+                    });
+                }
             }
+        }
+        if (applyAllMachine) {
+            for (var idx in _su) {
+                changeoperator(_su[idx]);
+            }
+        }
+        else {
+            changeoperator(_su[0]);
         }
     }
     /**
      * 保持此附加状态唯一，需要先使用附加状态装饰器
      *
      */
-    function mUnique(target) {
-        if (!target.prototype['_su_']) {
-            console.warn('mState应该在前面声明');
-            setTimeout(function () {
-                changegsu(target);
-            });
-        }
-        else {
-            changegsu(target);
-        }
+    function mUnique(applyAllMachine) {
+        if (applyAllMachine === void 0) { applyAllMachine = false; }
+        return function (target) {
+            if (!target.prototype['_su_']) {
+                console.warn('mState应该在前面声明');
+                setTimeout(function () {
+                    changegsu(target, applyAllMachine);
+                });
+            }
+            else {
+                changegsu(target, applyAllMachine);
+            }
+        };
     }
     MSMDsc.mUnique = mUnique;
     function mSyncFunc(target, methodName, descriptor) {
@@ -203,8 +242,10 @@ var MSMDsc;
                     arg[_i] = arguments[_i];
                 }
                 var op = StateMachine_1.MSM.OperatorStruct.getinstance();
-                this.forEachAttach(methodName, op, arg);
-                m.apply(this, arg.push(op));
+                this.forEachAttach.apply(this, [methodName, op].concat(arg));
+                arg.push(op);
+                if (m)
+                    m.apply(this, arg);
             };
         });
     }

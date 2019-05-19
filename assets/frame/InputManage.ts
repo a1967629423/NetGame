@@ -79,7 +79,7 @@ export module IPSM {
             return false
         }
         static enableCollider:boolean = false;
-        static getInstance(tg?: cc.Component,collider:boolean=false): InputManage {
+        static getInstance(tg?: {getComponent(c:typeof cc.Component),addComponent(c:typeof cc.Component)},collider:boolean=false): InputManage {
             var ins: InputManage = null;
             if (tg) {
                 ins = tg.getComponent(InputManage);
@@ -128,18 +128,18 @@ export module IPSM {
         addInput(inp:IInput,type:InputType.touch):void
         addInput(inp:IInput_mouse,type:InputType.mouse):void
         addInput(inp:IInput_mouse,type:InputType.keyboard):void
-        addInput(inp: any,type?:InputType) {
-            if(type)
+        addInput(inp:any,type:InputType=InputType.touch) {
+            switch(type)
             {
-                switch(type)
-                {
-                    case InputType.mouse:
-                    this._addInput_mouse(inp);
-                    break;
-                    case InputType.keyboard:
-                    this._addInput_keyboard(inp);
-                    break;
-                }
+                case InputType.touch:
+                this._addInput_touch(inp);
+                break;
+                case InputType.mouse:
+                this._addInput_mouse(inp);
+                break;
+                case InputType.keyboard:
+                this._addInput_keyboard(inp);
+                break;
             }
             if(!this._tar.find(value=>value===inp))
             {
@@ -172,6 +172,17 @@ export module IPSM {
                 this.enableListens.keyboard = true;
             }
         }
+        private _addInput_touch(inp:IInput)
+        {
+            if(!this.enableListens.touch)
+            {
+                this.node.on(cc.Node.EventType.TOUCH_MOVE, this.touch, this);
+                this.node.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
+                this.node.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
+                this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchCancel, this);
+                this.enableListens.touch = true;
+            }
+        }
         // addInput(inp:IInput_mouse)
         // {
 
@@ -196,22 +207,23 @@ export module IPSM {
                 var test = this.node['_hitTest'];
                 //hookHitTest
                 this.node['_hitTest'] = ()=>{
-                    var result = false;
-                    for(var i = this.customHitTest.length-1;i>=0;i--)
-                    {
-                        var target = this.customHitTest[i].target;
-                        if(!target)target=this.node;
-                        if(this.customHitTest[i].callback.apply(target,arguments))result=true;
-                    } 
-                    if(test.apply(this.node,arguments))result=true
-                    return result;
+                    if(this.HitTest(...arguments))return true;
+                    if(test.apply(this.node,arguments))return true
+                    return false;
                 }
             }
-            this.node.on(cc.Node.EventType.TOUCH_MOVE, this.touch, this);
-            this.node.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
-            this.node.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
-            this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchCancel, this);
 
+
+        }
+        HitTest(...arg):boolean
+        {
+            for(var i = this.customHitTest.length-1;i>=0;i--)
+            {
+                var target = this.customHitTest[i].target;
+                if(!target)target=this.node;
+                if(this.customHitTest[i].callback.apply(target,arguments))return true;
+            }
+            return false;
         }
         onHitTest(hitTest:(this:cc.Node,point:cc.Vec2,listener:cc.TouchOneByOne)=>boolean,target:object = null)
         {
@@ -228,10 +240,13 @@ export module IPSM {
         }
         onDisable() {
             super.onDisable();
-            this.node.off(cc.Node.EventType.TOUCH_MOVE, this.touch, this);
-            this.node.off(cc.Node.EventType.TOUCH_START, this.touchStart, this);
-            this.node.off(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
-            this.node.off(cc.Node.EventType.TOUCH_CANCEL, this.touchCancel, this);
+            if(this.enableListens.touch)
+            {
+                this.node.off(cc.Node.EventType.TOUCH_MOVE, this.touch, this);
+                this.node.off(cc.Node.EventType.TOUCH_START, this.touchStart, this);
+                this.node.off(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
+                this.node.off(cc.Node.EventType.TOUCH_CANCEL, this.touchCancel, this);
+            }
             if(this.InputEventList.length>0)
             {
                 this.InputEventList.forEach(value=>{

@@ -32,6 +32,7 @@ var GameObjectManage = /** @class */ (function (_super) {
         _this.lineCount = 2;
         _this.saveLineType = [];
         _this.residueLineType = [];
+        _this.activePathType = Enums_1.SiteLineType.red;
         _this.GOCache = { Vehicle: false, Line: false, Site: false };
         _this.PathFactory = null;
         // LIFE-CYCLE CALLBACKS:
@@ -97,11 +98,22 @@ var GameObjectManage = /** @class */ (function (_super) {
             });
         });
     };
-    GameObjectManage.prototype.getLineType = function (type) {
+    GameObjectManage.prototype.removeLineType = function (type) {
         var idx = this.residueLineType.findIndex(function (value) { return value === type; });
         if (idx > -1) {
             this.lineCount--;
             this.residueLineType.splice(idx, 1);
+        }
+    };
+    GameObjectManage.prototype.getLineType = function () {
+        var _this = this;
+        if (this.residueLineType.some(function (v) { return v === _this.activePathType; })) {
+            return this.activePathType;
+        }
+        else {
+            var nActive = this.residueLineType[0];
+            this.activePathType = nActive;
+            return nActive;
         }
     };
     GameObjectManage.prototype.addLineType = function (type) {
@@ -136,20 +148,26 @@ var GameObjectManage = /** @class */ (function (_super) {
         }
     };
     GameObjectManage.prototype.CreateLine = function (nowSite, nextSite, type) {
-        return __awaiter(this, void 0, void 0, function () {
-            var line;
-            return __generator(this, function (_a) {
-                if (!this.PathFactory)
-                    this.PathFactory = new ObjectFactory_1.default(true, PathSM_1.Path.VehiclePath);
-                line = this.PathFactory.pop(nowSite, nextSite, type);
-                if (line) {
-                    nowSite.addLine(line);
-                    nextSite.addLine(line);
-                    return [2 /*return*/, line];
-                }
-                return [2 /*return*/, null];
-            });
-        });
+        if (!this.PathFactory)
+            this.PathFactory = new ObjectFactory_1.default(true, PathSM_1.Path.VehiclePath);
+        var line = this.PathFactory.pop(nowSite, nextSite, type);
+        if (line) {
+            if (nowSite instanceof SiteMachine_1.SiteSM.SiteMachine && nextSite instanceof SiteMachine_1.SiteSM.SiteMachine) {
+                nowSite.addLine(line);
+                nextSite.addLine(line);
+            }
+            return line;
+        }
+        return null;
+    };
+    GameObjectManage.prototype.removeLine = function (path) {
+        if (!path.lastSite || !path.nextSite) {
+            path.recycle();
+        }
+        else {
+            path.mask |= 5;
+            LineClearManage_1.LineClear.LineClearManage.Instance.updateClear();
+        }
     };
     GameObjectManage.prototype.getLine = function (type, lastSite, nowSite, endSite) {
         return __awaiter(this, void 0, Promise, function () {
@@ -164,52 +182,43 @@ var GameObjectManage = /** @class */ (function (_super) {
                         _a = operatorType;
                         switch (_a) {
                             case 1: return [3 /*break*/, 1];
-                            case 2: return [3 /*break*/, 8];
-                            case 3: return [3 /*break*/, 11];
-                            case 4: return [3 /*break*/, 12];
+                            case 2: return [3 /*break*/, 4];
+                            case 3: return [3 /*break*/, 5];
+                            case 4: return [3 /*break*/, 6];
                         }
-                        return [3 /*break*/, 13];
+                        return [3 /*break*/, 7];
                     case 1:
                         newPath = null;
-                        if (!(nSL && nSL.lastSite === nowSite)) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.CreateLine(endSite, nowSite, type)];
-                    case 2:
-                        newPath = _b.sent();
-                        return [3 /*break*/, 5];
-                    case 3: return [4 /*yield*/, this.CreateLine(nowSite, endSite, type)];
-                    case 4:
-                        newPath = _b.sent();
-                        _b.label = 5;
-                    case 5:
-                        if (!this.residueLineType.some(function (v) { return v === type; })) return [3 /*break*/, 7];
-                        this.getLineType(type);
+                        //如果当前选中的站点是线上的上的头站点则可以判断是向后连接
+                        if (nSL && nSL.lastSite === nowSite) {
+                            newPath = this.CreateLine(endSite, nowSite, type);
+                        }
+                        else
+                            newPath = this.CreateLine(nowSite, endSite, type);
+                        if (!this.residueLineType.some(function (v) { return v === type; })) return [3 /*break*/, 3];
+                        this.removeLineType(type);
                         vehiclesNode = ScenesObject_1.default.instance.node.getChildByName('vehicles');
                         return [4 /*yield*/, this.getVehicle(0, newPath)];
-                    case 6:
+                    case 2:
                         vehicle = _b.sent();
                         vehiclesNode.addChild(vehicle.node);
-                        _b.label = 7;
-                    case 7: return [3 /*break*/, 14];
-                    case 8:
+                        _b.label = 3;
+                    case 3: return [3 /*break*/, 8];
+                    case 4:
                         nextPath = nSL.NextPath;
                         nextSite = nextPath.nextSite;
                         nextPath.mask |= 15;
-                        return [4 /*yield*/, this.CreateLine(endSite, nextSite, type)];
-                    case 9:
-                        _b.sent();
-                        return [4 /*yield*/, this.CreateLine(nowSite, endSite, type)];
-                    case 10:
-                        _b.sent();
+                        this.CreateLine(endSite, nextSite, type);
+                        this.CreateLine(nowSite, endSite, type);
                         LR.updateRender();
                         LineClearManage_1.LineClear.LineClearManage.Instance.updateClear();
-                        return [3 /*break*/, 14];
-                    case 11:
-                        nSL.mask |= 5;
-                        LineClearManage_1.LineClear.LineClearManage.Instance.updateClear();
-                        return [3 /*break*/, 14];
-                    case 12: return [3 /*break*/, 14];
-                    case 13: return [3 /*break*/, 14];
-                    case 14:
+                        return [3 /*break*/, 8];
+                    case 5:
+                        this.removeLine(nSL);
+                        return [3 /*break*/, 8];
+                    case 6: return [3 /*break*/, 8];
+                    case 7: return [3 /*break*/, 8];
+                    case 8:
                         LR.updateRender();
                         return [2 /*return*/, null];
                 }

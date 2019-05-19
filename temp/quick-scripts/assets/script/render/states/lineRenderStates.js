@@ -9,9 +9,12 @@ var SiteLine_1 = require("../../site/SiteLine");
 var Enums_1 = require("../../Enums");
 var PathSM_1 = require("../../Path/PathSM");
 var InputManage_1 = require("../../../frame/InputManage");
+var Render_1 = require("../Render");
+var SiteRender_1 = require("../SiteRender");
 var LineRenderState = LineRender_1.LineRender.LineRenderState, LineRenderStateMachine = LineRender_1.LineRender.LineRenderStateMachine;
-var mState = StateDec_1.MSMDsc.mState, mDefaultState = StateDec_1.MSMDsc.mDefaultState, mLinkTo = StateDec_1.MSMDsc.mLinkTo;
+var mState = StateDec_1.MSMDsc.mState, mDefaultState = StateDec_1.MSMDsc.mDefaultState, mLinkTo = StateDec_1.MSMDsc.mLinkTo, mUnique = StateDec_1.MSMDsc.mUnique, mAttach = StateDec_1.MSMDsc.mAttach;
 var SiteLine = SiteLine_1.SLDSM.SiteLine;
+var SiteRenderStateMachine = SiteRender_1.SiteRender.SiteRenderStateMachine;
 var LineRenderStates;
 (function (LineRenderStates) {
     var BaseRender = /** @class */ (function (_super) {
@@ -143,6 +146,23 @@ var LineRenderStates;
         return DragLine;
     }(BaseRender));
     LineRenderStates.DragLine = DragLine;
+    var LineDragOp = /** @class */ (function (_super) {
+        __extends(LineDragOp, _super);
+        function LineDragOp() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        LineDragOp.prototype.Start = function () {
+            console.log('test run');
+            this.done();
+        };
+        LineDragOp = __decorate([
+            mUnique(true),
+            mAttach('lineDrag', true),
+            mState('LineDragOp', LineRenderStateMachine)
+        ], LineDragOp);
+        return LineDragOp;
+    }(Render_1.RenderBaseState));
+    LineRenderStates.LineDragOp = LineDragOp;
 })(LineRenderStates = exports.LineRenderStates || (exports.LineRenderStates = {}));
 
 cc._RF.pop();

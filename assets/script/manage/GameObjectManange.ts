@@ -50,8 +50,9 @@ export default class GameObjectManage extends cc.Component {
     }
     vehicleCount: number = 2;
     lineCount: number = 2;
-    saveLineType: SiteLineType[] = []
-    residueLineType: SiteLineType[] = []
+    saveLineType: SiteLineType[] = [];
+    residueLineType: SiteLineType[] = [];
+    activePathType: SiteLineType = SiteLineType.red;
     GOCache: { Vehicle: boolean, Line: boolean, Site: boolean } = { Vehicle: false, Line: false, Site: false }
     PathFactory: ObjectFactory<Path.VehiclePath> = null;
     async getVehicle(nowProgress: number, line: Path.VehiclePath) {
@@ -70,11 +71,21 @@ export default class GameObjectManage extends cc.Component {
             }
         }
     }
-    getLineType(type: SiteLineType) {
+    removeLineType(type: SiteLineType) {
         var idx = this.residueLineType.findIndex(value => value === type)
         if (idx > -1) {
             this.lineCount--;
             this.residueLineType.splice(idx, 1);
+        }
+    }
+    getLineType() {
+        if (this.residueLineType.some(v => v === this.activePathType)) {
+            return this.activePathType;
+        }
+        else {
+            var nActive = this.residueLineType[0];
+            this.activePathType = nActive;
+            return nActive;
         }
     }
     addLineType(type: SiteLineType) {
@@ -94,7 +105,7 @@ export default class GameObjectManage extends cc.Component {
                     return 3;
                 }
             }
-            else if ((nowLine.nextSite===now&&nowLine.isEnd) || (nowLine.lastSite===now&&nowLine.isBegin)) {
+            else if ((nowLine.nextSite === now && nowLine.isEnd) || (nowLine.lastSite === now && nowLine.isBegin)) {
                 return 1;
             }
             else {
@@ -110,15 +121,27 @@ export default class GameObjectManage extends cc.Component {
 
 
     }
-    async CreateLine(nowSite: SiteSM.SiteMachine, nextSite: SiteSM.SiteMachine, type: SiteLineType) {
+    CreateLine(nowSite: SiteSM.SiteMachine | cc.Vec2, nextSite: SiteSM.SiteMachine | cc.Vec2, type: SiteLineType) {
         if (!this.PathFactory) this.PathFactory = new ObjectFactory<Path.VehiclePath>(true, Path.VehiclePath);
         var line = this.PathFactory.pop(nowSite, nextSite, type);
         if (line) {
-            nowSite.addLine(line);
-            nextSite.addLine(line);
+            if (nowSite instanceof SiteSM.SiteMachine && nextSite instanceof SiteSM.SiteMachine) {
+                nowSite.addLine(line);
+                nextSite.addLine(line);
+            }
             return line;
         }
         return null;
+    }
+    removeLine(path: Path.VehiclePath) {
+        if (!path.lastSite || !path.nextSite) {
+            path.recycle();
+        }
+        else
+        {
+            path.mask |=5;
+            LineClear.LineClearManage.Instance.updateClear();
+        }
     }
     async getLine(type: SiteLineType, lastSite: SiteSM.SiteMachine, nowSite: SiteSM.SiteMachine, endSite: SiteSM.SiteMachine): Promise<SLDSM.SiteLine> {
         var operatorType = this.getOperatorType(type, lastSite, nowSite, endSite)
@@ -130,15 +153,13 @@ export default class GameObjectManage extends cc.Component {
                 //增加
                 var newPath = null
                 //如果当前选中的站点是线上的上的头站点则可以判断是向后连接
-                if(nSL&&nSL.lastSite===nowSite)
-                {
-                    newPath = await this.CreateLine(endSite, nowSite, type);
+                if (nSL && nSL.lastSite === nowSite) {
+                    newPath = this.CreateLine(endSite, nowSite, type);
                 }
                 else
-                newPath = await this.CreateLine(nowSite, endSite, type);
-                if(this.residueLineType.some(v=>v===type))
-                {
-                    this.getLineType(type);
+                    newPath = this.CreateLine(nowSite, endSite, type);
+                if (this.residueLineType.some(v => v === type)) {
+                    this.removeLineType(type);
                     var vehiclesNode = ScenesObject.instance.node.getChildByName('vehicles')
                     var vehicle = await this.getVehicle(0, newPath);
                     vehiclesNode.addChild(vehicle.node);
@@ -147,16 +168,14 @@ export default class GameObjectManage extends cc.Component {
             case 2:
                 var nextPath = nSL.NextPath
                 var nextSite = nextPath.nextSite;
-                nextPath.mask|=15;
-                await this.CreateLine(endSite,nextSite,type);
-                await this.CreateLine(nowSite, endSite, type);
+                nextPath.mask |= 15;
+                this.CreateLine(endSite, nextSite, type);
+                this.CreateLine(nowSite, endSite, type);
                 LR.updateRender();
                 LineClear.LineClearManage.Instance.updateClear();
                 break;
             case 3:
-                nSL.mask |= 5;
-                LineClear.LineClearManage.Instance.updateClear();
-                
+                this.removeLine(nSL);
                 break;
             case 4:
 

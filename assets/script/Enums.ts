@@ -8,7 +8,7 @@ export enum SiteLineType
 }
 export enum InputType
 {
-    touch=0,mouse=1,keyboard=2
+    touch=1,mouse=2,keyboard=3
 }
 export enum SiteLineShowState
 {

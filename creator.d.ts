@@ -9085,7 +9085,7 @@ declare namespace cc {
 		it will be inited as the canvas render engine. Canvas render engine is no longer available for other use case since v2.0.
 		!#zh 基础渲染引擎对象只在 cc.game.EVENT_ENGINE_INITED 事件触发后才可获取。<br/>
 		大多数情况下，它都会是 WebGL 渲染引擎实例，但是在微信开放数据域当中，它会是 Canvas 渲染引擎实例。请注意，从 2.0 开始，我们在其他平台和环境下都废弃了 Canvas 渲染器。 */
-		static renderEngine: any;		
+		//static renderEngine: any;		
 		/** !#en The total draw call count in last rendered frame.
 		!#zh 上一次渲染帧所提交的渲染批次总数。 */
 		static drawCalls: number;	

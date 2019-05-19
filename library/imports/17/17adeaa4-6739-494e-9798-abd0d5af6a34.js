@@ -79,6 +79,7 @@ var LineRender;
             im.onHitTest(this.HitTest, this);
             this.siteRender = ScenesObject_1.default.instance.node.getComponentInChildren(SiteRender_1.SiteRender.SiteRenderStateMachine);
             this.draw();
+            this.emit('lineDrag');
         };
         LineRenderStateMachine.prototype.onDestroy = function () {
             this.node.off(cc.Node.EventType.CHILD_ADDED, this.childChange, this);
@@ -89,6 +90,11 @@ var LineRender;
         };
         LineRenderStateMachine.prototype.draw = function () {
             _super.prototype.draw.call(this);
+        };
+        LineRenderStateMachine.prototype.createGraphics = function (s, p) {
+            var g = _super.prototype.createGraphics.call(this, s, p);
+            g.lineWidth = this.lineWidth;
+            return g;
         };
         var LineRenderStateMachine_1;
         LineRenderStateMachine._Instance = null;

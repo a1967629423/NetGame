@@ -43,8 +43,7 @@ export module MSM {
         {
             
         }
-        Start() {
-
+        Start(...arg) {
         }
         update(dt: number, op: OperatorStruct<any>) {
 
@@ -59,7 +58,11 @@ export module MSM {
          * 如果此状态为附加状态则此状态退出
          */
         done() {
-            if (this._isAttach) this.context.attachQuit(this);
+            if (this._isAttach)
+            {
+                this.quitEvent = null;
+                this.context.attachQuit(this);
+            } 
             this.context.emit("done");
         }
     }
@@ -233,10 +236,10 @@ export module MSM {
         Coroutines: DCoroutine[] = [];
         CoroutinesSpeed:CSpeed[] = [];
         protected listenlist: { eventName: string, callback: (eventName: string) => void }[] = [];
-        changeState(cs: State) {
+        changeState(cs: State,...arg) {
             if (this.nowState) this.nowState.Quit();
             this.nowState = cs;
-            cs.Start();
+            cs.Start.apply(cs,arg);
         }
         /**
          * 初始化状态池，并且进入默认状态
@@ -357,7 +360,7 @@ export module MSM {
             var op = OperatorStruct.getinstance();
             if (this.nowState) this.nowState.update(dt, op);
         }
-        attachState<T extends State>(type: {new(ctx:StateMachine):State}): T {
+        attachState<T extends State>(type: {new(ctx:StateMachine):State},...arg): T {
             //创建实例
             var cs: T = type.apply({ __proto__: type.prototype }, [this])
             cs.quitEvent = this.attachQuit.bind(this);
@@ -373,7 +376,7 @@ export module MSM {
             this.sqs.push(cs);
             cs._isAttach = true;
             setTimeout(() => {
-                cs.Start();
+                cs.Start(...arg);
             })
             return cs;
         }
@@ -392,10 +395,16 @@ export module MSM {
                 if (value === CS) return true;
             });
             if(index>-1)
-            this.attachment[index].ch.splice(chindex, 1);
+            {
+                this.attachment[index].ch.splice(chindex, 1);
+                if (this.attachment[index].ch.length < 1) this.attachment.splice(index,1);
+            }
             if(index2>-1)
             this.sqs.splice(index2, 1);
-            if (this.attachment[index].ch.length < 1) delete this.attachment[typestr];
+            if(CS.quitEvent)CS.quitEvent = null;
+            else
+            CS.Quit();
+            
         }
         getAttachs<T extends State>(type: { prototype: T, apply: Function }): T[] {
             for (let val in this.attachment) {
@@ -413,7 +422,8 @@ export module MSM {
             if (this.sqs.length > 0) {
                 for (var i = this.sqs.length - 1; i >= 0; i--) {
                     arg.push(os);
-                    this.sqs[i][functionName].apply(this.sqs[i], arg);
+                    //this.sqs[i][functionName].apply(this.sqs[i], arg);
+                    if(this.sqs[i][functionName])this.sqs[i][functionName].apply(this.sqs[i],arg);
                 }
             }
         }
@@ -436,7 +446,7 @@ export module MSM {
          * 引发一个事件
          * @param eventName 事件名
          */
-        emit(eventName: string) {
+        emit(eventName: string,...arg) {
             var st = this.strelation.find(value => {
                 if(value.type===1)
                 {
@@ -451,7 +461,7 @@ export module MSM {
                 var tarIns = this.stateIns.find(value => { return value.Ins['constructor'] === st.target })
                 if(tarIns&&(st.type===1||st.type===2)&&this.nowState!==tarIns.Ins)
                 {
-                    this.changeState(tarIns.Ins);
+                    this.changeState(tarIns.Ins,...arg);
                 }
                 else if(st.target&&typeof st.target !=='string')
                 {
@@ -459,17 +469,19 @@ export module MSM {
                     {
                         if(!this.sqs.find(v=>v['constructor']===st.target))
                         {
-                            this.attachState(st.target);
+                            this.attachState(st.target,...arg);
                         }
                     }
                     else
                     {
-                        this.attachState(st.target);
+                        this.attachState(st.target,...arg);
                     }
                     
                 }
             }
-            this.node.emit(eventName);
+            var emitArgs = [eventName];
+            emitArgs.push(...arg);
+            this.node.emit.apply(this.node,emitArgs);
         }
         private listenToemit(eventName: string) {
             this.emit(eventName);

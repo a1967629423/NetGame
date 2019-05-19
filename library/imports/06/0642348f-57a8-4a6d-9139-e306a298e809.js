@@ -50,6 +50,10 @@ var MSM;
         State.prototype.OnLoad = function () {
         };
         State.prototype.Start = function () {
+            var arg = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                arg[_i] = arguments[_i];
+            }
         };
         State.prototype.update = function (dt, op) {
         };
@@ -63,8 +67,10 @@ var MSM;
          * 如果此状态为附加状态则此状态退出
          */
         State.prototype.done = function () {
-            if (this._isAttach)
+            if (this._isAttach) {
+                this.quitEvent = null;
                 this.context.attachQuit(this);
+            }
             this.context.emit("done");
         };
         return State;
@@ -257,10 +263,14 @@ var MSM;
         StateMachine.prototype.recycle = function (value) {
         };
         StateMachine.prototype.changeState = function (cs) {
+            var arg = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                arg[_i - 1] = arguments[_i];
+            }
             if (this.nowState)
                 this.nowState.Quit();
             this.nowState = cs;
-            cs.Start();
+            cs.Start.apply(cs, arg);
         };
         /**
          * 初始化状态池，并且进入默认状态
@@ -378,6 +388,10 @@ var MSM;
                 this.nowState.update(dt, op);
         };
         StateMachine.prototype.attachState = function (type) {
+            var arg = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                arg[_i - 1] = arguments[_i];
+            }
             //创建实例
             var cs = type.apply({ __proto__: type.prototype }, [this]);
             cs.quitEvent = this.attachQuit.bind(this);
@@ -394,7 +408,7 @@ var MSM;
             this.sqs.push(cs);
             cs._isAttach = true;
             setTimeout(function () {
-                cs.Start();
+                cs.Start.apply(cs, arg);
             });
             return cs;
         };
@@ -414,12 +428,17 @@ var MSM;
                 if (value === CS)
                     return true;
             });
-            if (index > -1)
+            if (index > -1) {
                 this.attachment[index].ch.splice(chindex, 1);
+                if (this.attachment[index].ch.length < 1)
+                    this.attachment.splice(index, 1);
+            }
             if (index2 > -1)
                 this.sqs.splice(index2, 1);
-            if (this.attachment[index].ch.length < 1)
-                delete this.attachment[typestr];
+            if (CS.quitEvent)
+                CS.quitEvent = null;
+            else
+                CS.Quit();
         };
         StateMachine.prototype.getAttachs = function (type) {
             for (var val in this.attachment) {
@@ -440,7 +459,9 @@ var MSM;
             if (this.sqs.length > 0) {
                 for (var i = this.sqs.length - 1; i >= 0; i--) {
                     arg.push(os);
-                    this.sqs[i][functionName].apply(this.sqs[i], arg);
+                    //this.sqs[i][functionName].apply(this.sqs[i], arg);
+                    if (this.sqs[i][functionName])
+                        this.sqs[i][functionName].apply(this.sqs[i], arg);
                 }
             }
         };
@@ -465,6 +486,10 @@ var MSM;
          */
         StateMachine.prototype.emit = function (eventName) {
             var _this = this;
+            var arg = [];
+            for (var _i = 1; _i < arguments.length; _i++) {
+                arg[_i - 1] = arguments[_i];
+            }
             var st = this.strelation.find(function (value) {
                 if (value.type === 1) {
                     return value.eventname == eventName && (value.source == _this.nowState['constructor'] || !value.source);
@@ -476,20 +501,22 @@ var MSM;
             if (st) {
                 var tarIns = this.stateIns.find(function (value) { return value.Ins['constructor'] === st.target; });
                 if (tarIns && (st.type === 1 || st.type === 2) && this.nowState !== tarIns.Ins) {
-                    this.changeState(tarIns.Ins);
+                    this.changeState.apply(this, [tarIns.Ins].concat(arg));
                 }
                 else if (st.target && typeof st.target !== 'string') {
                     if (st.type & 8) {
                         if (!this.sqs.find(function (v) { return v['constructor'] === st.target; })) {
-                            this.attachState(st.target);
+                            this.attachState.apply(this, [st.target].concat(arg));
                         }
                     }
                     else {
-                        this.attachState(st.target);
+                        this.attachState.apply(this, [st.target].concat(arg));
                     }
                 }
             }
-            this.node.emit(eventName);
+            var emitArgs = [eventName];
+            emitArgs.push.apply(emitArgs, arg);
+            this.node.emit.apply(this.node, emitArgs);
         };
         StateMachine.prototype.listenToemit = function (eventName) {
             this.emit(eventName);

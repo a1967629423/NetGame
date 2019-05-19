@@ -1,0 +1,91 @@
+2019-05-19T09:06:12.777Z - normal: Load ~/.CocosCreator/settings.json
+2019-05-19T09:06:13.947Z - normal: Initializing Asset Database
+2019-05-19T09:06:13.950Z - normal: checking language setting...
+2019-05-19T09:06:13.950Z - normal: Language: zh
+2019-05-19T09:06:14.547Z - success: preview server running at http://localhost:7456
+2019-05-19T09:06:14.550Z - success: protocol editor-framework registered
+2019-05-19T09:06:14.550Z - success: protocol app registered
+2019-05-19T09:06:14.550Z - success: protocol theme registered
+2019-05-19T09:06:14.550Z - success: protocol packages registered
+2019-05-19T09:06:14.550Z - success: protocol uuid registerred
+2019-05-19T09:06:14.551Z - success: protocol db registerred
+2019-05-19T09:06:14.551Z - success: protocol thumbnail registerred
+2019-05-19T09:06:14.551Z - success: protocol unpack registerred
+2019-05-19T09:06:14.551Z - success: protocol disable-commonjs registerred
+2019-05-19T09:06:14.690Z - normal: connected!
+2019-05-19T09:06:14.691Z - normal: Check project E:\Cocos_Project\CocosCreatorFrame-NetGame
+2019-05-19T09:06:14.692Z - normal: Initializing project E:\Cocos_Project\CocosCreatorFrame-NetGame
+2019-05-19T09:06:15.046Z - normal: Initializing Cocos2d
+2019-05-19T09:06:15.710Z - normal: Initializing engine extends
+2019-05-19T09:06:15.726Z - success: asset-db-debugger loaded
+2019-05-19T09:06:15.727Z - success: baidu-adapter loaded
+2019-05-19T09:06:15.728Z - success: code-editor loaded
+2019-05-19T09:06:15.729Z - success: color-picker loaded
+2019-05-19T09:06:15.805Z - success: fb-audience-network loaded
+2019-05-19T09:06:15.853Z - success: fb-live-stream loaded
+2019-05-19T09:06:15.858Z - success: google-play-instant loaded
+2019-05-19T09:06:15.862Z - success: huawei-runtime loaded
+2019-05-19T09:06:15.863Z - success: jsb-adapter loaded
+2019-05-19T09:06:15.866Z - success: oppo-runtime loaded
+2019-05-19T09:06:15.869Z - success: package-manager loaded
+2019-05-19T09:06:15.978Z - success: qqplay-adapter loaded
+2019-05-19T09:06:15.979Z - success: runtime-dev-tools loaded
+2019-05-19T09:06:15.985Z - success: sdkbox loaded
+2019-05-19T09:06:15.988Z - success: tester loaded
+2019-05-19T09:06:15.989Z - success: ui-grid loaded
+2019-05-19T09:06:15.990Z - success: ui-kit-preview-extra loaded
+2019-05-19T09:06:15.991Z - success: ui-kit-preview loaded
+2019-05-19T09:06:15.992Z - success: ui-kit loaded
+2019-05-19T09:06:15.993Z - success: ui-tree loaded
+2019-05-19T09:06:15.997Z - success: vivo-runtime loaded
+2019-05-19T09:06:15.997Z - success: weapp-adapter loaded
+2019-05-19T09:06:16.034Z - success: assets loaded
+2019-05-19T09:06:16.037Z - success: builder loaded
+2019-05-19T09:06:16.276Z - success: cocos-services loaded
+2019-05-19T09:06:16.279Z - success: console loaded
+2019-05-19T09:06:16.312Z - success: fb-instant-games loaded
+2019-05-19T09:06:16.314Z - success: google-instant-games loaded
+2019-05-19T09:06:16.319Z - success: hierarchy loaded
+2019-05-19T09:06:16.321Z - success: inspector loaded
+2019-05-19T09:06:16.322Z - success: keystore loaded
+2019-05-19T09:06:16.325Z - success: node-library loaded
+2019-05-19T09:06:16.326Z - success: package-asset loaded
+2019-05-19T09:06:16.328Z - success: preferences loaded
+2019-05-19T09:06:16.329Z - success: project-exporter loaded
+2019-05-19T09:06:16.330Z - success: project-importer loaded
+2019-05-19T09:06:16.331Z - success: project-settings loaded
+2019-05-19T09:06:16.334Z - success: scene loaded
+2019-05-19T09:06:16.336Z - success: simulator-debugger loaded
+2019-05-19T09:06:16.338Z - success: sprite-editor loaded
+2019-05-19T09:06:16.342Z - success: store loaded
+2019-05-19T09:06:16.346Z - success: timeline loaded
+2019-05-19T09:06:16.353Z - success: cc-inspector loaded
+2019-05-19T09:06:16.353Z - warn: Invalid package name: pathcreate: do not contains uppercase characters.
+2019-05-19T09:06:16.356Z - success: pathcreate loaded
+2019-05-19T09:06:18.365Z - normal: Loading packages
+2019-05-19T09:06:18.371Z - normal: Watching packages
+2019-05-19T09:06:18.463Z - info: Cocos Services load base data!
+2019-05-19T09:06:19.590Z - normal: Run Application
+2019-05-19T09:06:25.773Z - normal: [cc-inspector] 插件启动成功: 6543
+2019-05-19T10:38:32.738Z - error: Can not find cc.Component in the script acbd8VChOZOQqnoQ7N+gzZu.
+    at Object.addComponent (D:\Program Files (x86)\CocosCreator\resources\app.asar\editor\page\scene-utils\utils\scene.js:1:5981)
+    at HTMLElement.add-component (D:\Program Files (x86)\CocosCreator\resources\app.asar\editor\builtin\scene\panel\messages\scene-operation.js:1:1166)
+    at Object.e._dispatch (D:\Program Files (x86)\CocosCreator\resources\app.asar\editor-framework\lib\renderer\panel.js:1:1941)
+    at EventEmitter.o.on.s (D:\Program Files (x86)\CocosCreator\resources\app.asar\editor-framework\lib\renderer\ipc.js:1:2917)
+    at emitMany (events.js:127:13)
+    at EventEmitter.emit (events.js:204:7)
+2019-05-19T10:53:27.781Z - failed: load script [E:\Cocos_Project\CocosCreatorFrame-NetGame\temp\quick-scripts\assets\Material\PathMaterial.js] failed : TypeError: Cannot read property 'prototype' of null
+    at E:\Cocos_Project\CocosCreatorFrame-NetGame\temp\quick-scripts\assets\Material\ShaderDec.js:15:37
+    at window.__decorate (D:\Program Files (x86)\CocosCreator\resources\engine\bin\.cache\dev\polyfill\typescript.js:65:38)
+    at E:\Cocos_Project\CocosCreatorFrame-NetGame\temp\quick-scripts\assets\Material\PathMaterial.js:13:20
+    at __define (E:\Cocos_Project\CocosCreatorFrame-NetGame\temp\quick-scripts\assets\Material\PathMaterial.js:17:2)
+    at E:\Cocos_Project\CocosCreatorFrame-NetGame\temp\quick-scripts\assets\Material\PathMaterial.js:23:13
+    at Object.<anonymous> (E:\Cocos_Project\CocosCreatorFrame-NetGame\temp\quick-scripts\assets\Material\PathMaterial.js:30:11)
+    at Object.<anonymous> (E:\Cocos_Project\CocosCreatorFrame-NetGame\temp\quick-scripts\assets\Material\PathMaterial.js:33:3)
+    at Module._compile (module.js:571:32)
+    at Object.Module._extensions..js (module.js:580:10)
+    at Module.load (module.js:488:32)
+2019-05-19T12:49:34.118Z - error: Window "main" unresponsive: [object Object]
+    at BrowserWindow.nativeWin.on.e (D:\Program Files (x86)\CocosCreator\resources\app.asar\editor-framework\lib\main\window.js:1:2237)
+    at emitOne (events.js:96:13)
+    at BrowserWindow.emit (events.js:191:7)

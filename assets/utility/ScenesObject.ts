@@ -35,7 +35,7 @@ export default class ScenesObject extends cc.Component {
     loadModle:string = "1";
     start()
     {
-        cc.loader.loadRes('SOConfig/config.json',(err,data)=>{
+        cc.loader.loadRes('SOConfig/config',(err,data)=>{
             if(err)
             {
                 console.error('SOConfig/config.json not exist')

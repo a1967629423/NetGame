@@ -81,6 +81,7 @@ export module LineRender {
             im.onHitTest(this.HitTest,this);
             this.siteRender = ScenesObject.instance.node.getComponentInChildren(SiteRender.SiteRenderStateMachine);
             this.draw();
+            this.emit('lineDrag');
         }
         onDestroy()
         {
@@ -92,6 +93,12 @@ export module LineRender {
         draw()
         {
             super.draw();
+        }
+        createGraphics(s?,p?)
+        {
+            var g = super.createGraphics(s,p);
+            g.lineWidth = this.lineWidth;
+            return g;
         }
 
         // update (dt) {}

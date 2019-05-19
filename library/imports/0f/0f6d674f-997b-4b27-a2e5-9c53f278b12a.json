@@ -1,0 +1,28 @@
+{
+  "__type__": "cc.SpriteFrame",
+  "content": {
+    "name": "TIM图片20190519181102",
+    "texture": "7a33e822-305e-4ff2-80ff-e3a5c415db0a",
+    "atlas": "",
+    "rect": [
+      0,
+      0,
+      422,
+      406
+    ],
+    "offset": [
+      0,
+      0
+    ],
+    "originalSize": [
+      422,
+      406
+    ],
+    "capInsets": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+}

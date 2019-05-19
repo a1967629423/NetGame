@@ -76,7 +76,7 @@ var Helper;
                 var p1 = points[i];
                 var p2 = points[j];
                 if (p1.y < hitPoint.y && p2.y >= hitPoint.y || p2.y < hitPoint.y && p1.y >= hitPoint.y) {
-                    if ((p1.x + (hitPoint.y - p1.y)) / (p2.y - p1.y) * (p2.x - p1.x) < hitPoint.x) {
+                    if (p1.x + (hitPoint.y - p1.y) / (p2.y - p1.y) * (p2.x - p1.x) < hitPoint.x) {
                         result = !result;
                     }
                 }

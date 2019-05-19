@@ -239,7 +239,8 @@ var SiteSM;
         SiteMachine.prototype.touchCancel = function (touchEvent) {
         };
         SiteMachine.prototype.onLoad = function () {
-            InputManage_1.IPSM.InputManage.getInstance(this, true).addInput(this);
+            var ins = InputManage_1.IPSM.InputManage.getInstance(this);
+            //ins.addInput(this)
         };
         SiteMachine.prototype.start = function () {
             _super.prototype.start.call(this);

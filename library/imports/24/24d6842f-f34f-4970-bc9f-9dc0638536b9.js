@@ -41,7 +41,7 @@ var ScenesObject = /** @class */ (function (_super) {
     });
     ScenesObject.prototype.start = function () {
         var _this = this;
-        cc.loader.loadRes('SOConfig/config.json', function (err, data) {
+        cc.loader.loadRes('SOConfig/config', function (err, data) {
             if (err) {
                 console.error('SOConfig/config.json not exist');
             }

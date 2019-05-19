@@ -4,10 +4,13 @@ import { SLDSM } from "../../site/SiteLine";
 import { SiteLineType, ConvertRGBToColor } from "../../Enums";
 import { Path } from "../../Path/PathSM";
 import { IPSM } from "../../../frame/InputManage";
+import RenderBase, { RenderBaseState } from "../Render";
+import { SiteRender } from "../SiteRender";
 
 const {LineRenderState,LineRenderStateMachine}=LineRender;
-const {mState,mDefaultState,mLinkTo}=MSMDsc
+const {mState,mDefaultState,mLinkTo,mUnique,mAttach}=MSMDsc
 const {SiteLine}=SLDSM;
+const {SiteRenderStateMachine}= SiteRender
 export module LineRenderStates
 {
     type LineSave = {type:SiteLineType,node:SLDSM.SiteLine[]}[]
@@ -133,6 +136,18 @@ export module LineRenderStates
                 this.stateEnd();
             }
             
+        }
+    }
+    
+    @mUnique(true)
+    @mAttach('lineDrag',true)
+    @mState('LineDragOp',LineRenderStateMachine)
+    export class LineDragOp extends RenderBaseState
+    {
+        Start()
+        {
+            console.log('test run');
+            this.done();
         }
     }
 }

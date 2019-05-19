@@ -231,7 +231,6 @@ export module SiteSM {
         SiteType: SiteType = SiteType.rect
         @mSyncFunc
         touch(touchEvent: cc.Touch) {
-
         }
         @mSyncFunc
         touchStart(touchEvent: cc.Touch) {
@@ -248,7 +247,8 @@ export module SiteSM {
         static SiteMachines: SiteMachine[] = []
         onLoad()
         {
-            IPSM.InputManage.getInstance(this,true).addInput(this);
+            var ins = IPSM.InputManage.getInstance(this);
+            //ins.addInput(this)
         }
         start() {
             super.start();

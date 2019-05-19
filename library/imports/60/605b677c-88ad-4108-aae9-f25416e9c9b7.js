@@ -17,9 +17,9 @@ var SiteLineType;
 })(SiteLineType = exports.SiteLineType || (exports.SiteLineType = {}));
 var InputType;
 (function (InputType) {
-    InputType[InputType["touch"] = 0] = "touch";
-    InputType[InputType["mouse"] = 1] = "mouse";
-    InputType[InputType["keyboard"] = 2] = "keyboard";
+    InputType[InputType["touch"] = 1] = "touch";
+    InputType[InputType["mouse"] = 2] = "mouse";
+    InputType[InputType["keyboard"] = 3] = "keyboard";
 })(InputType = exports.InputType || (exports.InputType = {}));
 var SiteLineShowState;
 (function (SiteLineShowState) {

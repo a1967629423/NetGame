@@ -96,15 +96,17 @@ var IPSM;
             return ins;
         };
         InputManage.prototype.addInput = function (inp, type) {
-            if (type) {
-                switch (type) {
-                    case Enums_1.InputType.mouse:
-                        this._addInput_mouse(inp);
-                        break;
-                    case Enums_1.InputType.keyboard:
-                        this._addInput_keyboard(inp);
-                        break;
-                }
+            if (type === void 0) { type = Enums_1.InputType.touch; }
+            switch (type) {
+                case Enums_1.InputType.touch:
+                    this._addInput_touch(inp);
+                    break;
+                case Enums_1.InputType.mouse:
+                    this._addInput_mouse(inp);
+                    break;
+                case Enums_1.InputType.keyboard:
+                    this._addInput_keyboard(inp);
+                    break;
             }
             if (!this._tar.find(function (value) { return value === inp; })) {
                 this._tar.push(inp);
@@ -132,6 +134,15 @@ var IPSM;
                 this.enableListens.keyboard = true;
             }
         };
+        InputManage.prototype._addInput_touch = function (inp) {
+            if (!this.enableListens.touch) {
+                this.node.on(cc.Node.EventType.TOUCH_MOVE, this.touch, this);
+                this.node.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
+                this.node.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
+                this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchCancel, this);
+                this.enableListens.touch = true;
+            }
+        };
         // addInput(inp:IInput_mouse)
         // {
         // }
@@ -155,23 +166,27 @@ var IPSM;
                 var test = this.node['_hitTest'];
                 //hookHitTest
                 this.node['_hitTest'] = function () {
-                    var result = false;
-                    for (var i = _this.customHitTest.length - 1; i >= 0; i--) {
-                        var target = _this.customHitTest[i].target;
-                        if (!target)
-                            target = _this.node;
-                        if (_this.customHitTest[i].callback.apply(target, arguments))
-                            result = true;
-                    }
+                    if (_this.HitTest.apply(_this, arguments))
+                        return true;
                     if (test.apply(_this.node, arguments))
-                        result = true;
-                    return result;
+                        return true;
+                    return false;
                 };
             }
-            this.node.on(cc.Node.EventType.TOUCH_MOVE, this.touch, this);
-            this.node.on(cc.Node.EventType.TOUCH_START, this.touchStart, this);
-            this.node.on(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
-            this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.touchCancel, this);
+        };
+        InputManage.prototype.HitTest = function () {
+            var arg = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                arg[_i] = arguments[_i];
+            }
+            for (var i = this.customHitTest.length - 1; i >= 0; i--) {
+                var target = this.customHitTest[i].target;
+                if (!target)
+                    target = this.node;
+                if (this.customHitTest[i].callback.apply(target, arguments))
+                    return true;
+            }
+            return false;
         };
         InputManage.prototype.onHitTest = function (hitTest, target) {
             if (target === void 0) { target = null; }
@@ -188,10 +203,12 @@ var IPSM;
         InputManage.prototype.onDisable = function () {
             var _this = this;
             _super.prototype.onDisable.call(this);
-            this.node.off(cc.Node.EventType.TOUCH_MOVE, this.touch, this);
-            this.node.off(cc.Node.EventType.TOUCH_START, this.touchStart, this);
-            this.node.off(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
-            this.node.off(cc.Node.EventType.TOUCH_CANCEL, this.touchCancel, this);
+            if (this.enableListens.touch) {
+                this.node.off(cc.Node.EventType.TOUCH_MOVE, this.touch, this);
+                this.node.off(cc.Node.EventType.TOUCH_START, this.touchStart, this);
+                this.node.off(cc.Node.EventType.TOUCH_END, this.touchEnd, this);
+                this.node.off(cc.Node.EventType.TOUCH_CANCEL, this.touchCancel, this);
+            }
             if (this.InputEventList.length > 0) {
                 this.InputEventList.forEach(function (value) {
                     _this.node.off(value.eventType, value.callback, _this);

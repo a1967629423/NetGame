@@ -1,5 +1,5 @@
 import { MSM } from "./StateMachine";
-
+type SMSave = {machine:{new():MSM.StateMachine},sname:string};
 export module MSMDsc {
     var SMDB: SM[] = [];
     /**
@@ -31,11 +31,16 @@ export module MSMDsc {
                 SMDB.push(p);
             }
             target.prototype.stateName = name;
-            if(!target.prototype['_su_'])
+            var sus:SMSave[] = target.prototype['_su_']
+            if(!sus)
             {
-
+                sus = [{machine:su,sname:name}];
+                target.prototype['_su_'] = sus;
             }
-            target.prototype['_su_'] = su;
+            else
+            {
+                sus.push({machine:su,sname:name});
+            }
         }
     }
     /**
@@ -44,9 +49,9 @@ export module MSMDsc {
      */
     export function mDefaultState<T extends MSM.StateMachine, P extends MSM.State>(target: { new(cxt: MSM.StateMachine): P }) {
         function initDefault() {
-            var su: { prototype: T } = target.prototype['_su_'];
-            if (su) {
-
+            var _su: SMSave[] = target.prototype['_su_'];
+            if (_su) {
+                var su = _su[0].machine;
                 if (su.prototype.strelation.find(value => { return value.eventname === 'start' })) {
                     console.log("DefaultState only one");
                     return;
@@ -66,23 +71,26 @@ export module MSMDsc {
      * @param targenamet 目标状态名
      * @param eventname 触发事件名
      */
-    export function mLinkTo<T extends MSM.State, P extends MSM.StateMachine>(targenamet: string, eventname: string) {
+    export function mLinkTo<T extends MSM.State, P extends MSM.StateMachine>(targenamet: string, eventname: string,applyAllMachine:boolean = false) {
+        var e_name = eventname;
+        var t_name = targenamet;
         function initLink(tar: { new(cxt: P): T }) {
             var gsu: SM;
-            var su: { prototype: P } = tar.prototype['_su_'];
-            if (!su) {
+            var _su: SMSave[] = tar.prototype['_su_'];
+            if (!_su) {
                 console.error("su is undefind");
                 return;
             }
+            var su  =_su[0].machine;
             if (gsu = SMDB.find(value => { return value.sm == su })) {
-                var linkc = gsu.sts.find(value => { return value.name == targenamet });
+                var linkc = gsu.sts.find(value => { return value.name == t_name });
                 if (linkc) {
-                    gsu.stateRelation.push({ source: tar, target: linkc.st, eventname: eventname, type: 1 });
+                    gsu.stateRelation.push({ source: tar, target: linkc.st, eventname: e_name, type: 1 });
                 }
                 else {
-                    gsu.stateRelation.push({ source: tar, target: targenamet, eventname: eventname, type: 1 });
+                    gsu.stateRelation.push({ source: tar, target: t_name, eventname: e_name, type: 1 });
                 }
-                if (!gsu.eventsName.find(value => { return value === eventname })) gsu.eventsName.push(eventname)
+                if (!gsu.eventsName.find(value => { return value === e_name })) gsu.eventsName.push(e_name)
             }
         }
         return (target: { new(cxt: P): T }) => {
@@ -95,80 +103,112 @@ export module MSMDsc {
             }
         }
     }
-    function initAttach<T extends MSM.State, P extends MSM.StateMachine>(tar: { new(cxt: P): T }, eventname: string) {
+    function initAttach<T extends MSM.State, P extends MSM.StateMachine>(tar: { new(cxt: P): T }, eventname: string,applyAllMachine:boolean = false) {
         var gsu: SM;
-        var su: { prototype: P } = tar.prototype['_su_'];
-        if (!su) {
+        var _su: SMSave[] = tar.prototype['_su_'];
+        if (!_su) {
             console.error("su is undefind");
             return;
         }
-        if (gsu = SMDB.find(value => value.sm === su)) {
-            gsu.stateRelation.push({ source: null, target: tar, eventname: eventname, type: 4 })
-            if (!gsu.eventsName.find(value => { return value === eventname })) gsu.eventsName.push(eventname);
+        if(applyAllMachine)
+        {
+            for(var idx in _su)
+            {
+                var su = _su[idx].machine;
+                if (gsu = SMDB.find(value => value.sm === su)) {
+                    gsu.stateRelation.push({ source: null, target: tar, eventname: eventname, type: 4 })
+                    if (!gsu.eventsName.find(value => { return value === eventname })) gsu.eventsName.push(eventname);
+                }
+            }
+        }
+        else
+        {
+            var su = _su[0].machine;
+            if (gsu = SMDB.find(value => value.sm === su)) {
+                gsu.stateRelation.push({ source: null, target: tar, eventname: eventname, type: 4 })
+                if (!gsu.eventsName.find(value => { return value === eventname })) gsu.eventsName.push(eventname);
+            }
         }
     }
     /**
      * 作为Attach状态，当事件被触发时会将此状态附加到状态机上
      * @param eventname 事件名
      */
-    export function mAttach<T extends MSM.State, P extends MSM.StateMachine>(eventname: string) {
+    export function mAttach<T extends MSM.State, P extends MSM.StateMachine>(eventname: string,applyAllMachine:boolean = false) {
         return (target: { new(cxt: P): T }) => {
             if (!target.prototype['_su_']) {
-                setTimeout(() => { initAttach(target, eventname) })
+                setTimeout(() => { initAttach(target, eventname),applyAllMachine })
             } else {
-                initAttach(target, eventname);
+                initAttach(target, eventname,applyAllMachine);
             }
         }
     }
-    function changegsu<T extends MSM.State, P extends MSM.StateMachine>(target: { new(ctx: P): T }) {
+    function changegsu<T extends MSM.State, P extends MSM.StateMachine>(target: { new(ctx: P): T },applyAllMachine:boolean = false) {
         var gsu: SM;
-        var su: { prototype: P } = target.prototype['_su_'];
-        if (!su) {
+        var _su: SMSave = target.prototype['_su_'];
+        if (!_su) {
             console.error("su is undefind");
             return;
         }
-        if (gsu = SMDB.find(value => value.sm === su)) {
-            var tars: SR[] = []
-            gsu.stateRelation.forEach(value => {
-                if (value.target === target) {
-                    tars.push(value);
-                }
-            })
-            if (tars.length !== 0) {
-                tars.forEach(sr => {
-                    sr.type |= 8;
-                });
-            }
-            else {
-                console.warn('mAttach或mLinkTo应该在前面声明')
-                setTimeout(() => {
-                    gsu.stateRelation.forEach(value => {
-                        if (value.target === target) {
-                            tars.push(value);
-                        }
-                    })
-                    if (tars.length !== 0) {
-                        tars.forEach(sr => {
-                            sr.type |= 8;
-                        });
+        function changeoperator(su:{new():P})
+        {
+            if (gsu = SMDB.find(value => value.sm === su)) {
+                var tars: SR[] = []
+                gsu.stateRelation.forEach(value => {
+                    if (value.target === target) {
+                        tars.push(value);
                     }
                 })
+                if (tars.length !== 0) {
+                    tars.forEach(sr => {
+                        sr.type |= 8;
+                    });
+                }
+                else {
+                    console.warn('mAttach或mLinkTo应该在前面声明')
+                    setTimeout(() => {
+                        gsu.stateRelation.forEach(value => {
+                            if (value.target === target) {
+                                tars.push(value);
+                            }
+                        })
+                        if (tars.length !== 0) {
+                            tars.forEach(sr => {
+                                sr.type |= 8;
+                            });
+                        }
+                    })
+                }
             }
+        }
+        if(applyAllMachine)
+        {
+            for(var idx in _su)
+            {
+                changeoperator(_su[idx]);
+            }
+        }
+        else
+        {
+            changeoperator(_su[0]);
         }
     }
     /**
      * 保持此附加状态唯一，需要先使用附加状态装饰器
      * 
      */
-    export function mUnique<T extends MSM.State, P extends MSM.StateMachine>(target: { new(ctx: P): T }) {
-        if (!target.prototype['_su_']) {
-            console.warn('mState应该在前面声明');
-            setTimeout(() => {
-                changegsu(target)
-            });
-        }
-        else {
-            changegsu(target);
+    export function mUnique<T extends MSM.State, P extends MSM.StateMachine>(applyAllMachine:boolean = false) {
+        return function(target: { new(ctx: P): T })
+        {
+            if (!target.prototype['_su_']) {
+                console.warn('mState应该在前面声明');
+                setTimeout(() => {
+                    changegsu(target,applyAllMachine)
+                });
+            }
+            else {
+                changegsu(target,applyAllMachine);
+            }
         }
     }
     export function mSyncFunc<P extends MSM.StateMachine>(target: P, methodName: string, descriptor: TypedPropertyDescriptor<any>) {
@@ -187,8 +227,9 @@ export module MSMDsc {
             var m = target[methodName]
             target[methodName] = function (...arg) {
                 var op = MSM.OperatorStruct.getinstance()
-                this.forEachAttach(methodName, op, arg)
-                m.apply(this, arg.push(op))
+                this.forEachAttach(methodName, op, ...arg)
+                arg.push(op);
+                if(m)m.apply(this, arg)
             }
         })
     }
